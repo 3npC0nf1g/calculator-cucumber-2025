@@ -3,6 +3,7 @@ package calculator;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -42,6 +43,23 @@ public class CalculatorSteps {
 				default		->	fail();
 			}
 		} catch (IllegalConstruction e) {
+			fail();
+		}
+	}
+
+	@Given("an integer operation print option {string}")
+	public void givenAnIntegerOperationPrintOption(String s) {
+		// Write code here that turns the phrase above into concrete actions
+		params = new ArrayList<>(); // create an empty set of parameters to be filled in
+		try {
+			Notation key = Notation.valueOf(s);
+			switch (key) {
+				case Notation.INFIX	->	op.notation= Notation.valueOf("INFIX");
+				case Notation.PREFIX	->op.notation= Notation.valueOf("PREFIX");
+				case Notation.POSTFIX	->op.notation= Notation.valueOf("POSTFIX");
+				default		->	fail();
+			}
+		} catch (Exception e) {
 			fail();
 		}
 	}
@@ -111,5 +129,37 @@ public class CalculatorSteps {
 	public void thenTheOperationEvaluatesTo(int val) {
 		assertEquals(val, c.eval(op));
 	}
+
+	@Given("the multiplication of two numbers {int} and {int}")
+	public void theMultiplicationOfTwoNumbersAnd(int arg0, int arg1) {
+		try {
+			params = new ArrayList<>();
+			params.add(new MyNumber(arg0));
+			params.add(new MyNumber(arg1));
+			op = new Times(params);}
+		catch(IllegalConstruction e) { fail(); }
+	}
+
+	@Given("the division of two numbers {int} and {int}")
+	public void theDivisionOfTwoNumbersAnd(int arg0, int arg1) {
+		try {
+			params = new ArrayList<>();
+			params.add(new MyNumber(arg0));
+			params.add(new MyNumber(arg1));
+			op = new Divides(params);}
+		catch(IllegalConstruction e) { fail(); }
+	}
+
+	@And("I provide a notation string {string}")
+	public void iProvideANotationString(String arg0) {
+		op.notation = Notation.valueOf(arg0);
+	}
+
+
+	@Then("the operation prints to {}")
+	public void theOperationPrintsTo(String arg0) {
+			assertEquals(arg0, op.toString());
+	}
+
 
 }
