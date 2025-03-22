@@ -63,6 +63,11 @@ public class MyNumber implements Expression
 	  return 1;
   }
 
+    @Override
+    public String toString(Notation n) {
+        return Integer.toString(value);
+    }
+
     /**
      * Convert a number into a String to allow it to be printed.
      *

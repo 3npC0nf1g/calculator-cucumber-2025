@@ -39,4 +39,21 @@ public interface Expression {
     */
    int countNbs();
 
+   /**
+    * Converts the expression into a string representation using the specified notation.
+    *
+    * <p>This method returns a string that represents the expression according to the given
+    * notation style. The notation can be one of the following:
+    * <ul>
+    *   <li>{@code PREFIX}: The operator appears before its operands, e.g. {@code + (3, 4)}</li>
+    *   <li>{@code INFIX}: The operator appears between its operands, e.g. {@code ( 3 + 4 )}</li>
+    *   <li>{@code POSTFIX}: The operator appears after its operands, e.g. {@code (3, 4) +}</li>
+    * </ul>
+    * If the expression is composite, the specified notation is applied recursively to all sub-expressions.
+    *
+    * @param n the notation to be used for representing the expression
+    * @return the string representation of the expression using the given notation
+    */
+   String toString(Notation n);
+
 }
