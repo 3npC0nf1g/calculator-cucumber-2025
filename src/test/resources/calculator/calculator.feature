@@ -98,8 +98,8 @@ Feature: Integer Arithmetic Expressions
     Then the expression displayed in <notation> notation is <expected>
 
     Examples:
-      | notation | expected               |
-      | "PREFIX"   | "* (+ (3, 4), 5)"       |
-      | "INFIX"    | "( ( 3 + 4 ) * 5 )"       |
-      | "POSTFIX"  | "((3, 4) +, 5) *"         |
+      | notation   | expected             |
+      | "PREFIX"   | "* (+ (3, 4), 5)"    |
+      | "INFIX"    | "( ( 3 + 4 ) * 5 )"  |
+      | "POSTFIX"  | "((3, 4) +, 5) *"    |
 

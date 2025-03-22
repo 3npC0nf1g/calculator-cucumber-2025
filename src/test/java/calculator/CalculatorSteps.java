@@ -17,7 +17,7 @@ public class CalculatorSteps {
 	private ArrayList<Expression> params;
 	private Operation op;
 	private Calculator c;
-	private Expression compositeExpression;
+	private Operation compositeExpression;
 
 	@Before
     public void resetMemoryBeforeEachScenario() {
@@ -125,7 +125,7 @@ public class CalculatorSteps {
 	@When("I set the notation to {string}")
 	public void iSetTheNotationToNotation(String notation) {
 		if (compositeExpression != null) {
-			compositeExpression.setNotation(Notation.valueOf(notation)); // Set the notation
+			compositeExpression.notation   = Notation.valueOf(notation); // Set the notation
 		} else {
 			fail("Composite expression is not initialized.");
 		}
@@ -134,7 +134,7 @@ public class CalculatorSteps {
 	@Then("the expression displayed in {string} notation is {string}")
 	public void theExpressionDisplayedInNotationNotationIsExpected(String notation, String expected) {
 		if (compositeExpression != null) {
-			compositeExpression.setNotation(Notation.valueOf(notation)); // Set the notation
+			compositeExpression.notation   = Notation.valueOf(notation); // Set the notation
 			assertEquals(expected, compositeExpression.toString()); // Validate the expected output
 		} else {
 			fail("Composite expression is not initialized.");

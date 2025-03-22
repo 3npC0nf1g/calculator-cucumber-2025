@@ -39,5 +39,4 @@ public interface Expression {
     */
    int countNbs();
 
-    void setNotation(Notation notation);
 }
