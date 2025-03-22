@@ -38,4 +38,6 @@ public interface Expression {
     * @return The number of values contained in an arithmetic expression
     */
    int countNbs();
+
+    void setNotation(Notation notation);
 }
