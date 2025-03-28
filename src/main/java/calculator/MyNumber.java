@@ -1,5 +1,6 @@
 package calculator;
 
+import visitor.PrintVisitor;
 import visitor.Visitor;
 
 /**
@@ -65,8 +66,11 @@ public class MyNumber implements Expression
 
     @Override
     public String toString(Notation n) {
-        return Integer.toString(value);
+        PrintVisitor pv = new PrintVisitor(n);
+        this.accept(pv);
+        return pv.getResult();
     }
+
 
     /**
      * Convert a number into a String to allow it to be printed.
