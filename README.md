@@ -5,8 +5,15 @@ Code quality: ![Maven Build](https://github.com/University-of-Mons/calculator-cu
 Test coverage: ![Coverage](.github/badges/jacoco.svg)
 ![Branches](.github/badges/branches.svg)
 
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)
 
 Code Quality: [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=3npC0nf1g_calculator-cucumber-2025&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)
+
+Code Smells: [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=3npC0nf1g_calculator-cucumber-2025&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)
+
+Bugs: [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=3npC0nf1g_calculator-cucumber-2025&metric=bugs)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)
+
+Duplicated lines: [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=3npC0nf1g_calculator-cucumber-2025&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)
 
 # Calculating arithmetic expressions
 
