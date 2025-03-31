@@ -6,6 +6,8 @@ Test coverage: ![Coverage](.github/badges/jacoco.svg)
 ![Branches](.github/badges/branches.svg)
 
 
+Code Quality: [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=3npC0nf1g_calculator-cucumber-2025&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)
+
 # Calculating arithmetic expressions
 
 ## About

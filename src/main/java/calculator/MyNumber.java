@@ -1,5 +1,6 @@
 package calculator;
 
+import visitor.PrintVisitor;
 import visitor.Visitor;
 
 /**
@@ -62,6 +63,14 @@ public class MyNumber implements Expression
   public int countNbs() {
 	  return 1;
   }
+
+    @Override
+    public String toString(Notation n) {
+        PrintVisitor pv = new PrintVisitor(n);
+        this.accept(pv);
+        return pv.getResult();
+    }
+
 
     /**
      * Convert a number into a String to allow it to be printed.

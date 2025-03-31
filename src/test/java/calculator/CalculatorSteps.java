@@ -17,11 +17,13 @@ public class CalculatorSteps {
 	private ArrayList<Expression> params;
 	private Operation op;
 	private Calculator c;
+	private Operation compositeExpression;
 
 	@Before
     public void resetMemoryBeforeEachScenario() {
 		params = null;
 		op = null;
+		compositeExpression = null;
 	}
 
 	@Given("I initialise a calculator")
@@ -110,6 +112,33 @@ public class CalculatorSteps {
 	@Then("the operation evaluates to {int}")
 	public void thenTheOperationEvaluatesTo(int val) {
 		assertEquals(val, c.eval(op));
+	}
+
+	// Handling the new composite expression
+	@Given("a composite expression consisting of the addition of {int} and {int} and multiplication by {int}")
+	public void aCompositeExpressionConsistingOfTheAdditionOfAndAndMultiplicationBy(int arg0, int arg1, int arg2) throws IllegalConstruction {
+		// Create the components of the composite expression
+		Expression addition = new Plus(List.of(new MyNumber(arg0), new MyNumber(arg1)));
+        compositeExpression = new Times(List.of(addition, new MyNumber(arg2))); // Store the full composite expression
+	}
+
+	@When("I set the notation to {string}")
+	public void iSetTheNotationToNotation(String notation) {
+		if (compositeExpression != null) {
+			compositeExpression.notation   = Notation.valueOf(notation); // Set the notation
+		} else {
+			fail("Composite expression is not initialized.");
+		}
+	}
+
+	@Then("the expression displayed in {string} notation is {string}")
+	public void theExpressionDisplayedInNotationNotationIsExpected(String notation, String expected) {
+		if (compositeExpression != null) {
+			compositeExpression.notation   = Notation.valueOf(notation); // Set the notation
+			assertEquals(expected, compositeExpression.toString()); // Validate the expected output
+		} else {
+			fail("Composite expression is not initialized.");
+		}
 	}
 
 }

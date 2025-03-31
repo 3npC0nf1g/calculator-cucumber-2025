@@ -91,3 +91,15 @@ Feature: Integer Arithmetic Expressions
       | "-" | 8| 5|     3|
       | "*" | 7| 2|    14|
       | "/" | 6| 2|     3|
+
+  Scenario Outline: Displaying a composite expression with consistent notation
+    Given a composite expression consisting of the addition of 3 and 4 and multiplication by 5
+    When I set the notation to <notation>
+    Then the expression displayed in <notation> notation is <expected>
+
+    Examples:
+      | notation   | expected             |
+      | "PREFIX"   | "* (+ (3, 4), 5)"    |
+      | "INFIX"    | "( ( 3 + 4 ) * 5 )"  |
+      | "POSTFIX"  | "((3, 4) +, 5) *"    |
+
