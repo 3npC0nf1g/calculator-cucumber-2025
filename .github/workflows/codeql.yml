@@ -45,7 +45,7 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
-        category: "/language:java-kotlin"
+        category: "/language:java"
 
     - name: Run JaCoCo Coverage Analysis
       run: mvn -B verify jacoco:report --file pom.xml
