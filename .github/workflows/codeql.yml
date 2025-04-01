@@ -1,4 +1,4 @@
-name: CodeQL security analysis for Java
+name: CodeQL coverage and quality analysis
 
 on:
   workflow_run:
