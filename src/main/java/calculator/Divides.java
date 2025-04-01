@@ -42,10 +42,17 @@ public final class Divides extends Operation
 
     /**
      * The actual computation of the (binary) arithmetic division of two integers
+     *
      * @param l The first integer
      * @param r The second integer that should divide the first
      * @return The integer that is the result of the division
      */
-  public int op(int l, int r)
-    { return (l/r); }
+    @Override
+    public double op(double l, double r) {
+        if (r == 0) {
+            return Double.NaN;
+        }
+        return l / r;
+    }
+
 }

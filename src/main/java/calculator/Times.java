@@ -41,10 +41,11 @@ public final class Times extends Operation
 
   /**
    * The actual computation of the (binary) arithmetic multiplication of two integers
+   *
    * @param l The first integer
    * @param r The second integer that should be multiplied with the first
    * @return The integer that is the result of the multiplication
    */
-  public int op(int l, int r)
+  public double op(double l, double r)
     { return (l*r); }
 }

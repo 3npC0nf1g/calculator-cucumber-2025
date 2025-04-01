@@ -76,12 +76,13 @@ public abstract class Operation implements Expression
   }
 
 	/**
-	 * Abstract method representing the actual binary arithmetic operation to compute
-	 * @param l	 first argument of the binary operation
-	 * @param r	second argument of the binary operation
-	 * @return	result of computing the binary operation
-	 */
-   public abstract int op(int l, int r);
+     * Abstract method representing the actual binary arithmetic operation to compute
+     *
+     * @param l first argument of the binary operation
+     * @param r second argument of the binary operation
+     * @return result of computing the binary operation
+     */
+   public abstract double op(double l, double r);
     // the operation itself is specified in the subclasses
 
 	/** Add more parameters to the existing list of parameters
@@ -208,5 +209,6 @@ public abstract class Operation implements Expression
 		result = prime * result + args.hashCode();
 		return result;
 	}
+
 
 }

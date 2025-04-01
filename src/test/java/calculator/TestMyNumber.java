@@ -33,7 +33,7 @@ class TestMyNumber {
 
 	@Test
 	void testToString() {
-		assertEquals(Integer.toString(value), number.toString());
+		assertEquals(Double.toString(value), number.toString());
 	}
 
 }

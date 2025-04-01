@@ -107,8 +107,8 @@ public class CalculatorSteps {
 		}
 	}
 
-	@Then("the operation evaluates to {int}")
-	public void thenTheOperationEvaluatesTo(int val) {
+	@Then("the operation evaluates to {double}")
+	public void thenTheOperationEvaluatesTo(double val) {
 		assertEquals(val, c.eval(op));
 	}
 

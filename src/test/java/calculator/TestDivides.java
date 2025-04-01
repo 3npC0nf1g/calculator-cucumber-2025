@@ -76,4 +76,72 @@ class TestDivides {
 		assertThrows(IllegalConstruction.class, () -> op = new Divides(params));
 	}
 
+	void testDivisionByZeroReturnsNaN() {
+		try {
+			Divides division = new Divides(Arrays.asList(new MyNumber(8), new MyNumber(0)));
+			Calculator calculator = new Calculator();
+			double result = calculator.eval(division);
+			assertTrue(Double.isNaN(result), "Division by zero should return NaN");
+		} catch (IllegalConstruction e) {
+			fail("Should not throw IllegalConstruction");
+		}
+	}
+
+	@Test
+	void testComplexInfixDivisionByZero() {
+		try {
+			// Créer une opération de division 8 / 0
+			List<Expression> params = Arrays.asList(new MyNumber(8), new MyNumber(0));
+			Divides division = new Divides(params);
+			division.notation = Notation.INFIX;
+
+			// Calculer le résultat
+			Calculator calculator = new Calculator();
+			double result = calculator.eval(division);
+
+			// Afficher et vérifier le résultat
+			System.out.println("Résultat : " + result);
+			assertTrue(Double.isNaN(result), "Infix: 8 / 0 should return NaN");
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Should not throw exception in infix division by zero");
+		}
+	}
+
+
+	@Test
+	void testComplexPostfixDivisionByZero() {
+		try {
+			Expression left = new Plus(Arrays.asList(new MyNumber(8), new MyNumber(2)));
+			Expression right = new Minus(Arrays.asList(new MyNumber(3), new MyNumber(3)));
+			Divides division = new Divides(Arrays.asList(left, right));
+			division.notation = Notation.POSTFIX;
+
+			Calculator calculator = new Calculator();
+			double result = calculator.eval(division);
+			assertTrue(Double.isNaN(result), "Postfix: (8 + 2) / (3 - 3) should return NaN");
+		} catch (Exception e) {
+			fail("Should not throw exception in postfix complex division by zero");
+		}
+	}
+
+	@Test
+	void testComplexPrefixDivisionByZero() {
+		try {
+			Expression left = new MyNumber(10);
+			Expression right = new Minus(Arrays.asList(new MyNumber(2), new MyNumber(2)));
+			Divides division = new Divides(Arrays.asList(left, right));
+			division.notation = Notation.PREFIX;
+
+			Calculator calculator = new Calculator();
+			double result = calculator.eval(division);
+			assertTrue(Double.isNaN(result), "Prefix: 10 / (2 - 2) should return NaN");
+		} catch (Exception e) {
+			fail("Should not throw exception in prefix complex division by zero");
+		}
+	}
+
+
+
+
 }

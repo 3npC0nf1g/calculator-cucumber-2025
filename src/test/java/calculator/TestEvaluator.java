@@ -12,7 +12,7 @@ import java.util.List;
 class TestEvaluator {
 
     private Calculator calc;
-    private int value1, value2;
+    private double value1, value2;
 
     @BeforeEach
     void setUp() {
@@ -33,11 +33,12 @@ class TestEvaluator {
         try {
             //construct another type of operation depending on the input value
             //of the parameterised test
+
             switch (symbol) {
                 case "+"	->	assertEquals( value1 + value2, calc.eval(new Plus(params)));
                 case "-"	->	assertEquals( value1 - value2, calc.eval(new Minus(params)));
                 case "*"	->	assertEquals( value1 * value2, calc.eval(new Times(params)));
-                case "/"	->	assertEquals( value1 / value2, calc.eval(new Divides(params)));
+                case "/"	->	assertEquals( value1 / value2, calc.eval(new Divides(params)), 0.01);
                 default		->	fail();
             }
         } catch (IllegalConstruction e) {
