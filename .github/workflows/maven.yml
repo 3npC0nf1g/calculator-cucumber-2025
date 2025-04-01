@@ -23,11 +23,11 @@ jobs:
     steps:
     - id: checkout
       name: Checkout Repository
-      uses: actions/checkout@v4  # ✅ Version à jour
+      uses: actions/checkout@v4  
 
     - id: setupjava
       name: Set up with Java 23
-      uses: actions/setup-java@v4  # ✅ Version à jour
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: 23
