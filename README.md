@@ -1,6 +1,6 @@
 [![Continuous Reporting](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/Continuous-reporting.yml/badge.svg)](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/Continuous-reporting.yml)
 
-Code quality: [![Build and Test](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/maven.yml/badge.svg)](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/maven.yml)
+Build and Test: [![Build and Test](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/maven.yml/badge.svg)](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/maven.yml)
 
 Test coverage: [![CodeQL coverage and quality analysis](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/codeql.yml/badge.svg)](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/codeql.yml)
 ![Branches](.github/badges/branches.svg)
