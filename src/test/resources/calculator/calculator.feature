@@ -23,17 +23,17 @@ Feature: Integer Arithmetic Expressions
     And I provide a second number 5
     Then the operation evaluates to 35
 
-  Scenario: Dividing two integer numbers
+  Scenario: Dividing two numbers
     Given an integer operation '/'
     When I provide a first number 7
     And I provide a second number 5
-    Then the operation evaluates to 1
+    Then the operation evaluates to 1.4
 
-  Scenario: Printing the sum of two integer numbers
+  Scenario: Printing the sum of two numbers
     Given the sum of two numbers 8 and 6
-    Then its INFIX notation is ( 8 + 6 )
-    And its PREFIX notation is + (8, 6)
-    And its POSTFIX notation is (8, 6) +
+    Then its INFIX notation is ( 8.0 + 6.0 )
+    And its PREFIX notation is + (8.0, 6.0)
+    And its POSTFIX notation is (8.0, 6.0) +
 
   Scenario: Evaluation arithmetic operations over a list of integer numbers
     Given the following list of integer numbers
@@ -54,17 +54,17 @@ Feature: Integer Arithmetic Expressions
       |4|5|9|
       |5|3|8|
 
-  Scenario Outline: Dividing two integer numbers
+  Scenario Outline: Dividing two numbers
     Given an integer operation '/'
     When I provide a first number <n1>
     And I provide a second number <n2>
     Then the operation evaluates to <result>
 
     Examples:
-      |n1|n2|result|
-      |35|5|7|
-      |7|5|1|
-      |5|7|0|
+      | n1 | n2 | result |
+      | 35 | 5  | 7      |
+      | 7  | 5  | 1.4    |
+      | 5  | 7  | 0.71|
 
   Scenario Outline: Evaluating arithmetic operations with two integer parameters
     Given an integer operation <op>
