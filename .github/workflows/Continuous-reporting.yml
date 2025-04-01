@@ -68,6 +68,7 @@ jobs:
 
     # Attacher les rapports à la release GitHub en tant qu'assets
     - name: Upload assets to GitHub Release
+      if: ${{ github.event_name == 'release' }}
       uses: softprops/action-gh-release@v2
       with:
         files: |
