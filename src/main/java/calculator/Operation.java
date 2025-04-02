@@ -1,5 +1,6 @@
 package calculator;
 
+import visitor.PrintVisitor;
 import visitor.Visitor;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public abstract class Operation implements Expression
   /**
    * The character used to represent the arithmetic operation (e.g. "+", "*")
    */
-  protected String symbol;
+  public String symbol;
 
   /**
    * The neutral element of the operation (e.g. 1 for *, 0 for +)
@@ -159,21 +160,11 @@ public abstract class Operation implements Expression
    * @return	The String that is the result of the conversion.
    */
   public final String toString(Notation n) {
-	   Stream<String> s = args.stream().map(Object::toString);
-	   return switch (n) {
-		   case INFIX -> "( " +
-				   s.reduce((s1, s2) -> s1 + " " + symbol + " " + s2).get() +
-				   " )";
-		   case PREFIX -> symbol + " " +
-				   "(" +
-				   s.reduce((s1, s2) -> s1 + ", " + s2).get() +
-				   ")";
-		   case POSTFIX -> "(" +
-				   s.reduce((s1, s2) -> s1 + ", " + s2).get() +
-				   ")" +
-				   " " + symbol;
-	   };
+	  PrintVisitor pv = new PrintVisitor(n);
+	  this.accept(pv);
+	  return pv.getResult();
   }
+
 
 	/**
 	 * Two operation objects are equal if their list of arguments is equal and they correspond to the same operation.
