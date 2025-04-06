@@ -59,9 +59,10 @@ class TestMinus {
 
 	@Test
 	void testNull() {
-		// Just verifying that checking for null does not throw an exception
-		assertDoesNotThrow(() -> assertNull(op));  // Verifying the operation can handle null checks
+		// Verifying that op is not null, as it should have been properly initialized in setUp()
+		assertNotNull(op, "The 'Minus' operation should not be null.");
 	}
+
 
 	@Test
 	void testHashCode() {

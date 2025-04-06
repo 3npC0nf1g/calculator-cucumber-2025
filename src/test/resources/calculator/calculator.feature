@@ -2,15 +2,8 @@ Feature: Integer Arithmetic Expressions
   This feature provides a range of scenarios corresponding to the
   intended external behaviour of arithmetic expressions on integers.
 
-  # This is just a comment.
-  # You can start with a Background: that will be run before executing each scenario.
-
   Background:
     Given I initialise a calculator
-
-  # Each scenario can be seen as a test that can be executed with JUnit,
-  # provided that each of the steps (Given, When, And and Then) are
-  # implemented in a Java mapping file (CalculatorSteps.Java)
 
   Scenario: Adding two integer numbers
     Given an integer operation '+'
@@ -42,9 +35,6 @@ Feature: Integer Arithmetic Expressions
     And its PREFIX notation is + (8, 6)
     And its POSTFIX notation is (8, 6) +
 
-  # This is an example of a scenario in which we provide a list of numbers as input.
-  # (In fact, this is not entirely true, since what is given as input is a table of
-  # strings. In this case, the table is of dimension 1 * 3 (1 line and three columns).
   Scenario: Evaluation arithmetic operations over a list of integer numbers
     Given the following list of integer numbers
       | 8 | 2 | 2 |
@@ -53,9 +43,6 @@ Feature: Integer Arithmetic Expressions
     And the difference is 4
     And the quotient is 2
 
-  # A scenario outline (or template) is a scenario that is parameterised
-  # with different values. The outline comes with a set of examples.
-  # The scenario will be executed with each of the provided inputs.
   Scenario Outline: Adding two integer numbers
     Given an integer operation '+'
     When I provide a first number <n1>
@@ -102,4 +89,3 @@ Feature: Integer Arithmetic Expressions
       | "PREFIX"   | "* (+ (3, 4), 5)"    |
       | "INFIX"    | "( ( 3 + 4 ) * 5 )"  |
       | "POSTFIX"  | "((3, 4) +, 5) *"    |
-

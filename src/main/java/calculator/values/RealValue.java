@@ -8,7 +8,8 @@ public class RealValue implements NumericValue {
 
     public RealValue(double value, int precision) {
         // Construct a BigDecimal with the specified precision.
-        this.value = new BigDecimal(value, new MathContext(precision));
+        this.value = new BigDecimal(Double.toString(value), new MathContext(precision));
+
     }
 
     public BigDecimal getValue() {
@@ -21,18 +22,15 @@ public class RealValue implements NumericValue {
 
     @Override
     public NumericValue add(NumericValue other) {
-        if (other instanceof RealValue) {
-            RealValue r = (RealValue) other;
-            return new RealValue(this.value.add(r.value).doubleValue(), value.precision());
-        } else if (other instanceof RationalValue) {
+        if (other instanceof RealValue realValue) {
+            return new RealValue(this.value.add(realValue.value).doubleValue(), value.precision());
+        } else if (other instanceof RationalValue rationalValue) {
             // Convert the rational value to BigDecimal
-            RationalValue r = (RationalValue) other;
-            BigDecimal rVal = new BigDecimal(r.getNumerator()).divide(new BigDecimal(r.getDenominator()), MathContext.DECIMAL128);
+            BigDecimal rVal = new BigDecimal(rationalValue.getNumerator()).divide(new BigDecimal(rationalValue.getDenominator()), MathContext.DECIMAL128);
             return new RealValue(this.value.add(rVal).doubleValue(), value.precision());
-        } else if (other instanceof IntegerValue) {
+        } else if (other instanceof IntegerValue integerValue) {
             // Promote IntegerValue to RealValue
-            IntegerValue i = (IntegerValue) other;
-            BigDecimal iVal = BigDecimal.valueOf(i.getValue());
+            BigDecimal iVal = BigDecimal.valueOf(integerValue.getValue());
             return new RealValue(this.value.add(iVal).doubleValue(), value.precision());
         } else if (other instanceof ComplexValue) {
             // Promotion: convert self to ComplexValue and delegate the addition.
@@ -44,16 +42,15 @@ public class RealValue implements NumericValue {
 
     @Override
     public NumericValue subtract(NumericValue other) {
-        if (other instanceof RealValue) {
-            RealValue r = (RealValue) other;
-            return new RealValue(this.value.subtract(r.value).doubleValue(), value.precision());
-        } else if (other instanceof RationalValue) {
-            RationalValue r = (RationalValue) other;
-            BigDecimal rVal = new BigDecimal(r.getNumerator()).divide(new BigDecimal(r.getDenominator()), MathContext.DECIMAL128);
+        if (other instanceof RealValue realValue) {
+            return new RealValue(this.value.subtract(realValue.value).doubleValue(), value.precision());
+        } else if (other instanceof RationalValue rationalValue) {
+            BigDecimal rVal = new BigDecimal(rationalValue.getNumerator())
+                    .divide(new BigDecimal(rationalValue.getDenominator()), MathContext.DECIMAL128);
+
             return new RealValue(this.value.subtract(rVal).doubleValue(), value.precision());
-        } else if (other instanceof IntegerValue) {
-            IntegerValue i = (IntegerValue) other;
-            BigDecimal iVal = BigDecimal.valueOf(i.getValue());
+        } else if (other instanceof IntegerValue integerValue) {
+            BigDecimal iVal = BigDecimal.valueOf(integerValue.getValue());
             return new RealValue(this.value.subtract(iVal).doubleValue(), value.precision());
         } else if (other instanceof ComplexValue) {
             ComplexValue c = new ComplexValue(this.value, BigDecimal.ZERO);
@@ -64,16 +61,13 @@ public class RealValue implements NumericValue {
 
     @Override
     public NumericValue multiply(NumericValue other) {
-        if (other instanceof RealValue) {
-            RealValue r = (RealValue) other;
-            return new RealValue(this.value.multiply(r.value).doubleValue(), value.precision());
-        } else if (other instanceof RationalValue) {
-            RationalValue r = (RationalValue) other;
-            BigDecimal rVal = new BigDecimal(r.getNumerator()).divide(new BigDecimal(r.getDenominator()), MathContext.DECIMAL128);
+        if (other instanceof RealValue realValue) {
+            return new RealValue(this.value.multiply(realValue.value).doubleValue(), value.precision());
+        } else if (other instanceof RationalValue rationalValue) {
+            BigDecimal rVal = new BigDecimal(rationalValue.getNumerator()).divide(new BigDecimal(rationalValue.getDenominator()), MathContext.DECIMAL128);
             return new RealValue(this.value.multiply(rVal).doubleValue(), value.precision());
-        } else if (other instanceof IntegerValue) {
-            IntegerValue i = (IntegerValue) other;
-            BigDecimal iVal = BigDecimal.valueOf(i.getValue());
+        } else if (other instanceof IntegerValue integerValue) {
+            BigDecimal iVal = BigDecimal.valueOf(integerValue.getValue());
             return new RealValue(this.value.multiply(iVal).doubleValue(), value.precision());
         } else if (other instanceof ComplexValue) {
             ComplexValue c = new ComplexValue(this.value, BigDecimal.ZERO);
@@ -84,18 +78,18 @@ public class RealValue implements NumericValue {
 
     @Override
     public NumericValue divide(NumericValue other) {
-        if (other instanceof RealValue) {
-            RealValue r = (RealValue) other;
-            if (r.value.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException("Division by zero");
-            return new RealValue(this.value.divide(r.value, MathContext.DECIMAL128).doubleValue(), value.precision());
-        } else if (other instanceof RationalValue) {
-            RationalValue r = (RationalValue) other;
-            BigDecimal rVal = new BigDecimal(r.getNumerator()).divide(new BigDecimal(r.getDenominator()), MathContext.DECIMAL128);
-            if (rVal.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException("Division by zero");
+        String dividedZero = "Division by zero";
+
+        if (other instanceof RealValue realValue) {
+            if (realValue.value.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException(dividedZero);
+            return new RealValue(this.value.divide(realValue.value, MathContext.DECIMAL128).doubleValue(), value.precision());
+        } else if (other instanceof RationalValue rationalValue) {
+            BigDecimal rVal = new BigDecimal(rationalValue.getNumerator()).divide(new BigDecimal(rationalValue.getDenominator()), MathContext.DECIMAL128);
+            if (rVal.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException(dividedZero);
             return new RealValue(this.value.divide(rVal, MathContext.DECIMAL128).doubleValue(), value.precision());
-        } else if (other instanceof IntegerValue) {
-            IntegerValue i = (IntegerValue) other;
-            if (i.getValue() == 0) throw new ArithmeticException("Division by zero");
+        } else if (other instanceof IntegerValue integerValue) {
+            IntegerValue i = integerValue;
+            if (i.getValue() == 0) throw new ArithmeticException(dividedZero);
             BigDecimal iVal = BigDecimal.valueOf(i.getValue());
             return new RealValue(this.value.divide(iVal, MathContext.DECIMAL128).doubleValue(), value.precision());
         } else if (other instanceof ComplexValue) {
@@ -111,8 +105,13 @@ public class RealValue implements NumericValue {
     }
 
     @Override
+    public int getValueInt() {
+        return 0;
+    }
+
+    @Override
     public boolean equals(Object o) {
-        return o instanceof RealValue && this.value.equals(((RealValue) o).value);
+        return o instanceof RealValue realValue && this.value.equals(realValue.value);
     }
 
     @Override

@@ -26,6 +26,7 @@ class TestEvaluator {
 
     @Test
     void testEvaluatorMyNumber() {
+
         assertEquals(value1, calc.eval(new MyNumber(value1)));
     }
 

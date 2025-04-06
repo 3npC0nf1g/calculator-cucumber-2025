@@ -27,7 +27,7 @@ class TestCounting {
 
     @Test
     void testNumberCounting() {
-        e = value1;
+        e = value1  ;
         // test whether a number has zero depth (i.e. no nested expressions)
         assertEquals(0, e.countDepth(), "Depth of a single number should be 0");
         // test whether a number contains zero operations

@@ -3,7 +3,6 @@ package calculator;
 import static org.junit.jupiter.api.Assertions.*;
 
 import calculator.values.IntegerValue;
-import calculator.values.NumericValue;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -101,7 +100,8 @@ public class CalculatorSteps {
 				case "difference" -> op = new Minus(params);
 				default -> fail("Invalid operation type: " + s);
 			}
-			assertEquals(val, c.eval(op));  // Vérifier que le résultat de l'opération correspond à la valeur attendue
+			int result = c.eval(op).getValueInt();  // Récupérer la valeur de l'objet IntegerValue
+			assertEquals(val, result);  // Vérifier que le résultat de l'opération correspond à la valeur attendue
 		} catch (IllegalConstruction e) {
 			fail("Failed to construct the operation: " + s);
 		}
@@ -109,7 +109,8 @@ public class CalculatorSteps {
 
 	@Then("the operation evaluates to {int}")
 	public void thenTheOperationEvaluatesTo(int val) {
-		assertEquals(val, c.eval(op));
+		int result = c.eval(op).getValueInt();  // Récupérer la valeur de l'objet IntegerValue
+		assertEquals(val, result);  // Comparer la valeur obtenue à la valeur attendue
 	}
 
 	@Given("a composite expression consisting of the addition of {int} and {int} and multiplication by {int}")

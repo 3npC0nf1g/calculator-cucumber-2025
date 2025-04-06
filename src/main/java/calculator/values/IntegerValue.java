@@ -14,12 +14,16 @@ public class IntegerValue implements NumericValue {
     }
 
     @Override
+    public int getValueInt() {
+        return this.value;
+    }
+    @Override
     public NumericValue add(NumericValue other) {
-        if (other instanceof IntegerValue) {
-            return new IntegerValue(this.value + ((IntegerValue) other).value);
-        } else if (other instanceof RealValue) {
+        if (other instanceof IntegerValue integerValue) {
+            return new IntegerValue(this.value + integerValue.value);
+        } else if (other instanceof RealValue realValue) {
             // Promotion : convertit l'entier en réel
-            return new RealValue(this.value + ((RealValue) other).getValue().doubleValue(), ((RealValue) other).getPrecision());
+            return new RealValue(this.value + realValue.getValue().doubleValue(), realValue.getPrecision());
         } else if (other instanceof ComplexValue) {
             // Promotion : convertit l'entier en complexe (avec partie imaginaire nulle)
             return new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).add(other);
@@ -29,10 +33,10 @@ public class IntegerValue implements NumericValue {
 
     @Override
     public NumericValue subtract(NumericValue other) {
-        if (other instanceof IntegerValue) {
-            return new IntegerValue(this.value - ((IntegerValue) other).value);
-        } else if (other instanceof RealValue) {
-            return new RealValue(this.value - ((RealValue) other).getValue().doubleValue(), ((RealValue) other).getPrecision());
+        if (other instanceof IntegerValue integerValue) {
+            return new IntegerValue(this.value - integerValue.value);
+        } else if (other instanceof RealValue realValue) {
+            return new RealValue(this.value - realValue.getValue().doubleValue(), realValue.getPrecision());
         } else if (other instanceof ComplexValue) {
             return new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).subtract(other);
         }
@@ -41,10 +45,10 @@ public class IntegerValue implements NumericValue {
 
     @Override
     public NumericValue multiply(NumericValue other) {
-        if (other instanceof IntegerValue) {
-            return new IntegerValue(this.value * ((IntegerValue) other).value);
-        } else if (other instanceof RealValue) {
-            return new RealValue(this.value * ((RealValue) other).getValue().doubleValue(), ((RealValue) other).getPrecision());
+        if (other instanceof IntegerValue integerValue) {
+            return new IntegerValue(this.value * integerValue.value);
+        } else if (other instanceof RealValue realValue) {
+            return new RealValue(this.value * realValue.getValue().doubleValue(), realValue.getPrecision());
         } else if (other instanceof ComplexValue) {
             return new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).multiply(other);
         }
@@ -53,14 +57,14 @@ public class IntegerValue implements NumericValue {
 
     @Override
     public NumericValue divide(NumericValue other) {
-        if (other instanceof IntegerValue) {
-            int divisor = ((IntegerValue) other).value;
+        if (other instanceof IntegerValue integerValue) {
+            int divisor = integerValue.value;
             if (divisor == 0) throw new ArithmeticException("Division by zero");
             return new IntegerValue(this.value / divisor);
-        } else if (other instanceof RealValue) {
-            double divisor = ((RealValue) other).getValue().doubleValue();
+        } else if (other instanceof RealValue realValue) {
+            double divisor = realValue.getValue().doubleValue();
             if (divisor == 0.0) throw new ArithmeticException("Division by zero");
-            return new RealValue(this.value / divisor, ((RealValue) other).getPrecision());
+            return new RealValue(this.value / divisor, realValue.getPrecision());
         } else if (other instanceof ComplexValue) {
             return new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).divide(other);
         }
@@ -74,11 +78,20 @@ public class IntegerValue implements NumericValue {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof IntegerValue && this.value == ((IntegerValue) other).value;
+        // Vérifie si l'objet est le même (optimisation de performance)
+        if (this == other) return true;
+
+        // Vérifie si l'autre objet est null ou si ce n'est pas un IntegerValue
+        if (other == null || getClass() != other.getClass()) return false;
+
+        IntegerValue that = (IntegerValue) other;
+        return this.value == that.value;
     }
 
     @Override
     public int hashCode() {
         return Integer.hashCode(value);
     }
+
+
 }

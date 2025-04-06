@@ -10,5 +10,6 @@ public interface NumericValue {
     int hashCode();
     String toString();
 
-  //  String getValue();
+    int getValueInt();
+
 }
