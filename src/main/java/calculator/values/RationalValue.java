@@ -106,9 +106,26 @@ public class RationalValue implements NumericValue {
 
     @Override
     public String toString() {
-        if (denominator.equals(BigInteger.ONE)) return numerator.toString();
+        // Convertir en BigDecimal pour l'affichage
+        BigDecimal decimalValue = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);
+        BigDecimal absVal = decimalValue.abs();
+
+        // Si la valeur est très grande ou très petite → notation scientifique
+        if ((absVal.compareTo(BigDecimal.ONE.movePointRight(6)) > 0) ||
+                (absVal.compareTo(BigDecimal.ONE.movePointLeft(6)) < 0 && absVal.compareTo(BigDecimal.ZERO) != 0)) {
+            return decimalValue.stripTrailingZeros().toEngineeringString();
+        }
+
+        // Si la fraction est entière (dénominateur == 1)
+        if (denominator.equals(BigInteger.ONE)) {
+            return numerator.toString();
+        }
+
+        // Sinon, afficher sous forme de fraction canonique
         return numerator + "/" + denominator;
     }
+
+
 
     @Override
     public int getValueInt() {
