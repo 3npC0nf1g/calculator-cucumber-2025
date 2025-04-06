@@ -50,7 +50,7 @@ public class CalculatorSteps {
 	public void givenTheFollowingListOfNumbers(List<List<String>> numbers) {
 		params = new ArrayList<>();
 		// Convertir les chaînes en IntegerValue et les ajouter à la liste des paramètres
-		numbers.get(0).forEach(n -> params.add(new MyNumber(new IntegerValue(Integer.parseInt(n)))));
+		numbers.getFirst().forEach(n -> params.add(new MyNumber(new IntegerValue(Integer.parseInt(n)))));
 	}
 
 	@Given("^the sum of two numbers (\\d+) and (\\d+)$")

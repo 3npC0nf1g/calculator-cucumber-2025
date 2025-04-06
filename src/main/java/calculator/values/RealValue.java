@@ -88,9 +88,8 @@ public class RealValue implements NumericValue {
             if (rVal.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException(dividedZero);
             return new RealValue(this.value.divide(rVal, MathContext.DECIMAL128).doubleValue(), value.precision());
         } else if (other instanceof IntegerValue integerValue) {
-            IntegerValue i = integerValue;
-            if (i.getValue() == 0) throw new ArithmeticException(dividedZero);
-            BigDecimal iVal = BigDecimal.valueOf(i.getValue());
+            if (integerValue.getValue() == 0) throw new ArithmeticException(dividedZero);
+            BigDecimal iVal = BigDecimal.valueOf(integerValue.getValue());
             return new RealValue(this.value.divide(iVal, MathContext.DECIMAL128).doubleValue(), value.precision());
         } else if (other instanceof ComplexValue) {
             ComplexValue c = new ComplexValue(this.value, BigDecimal.ZERO);

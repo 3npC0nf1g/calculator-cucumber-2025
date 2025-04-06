@@ -56,9 +56,8 @@ public class RationalValue implements NumericValue {
     @Override
     public NumericValue subtract(NumericValue other) {
         if (other instanceof RationalValue rationalValue) {
-            RationalValue r = rationalValue;
-            BigInteger num = numerator.multiply(r.denominator).subtract(r.numerator.multiply(denominator));
-            BigInteger den = denominator.multiply(r.denominator);
+            BigInteger num = numerator.multiply(rationalValue.denominator).subtract(rationalValue.numerator.multiply(denominator));
+            BigInteger den = denominator.multiply(rationalValue.denominator);
             return new RationalValue(num, den);
         } else {
             // Similar promotion que pour add()
@@ -118,8 +117,7 @@ public class RationalValue implements NumericValue {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof RationalValue)) return false;
-        RationalValue other = (RationalValue) o;
+        if (!(o instanceof RationalValue other)) return false;
         return numerator.equals(other.numerator) && denominator.equals(other.denominator);
     }
 

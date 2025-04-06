@@ -100,8 +100,7 @@ public class ComplexValue implements NumericValue {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ComplexValue)) return false;
-        ComplexValue other = (ComplexValue) o;
+        if (!(o instanceof ComplexValue other)) return false;
         return realPart.equals(other.realPart) && imaginaryPart.equals(other.imaginaryPart);
     }
 
