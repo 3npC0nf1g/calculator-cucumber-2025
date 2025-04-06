@@ -23,7 +23,7 @@
         <sonar.organization>tommens</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.met>${java.version}</maven.compiler.met>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.version>3.13.0</maven.compiler.version>
         <!-- As of JDK 23, annotation processing is only run with some explicit configuration
