@@ -1,5 +1,6 @@
 package calculator;
 
+import calculator.util.AngleConverter;
 import visitor.Evaluator;
 import calculator.values.NumericValue;
 
@@ -12,6 +13,8 @@ import calculator.values.NumericValue;
  * @author tommens
  */
 public class Calculator {
+
+    private boolean useRadians = true;
 
     /**
      * Default constructor of the class.
@@ -72,4 +75,34 @@ public class Calculator {
      * or to simplify some expression
      * public Expression simplify(Expression e)
      */
+
+    public void setUseRadians(boolean useRadians) {
+        this.useRadians = useRadians;
+    }
+
+    public boolean isUseRadians() {
+        return useRadians;
+    }
+
+    public double sin(double angle) {
+        if (!useRadians) {
+            angle = AngleConverter.degreesToRadians(angle);
+        }
+        return Math.sin(angle);
+    }
+
+    public double cos(double angle) {
+        if (!useRadians) {
+            angle = AngleConverter.degreesToRadians(angle);
+        }
+        return Math.cos(angle);
+    }
+
+    public double tan(double angle) {
+        if (!useRadians) {
+            angle = AngleConverter.degreesToRadians(angle);
+        }
+        return Math.tan(angle);
+    }
+
 }

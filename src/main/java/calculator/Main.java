@@ -33,10 +33,16 @@ public class Main {
 			c.eval(e);
 
 			// Test avec RealNumber (BigDecimal) et notation scientifique
-			Expression real1 = new MyNumber(new RealValue(3.14159E65, 6)); // Exemple avec une grande valeur en notation scientifique
+			Expression real1 = new MyNumber(new RealValue(1.6E-35, 6)); // Exemple avec une grande valeur en notation scientifique
 			c.print(real1);
 			c.eval(real1);
 
+
+			c.setUseRadians(false); // Mode degré
+			System.out.println("La valeur du sinus est " + c.sin(30));
+
+		//	c.setUseRadians(true); // Mode radian
+			System.out.println("La valeur du sinus est " + c.sin(Math.PI / 6));
 
 
 			// Test avec des nombres rationnels
