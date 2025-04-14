@@ -1,8 +1,8 @@
-[![](https://img.shields.io/github/v/release/University-of-Mons/calculator-cucumber-2025?label=Latest%20Release)](https://github.com/University-of-Mons/calculator-cucumber/releases/latest)
+[![Continuous Reporting](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/Continuous-reporting.yml/badge.svg)](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/Continuous-reporting.yml)
 
-Code quality: ![Maven Build](https://github.com/University-of-Mons/calculator-cucumber-2025/actions/workflows/maven.yml/badge.svg)
+Build and Test: [![Build and Test](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/maven.yml/badge.svg)](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/maven.yml)
 
-Test coverage: ![Coverage](.github/badges/jacoco.svg)
+Test coverage: [![CodeQL coverage and quality analysis](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/codeql.yml/badge.svg)](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/codeql.yml)
 ![Branches](.github/badges/branches.svg)
 
 [![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)

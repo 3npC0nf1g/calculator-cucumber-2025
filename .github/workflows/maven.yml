@@ -1,34 +1,33 @@
 # Build and test a Java project with Maven, and compute and report test coverage 
 
-name: Java CI with Maven
+name: Build and Test
 
 on:
   push:
-    branches: [ master ]
+    branches: '**'
   pull_request:
-    branches: [ master ]
+    branches: '**'
 
 permissions:
   contents: read
 
 jobs:
   build:
-    name: building, testing and quality analysis
+    name: Building, Testing, and Quality Analysis
     runs-on: ubuntu-latest
 
     permissions:
-      # need write permissions for publishing the test report
       checks: write
       contents: write
 
     steps:
     - id: checkout
-      name: checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      name: Checkout Repository
+      uses: actions/checkout@v4  
 
     - id: setupjava
       name: Set up with Java 23
-      uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: 23
@@ -36,16 +35,16 @@ jobs:
 
     - id: mvn
       name: Build with Maven (including running all tests)
-      run: mvn -B package --file pom.xml
+      run: mvn -B clean verify jacoco:report --fail-at-end --file pom.xml  
 
     - id: testreport
       name: Publish Test Report
       if: ${{ always() }}
-      uses: scacap/action-surefire-report@a2911bd1a4412ec18dde2d93b1758b3e56d2a880 # v1.8.0
+      uses: scacap/action-surefire-report@v1.8.0 
 
     - name: Generate JaCoCo Badge
       id: jacoco
-      uses: cicirello/jacoco-badge-generator@f33476a5a3fd5a4f77cb5eef2ebe728c1dd5b921 # v2.11.0
+      uses: cicirello/jacoco-badge-generator@v2.11.0  
       with:
         generate-coverage-badge: true
         generate-branches-badge: true
@@ -56,3 +55,30 @@ jobs:
       run: |
         echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
         echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
+
+    - name: Commit and push the svg badges and the json coverage summary (if it changed)
+      if: github.event_name != 'pull_request'
+      uses: EndBug/add-and-commit@v9  
+      with:
+        default_author: github_actions
+        message: 'commit coverage badge and summary'
+        add: '*.svg *.json'
+        
+    - name: Upload JaCoCo coverage report
+      uses: actions/upload-artifact@v4  
+      with:
+        name: jacoco-report
+        path: target/site/jacoco/
+        
+    - name: Comment on PR with coverage percentages
+      if: ${{ github.event_name == 'pull_request' }}
+      run: |
+        REPORT=$(<.github/badges/coverage-summary.json)
+        COVERAGE=$(jq -r '.coverage' <<< "$REPORT")%
+        BRANCHES=$(jq -r '.branches' <<< "$REPORT")%
+        NEWLINE=$'\n'
+        BODY="## Test Coverage Summary ${NEWLINE}* __Coverage:__ ${COVERAGE}${NEWLINE}* __Branches:__ ${BRANCHES}"
+        gh pr comment ${{ github.event.pull_request.number }} -b "${BODY}"
+      continue-on-error: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
