@@ -89,3 +89,51 @@ Feature: Integer Arithmetic Expressions
       | "PREFIX"   | "* (+ (3, 4), 5)"    |
       | "INFIX"    | "( ( 3 + 4 ) * 5 )"  |
       | "POSTFIX"  | "((3, 4) +, 5) *"    |
+
+  Scenario: Adding two real numbers
+    Given a real operation '+'
+    When I provide a first real number 3.14
+    And I provide a second real number 2.86
+    Then the operation evaluates to 6.00
+
+  Scenario: Dividing two real numbers
+    Given a real operation '/'
+    When I provide a first real number 5.0
+    And I provide a second real number 2.0
+    Then the operation evaluates to 2.5
+
+  Scenario: Adding two complex numbers
+    Given a complex operation '+'
+    When I provide a first complex number "2.0+3.0i"
+    And I provide a second complex number "1.0+2.0i"
+    Then the operation evaluates to "3.0+5.0i"
+
+  Scenario: Multiplying two complex numbers
+    Given a complex operation '*'
+    When I provide a first complex number "2.0+3.0i"
+    And I provide a second complex number "4.0+-1.0i"
+    Then the operation evaluates to "11.0+10.0i"
+
+  Scenario: Dividing two complex numbers
+    Given a complex operation '/'
+    When I provide a first complex number "5.0+3.0i"
+    And I provide a second complex number "2.0+1.0i"
+    Then the operation evaluates to "2.6+0.2i"
+
+
+  Scenario: Converting degrees to radians
+    Given I have an angle of 180 degrees
+    When I convert the angle to radians
+    Then the result should be "3.141592653589793"
+
+  Scenario Outline: Converting degrees to radians
+    Given I have an angle of <degrees> degrees
+    When I convert the angle to radians
+    Then the result should be <radians>
+
+    Examples:
+      | degrees | radians                |
+      | 0       | 0.0                    |
+      | 90      | 1.5707963267948966     |
+      | 180     | 3.141592653589793      |
+      | 360     | 6.283185307179586      |

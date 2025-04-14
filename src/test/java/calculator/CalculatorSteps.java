@@ -2,7 +2,10 @@ package calculator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import calculator.values.ComplexValue;
 import calculator.values.IntegerValue;
+import calculator.values.NumericValue;
+import calculator.values.RealValue;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -10,6 +13,8 @@ import io.cucumber.java.en.When;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CalculatorSteps {
 
@@ -17,6 +22,12 @@ public class CalculatorSteps {
 	private Operation op;
 	private Calculator c;
 	private Operation compositeExpression;
+
+
+	// Déclaration des variables pour la conversion d'angles
+	private double angleDegrees;
+	private double angleRadians;
+
 
 	@Before
 	public void resetMemoryBeforeEachScenario() {
@@ -107,12 +118,6 @@ public class CalculatorSteps {
 		}
 	}
 
-	@Then("the operation evaluates to {int}")
-	public void thenTheOperationEvaluatesTo(int val) {
-		int result = c.eval(op).getValueInt();  // Récupérer la valeur de l'objet IntegerValue
-		assertEquals(val, result);  // Comparer la valeur obtenue à la valeur attendue
-	}
-
 	@Given("a composite expression consisting of the addition of {int} and {int} and multiplication by {int}")
 	public void aCompositeExpressionConsistingOfTheAdditionOfAndAndMultiplicationBy(int arg0, int arg1, int arg2) throws IllegalConstruction {
 		// Créer une expression composite : (arg0 + arg1) * arg2
@@ -145,5 +150,144 @@ public class CalculatorSteps {
 		} else {
 			fail("Composite expression is not initialized.");
 		}
+	}
+
+	// Nouvelle étape pour les opérations sur des réels
+	@Given("a real operation {string}")
+	public void givenARealOperation(String s) {
+		params = new ArrayList<>();
+		try {
+			switch (s) {
+				case "+" -> op = new Plus(params);
+				case "-" -> op = new Minus(params);
+				case "*" -> op = new Times(params);
+				case "/" -> op = new Divides(params);
+				default -> fail("Invalid real operation: " + s);
+			}
+		} catch (IllegalConstruction e) {
+			fail("Failed to construct real operation: " + s);
+		}
+	}
+
+	// Nouvelle étape pour les opérations sur les nombres complexes
+	@Given("a complex operation {string}")
+	public void givenAComplexOperation(String s) {
+		params = new ArrayList<>();
+		try {
+			switch (s) {
+				case "+" -> op = new Plus(params);
+				case "-" -> op = new Minus(params);
+				case "*" -> op = new Times(params);
+				case "/" -> op = new Divides(params);
+				default -> fail("Invalid complex operation: " + s);
+			}
+		} catch (IllegalConstruction e) {
+			fail("Failed to construct complex operation: " + s);
+		}
+	}
+
+	@When("I provide a first real number {double}")
+	public void whenIProvideAFirstRealNumber(double val) {
+		op.addMoreParams(List.of(new MyNumber(new RealValue(val, 6))));
+	}
+
+	@When("I provide a second real number {double}")
+	public void whenIProvideASecondRealNumber(double val) {
+		op.addMoreParams(List.of(new MyNumber(new RealValue(val, 6))));
+	}
+
+	private void provideComplexNumber(String complexStr) {
+		ComplexValue cv = parseComplex(complexStr);
+		op.addMoreParams(List.of(new MyNumber(cv)));
+	}
+
+	@When("I provide a first complex number {string}")
+	public void whenIProvideAFirstComplexNumber(String complexStr) {
+		provideComplexNumber(complexStr);
+	}
+
+	@When("I provide a second complex number {string}")
+	public void whenIProvideASecondComplexNumber(String complexStr) {
+		provideComplexNumber(complexStr);
+	}
+
+	@Then("the operation evaluates to {double}")
+	public void thenTheOperationEvaluatesToDouble(double expected) {
+		NumericValue result = c.eval(op);
+
+		double actual;
+		if (result instanceof RealValue) {
+			actual = ((RealValue) result).getValue().doubleValue();
+		} else if (result instanceof IntegerValue) {
+			actual = ((IntegerValue) result).getValue();
+		} else {
+			fail("Expected numeric result but got: " + result.getClass().getSimpleName());
+			return;
+		}
+
+		assertEquals(expected, actual, 0.0001); // correct usage with numeric delta
+	}
+
+
+	private ComplexValue parseComplex(String s) {
+		// Nettoyage de la chaîne
+		s = s.replaceAll("\\s+", "");
+		// Normalisation des combinaisons de signes
+		s = s.replace("+-", "-").replace("-+", "-").replace("++", "+");
+
+		// Expression régulière pour capturer la partie réelle et imaginaire
+		Pattern pattern = Pattern.compile("^([+-]?\\d*\\.?\\d+)([+-]\\d*\\.?\\d+)i$");
+		Matcher matcher = pattern.matcher(s);
+		if (!matcher.matches()) {
+			fail("Invalid complex number format: " + s);
+		}
+
+		double realPart = Double.parseDouble(matcher.group(1));
+		double imagPart = Double.parseDouble(matcher.group(2));
+
+		return new ComplexValue(realPart, imagPart);
+	}
+
+	// Étapes pour la conversion d'angle
+	@Given("I have an angle of {int} degrees")
+	public void iHaveAnAngleOfDegrees(int degrees) {
+		angleDegrees = degrees;
+	}
+
+	@When("I convert the angle to radians")
+	public void iConvertTheAngleToRadians() {
+		angleRadians = calculator.util.AngleConverter.degreesToRadians(angleDegrees);
+	}
+
+	@Then("the result should be {string}")
+	public void thenTheResultShouldBeString(String expected) {
+		// Comparaison par chaîne de caractères
+		assertEquals(expected, Double.toString(angleRadians));
+	}
+
+	@Then("the result should be {double}")
+	public void thenTheResultShouldBeDouble(double expected) {
+		assertEquals(expected, angleRadians, 1e-9);
+	}
+
+
+	@Then("the operation evaluates to {string}")
+	public void thenTheOperationEvaluatesToComplexString(String expected) {
+		NumericValue result = c.eval(op);
+		if (!(result instanceof ComplexValue)) {
+			fail("Expected result to be a ComplexValue but got: " + result.getClass().getSimpleName());
+		}
+
+		// Remove spaces and normalize both expected and actual strings
+		String actual = normalizeComplex(((ComplexValue) result).toString().replace(" ", ""));
+		String normalizedExpected = normalizeComplex(expected.replace(" ", ""));
+
+		assertEquals(normalizedExpected, actual);
+	}
+
+	private String normalizeComplex(String complex) {
+		// Normalize real and imaginary parts like 2.60 -> 2.6, 0.20 -> 0.2
+		return complex.replaceAll("(\\d+\\.\\d*?)0+(?=[^\\d]|$)", "$1") // remove trailing zeroes
+				.replaceAll("\\.0+(?=[^\\d]|$)", ""); // remove trailing ".0" if it becomes lonely
 	}
 }
