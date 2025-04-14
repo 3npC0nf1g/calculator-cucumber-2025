@@ -236,7 +236,7 @@ public class CalculatorSteps {
 		s = s.replace("+-", "-").replace("-+", "-").replace("++", "+");
 
 		// Expression régulière pour capturer la partie réelle et imaginaire
-		Pattern pattern = Pattern.compile("^([+-]?\\d*\\.?\\d+)([+-]\\d*\\.?\\d+)i$");
+		Pattern pattern = Pattern.compile("^([+-]?\\d+(?:\\.\\d+)?)([+-]\\d+(?:\\.\\d+)?)i$");
 		Matcher matcher = pattern.matcher(s);
 		if (!matcher.matches()) {
 			fail("Invalid complex number format: " + s);
@@ -286,8 +286,8 @@ public class CalculatorSteps {
 	}
 
 	private String normalizeComplex(String complex) {
-		// Normalize real and imaginary parts like 2.60 -> 2.6, 0.20 -> 0.2
-		return complex.replaceAll("(\\d+\\.\\d*?)0+(?=[^\\d]|$)", "$1") // remove trailing zeroes
-				.replaceAll("\\.0+(?=[^\\d]|$)", ""); // remove trailing ".0" if it becomes lonely
+		// Remove trailing zeroes and ".0" without causing backtracking issues
+		return complex.replaceAll("(\\d+\\.\\d*?)0+(?=\\D|$)", "$1")
+				.replaceAll("\\.0+(?=\\D|$)", "");
 	}
 }
