@@ -24,7 +24,7 @@ This repository contains Java code for computing arithmetic expressions. It is d
 
 ### Unit testing and BDD
 
-*  All tests can be found in the src\test directory. They serve as executable documentation of the source code.
+*  All tests  can be found in the src\test directory. They serve as executable documentation of the source code.
 *  The source code is accompanied by a set of JUnit 5 unit tests. These tests can be written and run in the usual way. If you are not familiar with unit testing or JUnit 5, please refer to https://junit.org/junit5/.
 *  The source code is accompanied by a set of Cucumber BDD scenarios, also running in Junit. If you are not familiar with Cucumber and BDD, please refer to https://cucumber.io/docs/cucumber/.
 The BDD scenarios are specified as .feature files in the src\test\resources directory. Some classes defined in src\test take care of converting these scenarios to executable JUnit tests.

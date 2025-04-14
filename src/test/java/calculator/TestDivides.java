@@ -2,6 +2,9 @@ package calculator;
 
 //Import Junit5 libraries for unit testing:
 import static org.junit.jupiter.api.Assertions.*;
+
+import calculator.values.IntegerValue;
+import calculator.values.NumericValue;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -10,8 +13,8 @@ import java.util.List;
 
 class TestDivides {
 
-	private final int value1 = 8;
-	private final int value2 = 6;
+	private final NumericValue value1 = new IntegerValue(8);
+	private final NumericValue value2 = new IntegerValue(6);
 	private Divides op;
 	private List<Expression> params;
 
