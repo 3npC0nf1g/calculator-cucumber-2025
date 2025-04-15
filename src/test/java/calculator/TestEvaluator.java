@@ -1,6 +1,9 @@
 package calculator;
 
-//Import Junit5 libraries for unit testing:
+import calculator.values.IntegerValue;
+import calculator.values.NumericValue;
+
+// Import JUnit5 libraries for unit testing:
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,37 +15,50 @@ import java.util.List;
 class TestEvaluator {
 
     private Calculator calc;
-    private int value1, value2;
+    private NumericValue value1, value2;
 
     @BeforeEach
     void setUp() {
         calc = new Calculator();
-        value1 = 8;
-        value2 = 6;
+        value1 = new IntegerValue(8);
+        value2 = new IntegerValue(6);
     }
 
     @Test
     void testEvaluatorMyNumber() {
-        assertEquals( value1, calc.eval(new MyNumber(value1)));
+
+        assertEquals(value1, calc.eval(new MyNumber(value1)));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"*", "+", "/", "-"})
     void testEvaluateOperations(String symbol) {
-        List<Expression> params = Arrays.asList(new MyNumber(value1),new MyNumber(value2));
+        List<Expression> params = Arrays.asList(
+                new MyNumber(value1),
+                new MyNumber(value2)
+        );
+
         try {
-            //construct another type of operation depending on the input value
-            //of the parameterised test
-            switch (symbol) {
-                case "+"	->	assertEquals( value1 + value2, calc.eval(new Plus(params)));
-                case "-"	->	assertEquals( value1 - value2, calc.eval(new Minus(params)));
-                case "*"	->	assertEquals( value1 * value2, calc.eval(new Times(params)));
-                case "/"	->	assertEquals( value1 / value2, calc.eval(new Divides(params)));
-                default		->	fail();
-            }
+            NumericValue expected = switch (symbol) {
+                case "+" -> value1.add(value2);
+                case "-" -> value1.subtract(value2);
+                case "*" -> value1.multiply(value2);
+                case "/" -> value1.divide(value2);
+                default -> throw new IllegalArgumentException("Unsupported operation: " + symbol);
+            };
+
+            Expression op = switch (symbol) {
+                case "+" -> new Plus(params);
+                case "-" -> new Minus(params);
+                case "*" -> new Times(params);
+                case "/" -> new Divides(params);
+                default -> throw new IllegalArgumentException("Unsupported operation: " + symbol);
+            };
+
+            assertEquals(expected, calc.eval(op), "Evaluation failed for operation: " + symbol);
+
         } catch (IllegalConstruction e) {
-            fail();
+            fail("Unexpected IllegalConstruction: " + e.getMessage());
         }
     }
-
 }
