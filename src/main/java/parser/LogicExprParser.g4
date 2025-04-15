@@ -9,7 +9,6 @@ logicExpr : infixForm
           | postfixForm
           ;
 
-
 // Infix logical expressions
 
 infixForm
