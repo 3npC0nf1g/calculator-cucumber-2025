@@ -51,4 +51,79 @@ class CalculatorServiceTest {
         String result = calculatorService.getRep("/", 8, 0);
         assertTrue(result.contains("Error"), "Division by zero should return an error");
     }
+    @Test
+     void testGetComplexRepAddition() {
+        String result = calculatorService.getComplexRep("+", 2, 3, 4, 5);
+        // Adjust the expected value string based on the output format of ComplexValue.toString()
+        assertEquals("6.0 + 8.0i", result, "Complex addition should return 6.00+8.00i");
+    }
+    @Test
+     void testGetComplexRepDivision() {
+        String result = calculatorService.getComplexRep("/", 10, 5, 2, 1);
+        // Adjust the expected string if your ComplexValue.toString() method formats differently
+        assertEquals("5.00 + 0.00i", result, "Complex division should return 5.00+0.00i");
+    }
+    @Test
+    void testGetComplexRepSubtraction() {
+        String result = calculatorService.getComplexRep("-", 6, 3, 2, 1);
+        // Adjust the expected value string based on the output format of ComplexValue.toString()
+        assertEquals("4.0 + 2.0i", result, "Complex addition should return 4.0+2.0i");
+    }
+
+    @Test
+    void testGetRealRepSubtraction() {
+        String result = calculatorService.getRealRep("-", 6.0, 3.2);
+        assertEquals("2.8", result, "Real subtraction should return 2.8");
+    }
+    @Test
+    void testGetRealRepAddition() {
+        String result = calculatorService.getRealRep("+", 6.0, 3.2);
+        assertEquals("9.2", result, "Real addition should return 9.2");
+    }
+    @Test
+    void testGetRealMultiplication() {
+        String result = calculatorService.getRealRep("*", 6.0, 3.2);
+        assertEquals("19.2", result, "Real multiplication should return 19.2");
+    }
+    @Test
+    void testGetRealDivision() {
+        String result = calculatorService.getRealRep("/", 2.5, 5);
+        assertEquals("0.5", result, "Real division should return 0.5");
+    }
+
+    @Test
+    void testGetRationalSubtraction() {
+        String result = calculatorService.getRationalRep("-", 3, 2,3,4);
+        assertEquals("3/4", result, "Real subtraction should return 3/4");
+    }
+    @Test
+    void testGetRationalAddition() {
+        String result = calculatorService.getRationalRep("+", 3, 2,3,4);
+        assertEquals("9/4", result, "Real addition should return 9/4");
+    }
+    @Test
+    void testGetRationalMultiplication() {
+        String result = calculatorService.getRationalRep("*", 3, 2,3,4);
+        assertEquals("9/8", result, "Real multiplication should return 9/8");
+    }
+
+    @Test
+    void testGetRationalDivision() {
+        String result = calculatorService.getRationalRep("/", 3, 2,3,4);
+        assertEquals("2", result, "Real multiplication should return 2");
+    }
+
+
+    @Test
+    void testDegreeToRadian() {
+        String result = calculatorService.getFromDegreeToRadian(90.0);
+        assertEquals("1.5707963267948966", result, "Real multiplication should return 1.5707963267948966");
+    }
+    @Test
+    void testRadianToDegree() {
+        String result = calculatorService.getFromRadianToDegree(Math.PI);
+        assertEquals("180.0", result, "Real multiplication should return 180.0");
+    }
+
+
 }

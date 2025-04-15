@@ -14,191 +14,183 @@ import java.util.stream.Stream;
  * @see Expression
  * @see MyNumber
  */
-public abstract class Operation implements Expression
-{
+public abstract class Operation implements Expression {
 	/**
 	 * The list of expressions passed as an argument to the arithmetic operation
 	 */
 	public List&lt;Expression&gt; args;
 
-  /**
-   * The character used to represent the arithmetic operation (e.g. &quot;+&quot;, &quot;*&quot;)
-   */
-  public String symbol;
+	/**
+	 * The character used to represent the arithmetic operation (e.g. &quot;+&quot;, &quot;*&quot;)
+	 */
+	public String symbol;
 
-  /**
-   * The neutral element of the operation (e.g. 1 for *, 0 for +)
-   */
-  protected int neutral;
+	/**
+	 * The neutral element of the operation (e.g. 1 for *, 0 for +)
+	 */
+	protected int neutral;
 
-  /**
-   * The notation used to render operations as strings.
-   * By default, the infix notation will be used.
-   */
-<span class="fc" id="L38">  public Notation notation = Notation.INFIX;</span>
+	/**
+	 * The notation used to render operations as strings.
+	 * By default, the infix notation will be used.
+	 */
+<span class="fc" id="L37">	public Notation notation = Notation.INFIX;</span>
 
-  /** It is not allowed to construct an operation with a null list of expressions.
-   * Note that it is allowed to have an EMPTY list of arguments.
-   *
-   * @param elist	The list of expressions passed as argument to the arithmetic operation
-   * @throws IllegalConstruction	Exception thrown if a null list of expressions is passed as argument
-   */
-  protected /*constructor*/ Operation(List&lt;Expression&gt; elist)
-		  throws IllegalConstruction
-	{
-<span class="nc" id="L49">		this(elist, null);</span>
-<span class="nc" id="L50">    }</span>
+	/** It is not allowed to construct an operation with a null list of expressions.
+	 * Note that it is allowed to have an EMPTY list of arguments.
+	 *
+	 * @param elist    The list of expressions passed as argument to the arithmetic operation
+	 * @throws IllegalConstruction  Exception thrown if a null list of expressions is passed as argument
+	 */
+	protected /*constructor*/ Operation(List&lt;Expression&gt; elist)
+			throws IllegalConstruction {
+<span class="nc" id="L47">		this(elist, null);</span>
+<span class="nc" id="L48">	}</span>
 
 	/** To construct an operation with a list of expressions as arguments,
 	 * as well as the Notation used to represent the operation.
 	 *
-	 * @param elist	The list of expressions passed as argument to the arithmetic operation
-	 * @param n 	The notation to be used to represent the operation
-	 * @throws IllegalConstruction	Exception thrown if a null list of expressions is passed as argument
+	 * @param elist    The list of expressions passed as argument to the arithmetic operation
+	 * @param n        The notation to be used to represent the operation
+	 * @throws IllegalConstruction  Exception thrown if a null list of expressions is passed as argument
 	 */
-	protected /*constructor*/ Operation(List&lt;Expression&gt; elist,Notation n)
-			throws IllegalConstruction
-<span class="fc" id="L61">	{</span>
-<span class="fc bfc" id="L62" title="All 2 branches covered.">		if (elist == null) {</span>
-<span class="fc" id="L63">			throw new IllegalConstruction(); }</span>
-		else {
-<span class="fc" id="L65">			args = new ArrayList&lt;&gt;(elist);</span>
+	protected /*constructor*/ Operation(List&lt;Expression&gt; elist, Notation n)
+<span class="fc" id="L58">			throws IllegalConstruction {</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">		if (elist == null) {</span>
+<span class="fc" id="L60">			throw new IllegalConstruction();</span>
+		} else {
+<span class="fc" id="L62">			args = new ArrayList&lt;&gt;(elist);</span>
 		}
-<span class="fc bfc" id="L67" title="All 2 branches covered.">		if (n!=null) notation = n;</span>
-<span class="fc" id="L68">	}</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">		if (n != null) {</span>
+<span class="fc" id="L65">			notation = n;</span>
+		}
+<span class="fc" id="L67">	}</span>
 
 	/**
-	 * getter method to return the number of arguments of an arithmetic operation.
+	 * Getter method to return the list of arguments of an arithmetic operation.
 	 *
-	 * @return	The number of arguments of the arithmetic operation.
+	 * @return The list of arguments of the arithmetic operation.
 	 */
 	public List&lt;Expression&gt; getArgs() {
-<span class="fc" id="L76">  	return args;</span>
-  }
+<span class="fc" id="L75">		return args;</span>
+	}
 
 	/**
-	 * Abstract method representing the actual binary arithmetic operation to compute
-	 * @param l	 first argument of the binary operation
-	 * @param r	second argument of the binary operation
-	 * @return	result of computing the binary operation
+	 * Abstract method representing the actual binary arithmetic operation to compute.
+	 *
+	 * @param l  First argument of the binary operation
+	 * @param r  Second argument of the binary operation
+	 * @return   The result of computing the binary operation as a NumericValue.
 	 */
-   public abstract int op(int l, int r);
-    // the operation itself is specified in the subclasses
+	public abstract calculator.values.NumericValue op(calculator.values.NumericValue l, calculator.values.NumericValue r);
 
 	/** Add more parameters to the existing list of parameters
 	 *
-	 * @param params	The list of parameters to be added
+	 * @param params The list of parameters to be added
 	 */
 	public void addMoreParams(List&lt;Expression&gt; params) {
-<span class="fc" id="L93">  	args.addAll(params);</span>
-<span class="fc" id="L94">  }</span>
+<span class="fc" id="L92">		args.addAll(params);</span>
+<span class="fc" id="L93">	}</span>
 
 	/**
 	 * Accept method to implement the visitor design pattern to traverse arithmetic expressions.
 	 * Each operation will delegate the visitor to each of its arguments expressions,
 	 * and will then pass itself to the visitor object to get processed by the visitor object.
 	 *
-	 * @param v	The visitor object
+	 * @param v The visitor object
 	 */
-  public void accept(Visitor v) {
-<span class="fc bfc" id="L104" title="All 2 branches covered.">  	for(Expression a:args) { a.accept(v); }</span>
-<span class="fc" id="L105">  	v.visit(this);</span>
-<span class="fc" id="L106">  }</span>
+	public void accept(Visitor v) {
+<span class="fc bfc" id="L103" title="All 2 branches covered.">		for (Expression a : args) {</span>
+<span class="fc" id="L104">			a.accept(v);</span>
+<span class="fc" id="L105">		}</span>
+<span class="fc" id="L106">		v.visit(this);</span>
+<span class="fc" id="L107">	}</span>
 
 	/**
 	 * Count the depth of an arithmetic expression recursively,
 	 * using Java 8 functional programming capabilities (streams, maps, etc...)
 	 *
- 	 * @return	The depth of the arithmetic expression being traversed
+	 * @return The depth of the arithmetic expression being traversed
 	 */
 	public final int countDepth() {
-	    // use of Java 8 functional programming capabilities
-<span class="fc" id="L116">	return 1 + args.stream()</span>
-<span class="fc" id="L117">			   .mapToInt(Expression::countDepth)</span>
-<span class="fc" id="L118">			   .max()</span>
-<span class="fc" id="L119">			   .getAsInt();  </span>
-  }
+<span class="fc" id="L116">		return 1 + args.stream()</span>
+<span class="fc" id="L117">				.mapToInt(Expression::countDepth)</span>
+<span class="fc" id="L118">				.max()</span>
+<span class="fc" id="L119">				.getAsInt();</span>
+	}
 
 	/**
 	 * Count the number of operations contained in an arithmetic expression recursively,
 	 * using Java 8 functional programming capabilities (streams, maps, etc...)
 	 *
-	 * @return	The number of operations contained in an arithmetic expression being traversed
+	 * @return The number of operations contained in an arithmetic expression being traversed
 	 */
 	public final int countOps() {
-	    // use of Java 8 functional programming capabilities
-<span class="fc" id="L130">	return 1 + args.stream()</span>
-<span class="fc" id="L131">			   .mapToInt(Expression::countOps)</span>
-<span class="fc" id="L132">			   .reduce(Integer::sum)</span>
-<span class="fc" id="L133">			   .getAsInt();</span>
-  }
+<span class="fc" id="L129">		return 1 + args.stream()</span>
+<span class="fc" id="L130">				.mapToInt(Expression::countOps)</span>
+<span class="fc" id="L131">				.reduce(Integer::sum)</span>
+<span class="fc" id="L132">				.getAsInt();</span>
+	}
 
-  public final int countNbs() {
-	    // use of Java 8 functional programming capabilities
-<span class="fc" id="L138">	return args.stream()</span>
-<span class="fc" id="L139">			   .mapToInt(Expression::countNbs)</span>
-<span class="fc" id="L140">			   .reduce(Integer::sum)</span>
-<span class="fc" id="L141">			   .getAsInt();  </span>
-  }
+	public final int countNbs() {
+<span class="fc" id="L136">		return args.stream()</span>
+<span class="fc" id="L137">				.mapToInt(Expression::countNbs)</span>
+<span class="fc" id="L138">				.reduce(Integer::sum)</span>
+<span class="fc" id="L139">				.getAsInt();</span>
+	}
 
-  /**
-   * Convert the arithmetic operation into a String to allow it to be printed,
-   * using the default notation (prefix, infix or postfix) that is specified in some variable.
-   *
-   * @return	The String that is the result of the conversion.
-   */
-  @Override
-  public final String toString() {
-<span class="fc" id="L152">  	return toString(notation);</span>
-  }
+	/**
+	 * Convert the arithmetic operation into a String to allow it to be printed,
+	 * using the default notation (prefix, infix or postfix) that is specified in some variable.
+	 *
+	 * @return The String that is the result of the conversion.
+	 */
+	@Override
+	public final String toString() {
+<span class="fc" id="L150">		return toString(notation);</span>
+	}
 
-  /**
-   * Convert the arithmetic operation into a String to allow it to be printed,
-   * using the notation n (prefix, infix or postfix) that is specified as a parameter.
-   *
-   * @param n	The notation to be used for representing the operation (prefix, infix or postfix)
-   * @return	The String that is the result of the conversion.
-   */
-  public final String toString(Notation n) {
-<span class="fc" id="L163">	  PrintVisitor pv = new PrintVisitor(n);</span>
-<span class="fc" id="L164">	  this.accept(pv);</span>
-<span class="fc" id="L165">	  return pv.getResult();</span>
-  }
-
+	/**
+	 * Convert the arithmetic operation into a String to allow it to be printed,
+	 * using the notation n (prefix, infix or postfix) that is specified as a parameter.
+	 *
+	 * @param n The notation to be used for representing the operation (prefix, infix or postfix)
+	 * @return The String that is the result of the conversion.
+	 */
+	public final String toString(Notation n) {
+<span class="fc" id="L161">		PrintVisitor pv = new PrintVisitor(n);</span>
+<span class="fc" id="L162">		this.accept(pv);</span>
+<span class="fc" id="L163">		return pv.getResult();</span>
+	}
 
 	/**
 	 * Two operation objects are equal if their list of arguments is equal and they correspond to the same operation.
 	 *
-	 * @param o	The object to compare with
-	 * @return	The result of the equality comparison
+	 * @param o The object to compare with
+	 * @return The result of the equality comparison
 	 */
 	@Override
 	public boolean equals(Object o) {
-<span class="pc bpc" id="L177" title="1 of 2 branches missed.">		if (o == null) return false; // No object should be equal to null</span>
-
-<span class="fc bfc" id="L179" title="All 2 branches covered.">		if (this == o) return true; // If it's the same object, they're obviously equal</span>
-
-<span class="fc bfc" id="L181" title="All 2 branches covered.">		if (getClass() != o.getClass()) return false; // getClass() instead of instanceof() because an addition is not the same as a multiplication</span>
-
-<span class="fc" id="L183">		Operation other = (Operation) o;</span>
-<span class="fc" id="L184">		return this.args.equals(other.getArgs());</span>
-	  }
-
-	/** The method hashCode needs to be overridden it the equals method is overridden;
-	 * 	otherwise there may be problems when you use your object in hashed collections
-	 * 	such as HashMap, HashSet, LinkedHashSet.
-	 *
-	 * @return	The result of computing the hash.
-	 */
-	@Override
-	public int hashCode()
-	{
-<span class="fc" id="L196">		int result = 5, prime = 31;</span>
-<span class="fc" id="L197">		result = prime * result + neutral;</span>
-<span class="fc" id="L198">		result = prime * result + symbol.hashCode();</span>
-<span class="fc" id="L199">		result = prime * result + args.hashCode();</span>
-<span class="fc" id="L200">		return result;</span>
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">		if (o == null) return false;</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">		if (this == o) return true;</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">		if (getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L177">		Operation other = (Operation) o;</span>
+<span class="fc" id="L178">		return this.args.equals(other.getArgs());</span>
 	}
 
+	/** The method hashCode needs to be overridden if the equals method is overridden;
+	 *  otherwise there may be problems when you use your object in hashed collections
+	 *  such as HashMap, HashSet, LinkedHashSet.
+	 *
+	 * @return The result of computing the hash.
+	 */
+	@Override
+	public int hashCode() {
+<span class="fc" id="L189">		int result = 5, prime = 31;</span>
+<span class="fc" id="L190">		result = prime * result + neutral;</span>
+<span class="fc" id="L191">		result = prime * result + symbol.hashCode();</span>
+<span class="fc" id="L192">		result = prime * result + args.hashCode();</span>
+<span class="fc" id="L193">		return result;</span>
+	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

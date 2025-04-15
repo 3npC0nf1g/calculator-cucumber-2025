@@ -10,3 +10,8 @@
 /home/christian/Umons/Software_evol/calculator-cucumber-2025/src/test/java/calculator/TestOperation.java
 /home/christian/Umons/Software_evol/calculator-cucumber-2025/src/test/java/calculator/TestPlus.java
 /home/christian/Umons/Software_evol/calculator-cucumber-2025/src/test/java/calculator/TestTimes.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/test/java/calculator/util/AngleConverterTest.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/test/java/calculator/values/ComplexValueTest.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/test/java/calculator/values/IntegerValueTest.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/test/java/calculator/values/RationalValueTest.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/test/java/calculator/values/RealValueTest.java

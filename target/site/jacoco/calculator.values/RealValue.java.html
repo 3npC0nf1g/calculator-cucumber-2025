@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealValue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Calculator with JUnit5 and Cucumber tests</a> &gt; <a href="index.source.html" class="el_package">calculator.values</a> &gt; <span class="el_source">RealValue.java</span></div><h1>RealValue.java</h1><pre class="source lang-java linenums">package calculator.values;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
+
+public class RealValue implements NumericValue {
+    private final BigDecimal value;
+    private final MathContext mathContext;
+
+<span class="fc" id="L10">    public RealValue(double value, int precision) {</span>
+<span class="fc" id="L11">        this.mathContext = new MathContext(precision);</span>
+<span class="fc" id="L12">        this.value = new BigDecimal(value, mathContext);</span>
+<span class="fc" id="L13">    }</span>
+
+<span class="fc" id="L15">    public RealValue(BigDecimal value, int precision) {</span>
+<span class="fc" id="L16">        this.mathContext = new MathContext(precision);</span>
+<span class="fc" id="L17">        this.value = value.round(mathContext);</span>
+<span class="fc" id="L18">    }</span>
+
+    public BigDecimal getValue() {
+<span class="fc" id="L21">        return value;</span>
+    }
+
+    public int getPrecision() {
+<span class="fc" id="L25">        return mathContext.getPrecision();</span>
+    }
+
+    @Override
+    public NumericValue add(NumericValue other) {
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (other instanceof RealValue realValue) {</span>
+<span class="fc" id="L31">            return new RealValue(this.value.add(realValue.value, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        } else if (other instanceof RationalValue rationalValue) {</span>
+<span class="nc" id="L33">            BigDecimal rVal = new BigDecimal(rationalValue.getNumerator())</span>
+<span class="nc" id="L34">                    .divide(new BigDecimal(rationalValue.getDenominator()), mathContext);</span>
+<span class="nc" id="L35">            return new RealValue(this.value.add(rVal, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        } else if (other instanceof IntegerValue integerValue) {</span>
+<span class="nc" id="L37">            BigDecimal iVal = BigDecimal.valueOf(integerValue.getValue());</span>
+<span class="nc" id="L38">            return new RealValue(this.value.add(iVal, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        } else if (other instanceof ComplexValue) {</span>
+<span class="nc" id="L40">            ComplexValue c = new ComplexValue(this.value, BigDecimal.ZERO);</span>
+<span class="nc" id="L41">            return c.add(other);</span>
+        }
+<span class="nc" id="L43">        throw new UnsupportedOperationException(&quot;Cannot add different numeric types: &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public NumericValue subtract(NumericValue other) {
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (other instanceof RealValue realValue) {</span>
+<span class="fc" id="L49">            return new RealValue(this.value.subtract(realValue.value, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        } else if (other instanceof RationalValue rationalValue) {</span>
+<span class="nc" id="L51">            BigDecimal rVal = new BigDecimal(rationalValue.getNumerator())</span>
+<span class="nc" id="L52">                    .divide(new BigDecimal(rationalValue.getDenominator()), mathContext);</span>
+<span class="nc" id="L53">            return new RealValue(this.value.subtract(rVal, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        } else if (other instanceof IntegerValue integerValue) {</span>
+<span class="nc" id="L55">            BigDecimal iVal = BigDecimal.valueOf(integerValue.getValue());</span>
+<span class="nc" id="L56">            return new RealValue(this.value.subtract(iVal, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        } else if (other instanceof ComplexValue) {</span>
+<span class="nc" id="L58">            ComplexValue c = new ComplexValue(this.value, BigDecimal.ZERO);</span>
+<span class="nc" id="L59">            return c.subtract(other);</span>
+        }
+<span class="nc" id="L61">        throw new UnsupportedOperationException(&quot;Cannot subtract different numeric types: &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public NumericValue multiply(NumericValue other) {
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (other instanceof RealValue realValue) {</span>
+<span class="fc" id="L67">            return new RealValue(this.value.multiply(realValue.value, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        } else if (other instanceof RationalValue rationalValue) {</span>
+<span class="nc" id="L69">            BigDecimal rVal = new BigDecimal(rationalValue.getNumerator())</span>
+<span class="nc" id="L70">                    .divide(new BigDecimal(rationalValue.getDenominator()), mathContext);</span>
+<span class="nc" id="L71">            return new RealValue(this.value.multiply(rVal, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        } else if (other instanceof IntegerValue integerValue) {</span>
+<span class="nc" id="L73">            BigDecimal iVal = BigDecimal.valueOf(integerValue.getValue());</span>
+<span class="nc" id="L74">            return new RealValue(this.value.multiply(iVal, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        } else if (other instanceof ComplexValue) {</span>
+<span class="nc" id="L76">            ComplexValue c = new ComplexValue(this.value, BigDecimal.ZERO);</span>
+<span class="nc" id="L77">            return c.multiply(other);</span>
+        }
+<span class="nc" id="L79">        throw new UnsupportedOperationException(&quot;Cannot multiply different numeric types: &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public NumericValue divide(NumericValue other) {
+<span class="fc" id="L84">        String dividedZero = &quot;Division by zero&quot;;</span>
+
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (other instanceof RealValue realValue) {</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">            if (realValue.value.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException(dividedZero);</span>
+<span class="fc" id="L88">            return new RealValue(this.value.divide(realValue.value, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        } else if (other instanceof RationalValue rationalValue) {</span>
+<span class="nc" id="L90">            BigDecimal rVal = new BigDecimal(rationalValue.getNumerator())</span>
+<span class="nc" id="L91">                    .divide(new BigDecimal(rationalValue.getDenominator()), mathContext);</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            if (rVal.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException(dividedZero);</span>
+<span class="nc" id="L93">            return new RealValue(this.value.divide(rVal, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        } else if (other instanceof IntegerValue integerValue) {</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            if (integerValue.getValue() == 0) throw new ArithmeticException(dividedZero);</span>
+<span class="nc" id="L96">            BigDecimal iVal = BigDecimal.valueOf(integerValue.getValue());</span>
+<span class="nc" id="L97">            return new RealValue(this.value.divide(iVal, mathContext), getPrecision());</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        } else if (other instanceof ComplexValue) {</span>
+<span class="nc" id="L99">            ComplexValue c = new ComplexValue(this.value, BigDecimal.ZERO);</span>
+<span class="nc" id="L100">            return c.divide(other);</span>
+        }
+<span class="nc" id="L102">        throw new UnsupportedOperationException(&quot;Cannot divide different numeric types: &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L107">        return value.stripTrailingZeros().toPlainString();</span>
+    }
+
+    @Override
+    public int getValueInt() {
+<span class="nc" id="L112">        return value.intValue();</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L117" title="2 of 4 branches missed.">        return o instanceof RealValue realValue &amp;&amp; this.value.compareTo(realValue.value) == 0;</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L122">        return value.hashCode();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

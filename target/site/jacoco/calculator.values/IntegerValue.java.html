@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IntegerValue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Calculator with JUnit5 and Cucumber tests</a> &gt; <a href="index.source.html" class="el_package">calculator.values</a> &gt; <span class="el_source">IntegerValue.java</span></div><h1>IntegerValue.java</h1><pre class="source lang-java linenums">package calculator.values;
+
+import java.math.BigDecimal;
+
+public class IntegerValue implements NumericValue {
+    private final int value;
+
+<span class="fc" id="L8">    public IntegerValue(int value) {</span>
+<span class="fc" id="L9">        this.value = value;</span>
+<span class="fc" id="L10">    }</span>
+
+    public int getValue() {
+<span class="fc" id="L13">        return value;</span>
+    }
+
+    @Override
+    public int getValueInt() {
+<span class="fc" id="L18">        return this.value;</span>
+    }
+    @Override
+    public NumericValue add(NumericValue other) {
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        if (other instanceof IntegerValue integerValue) {</span>
+<span class="fc" id="L23">            return new IntegerValue(this.value + integerValue.value);</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">        } else if (other instanceof RealValue realValue) {</span>
+            // Promotion : convertit l'entier en réel
+<span class="fc" id="L26">            return new RealValue(this.value + realValue.getValue().doubleValue(), realValue.getPrecision());</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        } else if (other instanceof ComplexValue) {</span>
+            // Promotion : convertit l'entier en complexe (avec partie imaginaire nulle)
+<span class="fc" id="L29">            return new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).add(other);</span>
+        }
+<span class="nc" id="L31">        throw new UnsupportedOperationException(&quot;Unsupported addition between IntegerValue and &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public NumericValue subtract(NumericValue other) {
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        if (other instanceof IntegerValue integerValue) {</span>
+<span class="fc" id="L37">            return new IntegerValue(this.value - integerValue.value);</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        } else if (other instanceof RealValue realValue) {</span>
+<span class="nc" id="L39">            return new RealValue(this.value - realValue.getValue().doubleValue(), realValue.getPrecision());</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        } else if (other instanceof ComplexValue) {</span>
+<span class="nc" id="L41">            return new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).subtract(other);</span>
+        }
+<span class="nc" id="L43">        throw new UnsupportedOperationException(&quot;Unsupported subtraction between IntegerValue and &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public NumericValue multiply(NumericValue other) {
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (other instanceof IntegerValue integerValue) {</span>
+<span class="fc" id="L49">            return new IntegerValue(this.value * integerValue.value);</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        } else if (other instanceof RealValue realValue) {</span>
+<span class="nc" id="L51">            return new RealValue(this.value * realValue.getValue().doubleValue(), realValue.getPrecision());</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        } else if (other instanceof ComplexValue) {</span>
+<span class="fc" id="L53">            return new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).multiply(other);</span>
+        }
+<span class="nc" id="L55">        throw new UnsupportedOperationException(&quot;Unsupported multiplication between IntegerValue and &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public NumericValue divide(NumericValue other) {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (other instanceof IntegerValue integerValue) {</span>
+<span class="fc" id="L61">            int divisor = integerValue.value;</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">            if (divisor == 0) throw new ArithmeticException(&quot;Division by zero&quot;);</span>
+<span class="fc" id="L63">            return new IntegerValue(this.value / divisor);</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        } else if (other instanceof RealValue realValue) {</span>
+<span class="fc" id="L65">            double divisor = realValue.getValue().doubleValue();</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">            if (divisor == 0.0) throw new ArithmeticException(&quot;Division by zero&quot;);</span>
+<span class="fc" id="L67">            return new RealValue(this.value / divisor, realValue.getPrecision());</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        } else if (other instanceof ComplexValue) {</span>
+<span class="nc" id="L69">            return new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).divide(other);</span>
+        }
+<span class="nc" id="L71">        throw new UnsupportedOperationException(&quot;Unsupported division between IntegerValue and &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L76">        return Integer.toString(value);</span>
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        // Vérifie si l'objet est le même (optimisation de performance)
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (this == other) return true;</span>
+
+        // Vérifie si l'autre objet est null ou si ce n'est pas un IntegerValue
+<span class="pc bpc" id="L85" title="2 of 4 branches missed.">        if (other == null || getClass() != other.getClass()) return false;</span>
+
+<span class="fc" id="L87">        IntegerValue that = (IntegerValue) other;</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        return this.value == that.value;</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L93">        return Integer.hashCode(value);</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

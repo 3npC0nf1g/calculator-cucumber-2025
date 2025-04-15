@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComplexValue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Calculator with JUnit5 and Cucumber tests</a> &gt; <a href="index.source.html" class="el_package">calculator.values</a> &gt; <span class="el_source">ComplexValue.java</span></div><h1>ComplexValue.java</h1><pre class="source lang-java linenums">package calculator.values;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+public class ComplexValue implements NumericValue {
+    private final BigDecimal realPart;
+    private final BigDecimal imaginaryPart;
+
+<span class="fc" id="L10">    public ComplexValue(double realPart, double imaginaryPart) {</span>
+<span class="fc" id="L11">        this.realPart = BigDecimal.valueOf(realPart);</span>
+<span class="fc" id="L12">        this.imaginaryPart = BigDecimal.valueOf(imaginaryPart);</span>
+<span class="fc" id="L13">    }</span>
+
+<span class="fc" id="L15">    public ComplexValue(BigDecimal realPart, BigDecimal imaginaryPart) {</span>
+<span class="fc" id="L16">        this.realPart = realPart;</span>
+<span class="fc" id="L17">        this.imaginaryPart = imaginaryPart;</span>
+<span class="fc" id="L18">    }</span>
+
+    public BigDecimal getReal() {
+<span class="fc" id="L21">        return realPart;</span>
+    }
+
+    public BigDecimal getImag() {
+<span class="fc" id="L25">        return imaginaryPart;</span>
+    }
+
+    @Override
+    public NumericValue add(NumericValue other) {
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (other instanceof ComplexValue c) {</span>
+<span class="fc" id="L31">            BigDecimal newReal = this.realPart.add(c.realPart);</span>
+<span class="fc" id="L32">            BigDecimal newImag = this.imaginaryPart.add(c.imaginaryPart);</span>
+<span class="fc" id="L33">            return new ComplexValue(newReal, newImag);</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        } else if (other instanceof RealValue r) {</span>
+<span class="nc" id="L35">            return new ComplexValue(this.realPart.add(r.getValue()), this.imaginaryPart);</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        } else if (other instanceof IntegerValue i) {</span>
+<span class="nc" id="L37">            return new ComplexValue(this.realPart.add(BigDecimal.valueOf(i.getValue())), this.imaginaryPart);</span>
+        }
+<span class="nc" id="L39">        throw new UnsupportedOperationException(&quot;Unsupported addition between ComplexValue and &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public NumericValue subtract(NumericValue other) {
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (other instanceof ComplexValue c) {</span>
+<span class="fc" id="L45">            BigDecimal newReal = this.realPart.subtract(c.realPart);</span>
+<span class="fc" id="L46">            BigDecimal newImag = this.imaginaryPart.subtract(c.imaginaryPart);</span>
+<span class="fc" id="L47">            return new ComplexValue(newReal, newImag);</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        } else if (other instanceof RealValue r) {</span>
+<span class="nc" id="L49">            return new ComplexValue(this.realPart.subtract(r.getValue()), this.imaginaryPart);</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        } else if (other instanceof IntegerValue i) {</span>
+<span class="nc" id="L51">            return new ComplexValue(this.realPart.subtract(BigDecimal.valueOf(i.getValue())), this.imaginaryPart);</span>
+        }
+<span class="nc" id="L53">        throw new UnsupportedOperationException(&quot;Unsupported subtraction between ComplexValue and &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public NumericValue multiply(NumericValue other) {
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (other instanceof ComplexValue c) {</span>
+<span class="fc" id="L59">            BigDecimal newReal = this.realPart.multiply(c.realPart).subtract(this.imaginaryPart.multiply(c.imaginaryPart));</span>
+<span class="fc" id="L60">            BigDecimal newImag = this.realPart.multiply(c.imaginaryPart).add(this.imaginaryPart.multiply(c.realPart));</span>
+<span class="fc" id="L61">            return new ComplexValue(newReal, newImag);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        } else if (other instanceof RealValue r) {</span>
+<span class="nc" id="L63">            return new ComplexValue(this.realPart.multiply(r.getValue()), this.imaginaryPart.multiply(r.getValue()));</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        } else if (other instanceof IntegerValue i) {</span>
+<span class="nc" id="L65">            return new ComplexValue(this.realPart.multiply(BigDecimal.valueOf(i.getValue())), this.imaginaryPart.multiply(BigDecimal.valueOf(i.getValue())));</span>
+        }
+<span class="nc" id="L67">        throw new UnsupportedOperationException(&quot;Unsupported multiplication between ComplexValue and &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public NumericValue divide(NumericValue other) {
+<span class="fc" id="L72">        String dividedZero = &quot;Division by zero&quot;;</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (other instanceof ComplexValue c) {</span>
+<span class="fc" id="L74">            BigDecimal denominator = c.realPart.multiply(c.realPart).add(c.imaginaryPart.multiply(c.imaginaryPart));</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            if (denominator.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException(dividedZero);</span>
+<span class="fc" id="L76">            BigDecimal newReal = this.realPart.multiply(c.realPart).add(this.imaginaryPart.multiply(c.imaginaryPart)).divide(denominator, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L77">            BigDecimal newImag = this.imaginaryPart.multiply(c.realPart).subtract(this.realPart.multiply(c.imaginaryPart)).divide(denominator, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L78">            return new ComplexValue(newReal, newImag);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        } else if (other instanceof RealValue r) {</span>
+<span class="nc" id="L80">            BigDecimal divisor = r.getValue();</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            if (divisor.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException(dividedZero);</span>
+<span class="nc" id="L82">            return new ComplexValue(this.realPart.divide(divisor, RoundingMode.HALF_UP), this.imaginaryPart.divide(divisor, RoundingMode.HALF_UP));</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        } else if (other instanceof IntegerValue i) {</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">            if (i.getValue() == 0) throw new ArithmeticException(dividedZero);</span>
+<span class="nc" id="L85">            BigDecimal divisor = BigDecimal.valueOf(i.getValue());</span>
+<span class="nc" id="L86">            return new ComplexValue(this.realPart.divide(divisor, RoundingMode.HALF_UP), this.imaginaryPart.divide(divisor, RoundingMode.HALF_UP));</span>
+        }
+<span class="nc" id="L88">        throw new UnsupportedOperationException(&quot;Unsupported division between ComplexValue and &quot; + other.getClass());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L93">        return realPart + &quot; + &quot; + imaginaryPart + &quot;i&quot;;</span>
+    }
+
+    @Override
+    public int getValueInt() {
+<span class="nc" id="L98">        return 0;</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        if (!(o instanceof ComplexValue other)) return false;</span>
+<span class="pc bpc" id="L104" title="2 of 4 branches missed.">        return realPart.equals(other.realPart) &amp;&amp; imaginaryPart.equals(other.imaginaryPart);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L109">        return realPart.hashCode() ^ imaginaryPart.hashCode();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

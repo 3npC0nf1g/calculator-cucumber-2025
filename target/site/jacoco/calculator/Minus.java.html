@@ -2,52 +2,67 @@
 
 import java.util.List;
 
-/** This class represents the arithmetic operation &quot;-&quot;.
- * The class extends an abstract superclass Operation.
+/**
+ * This class represents the arithmetic operation &quot;-&quot; for subtraction.
+ * The class extends the abstract superclass Operation.
  * Other subclasses of Operation represent other arithmetic operations.
  * @see Operation
  * @see Plus
  * @see Times
  * @see Divides
  */
-public final class Minus extends Operation
- {
-
-  /**
-   * Class constructor specifying a number of Expressions to subtract.
-   *
-   * @param elist The list of Expressions to subtract
-   * @throws IllegalConstruction    If an empty list of expressions if passed as parameter
-   * @see #Minus(List&lt;Expression&gt;,Notation)
-   */
-  public /*constructor*/ Minus(List&lt;Expression&gt; elist) throws IllegalConstruction {
-<span class="fc" id="L24">  	this(elist, null);</span>
-<span class="fc" id="L25">  }</span>
-
-  /**
-   * Class constructor specifying a number of Expressions to subtract,
-   * as well as the Notation used to represent the operation.
-   *
-   * @param elist The list of Expressions to subtract
-   * @param n The Notation to be used to represent the operation
-   * @throws IllegalConstruction    If an empty list of expressions if passed as parameter
-   * @see #Minus(List&lt;Expression&gt;)
-   * @see Operation#Operation(List&lt;Expression&gt;,Notation)
-   */
-  public Minus(List&lt;Expression&gt; elist, Notation n) throws IllegalConstruction {
-<span class="fc" id="L38">  	super(elist,n);</span>
-<span class="fc" id="L39">  	symbol = &quot;-&quot;;</span>
-<span class="fc" id="L40">  	neutral = 0;</span>
-<span class="fc" id="L41">  }</span>
+public final class Minus extends Operation {
 
     /**
-     * The actual computation of the (binary) arithmetic subtraction of two integers
-     * @param l The first integer
-     * @param r The second integer that should be subtracted from the first
-     * @return The integer that is the result of the subtraction
+     * Class constructor specifying a number of Expressions to subtract.
+     *
+     * @param elist The list of Expressions to subtract.
+     * @throws IllegalConstruction If an empty list of expressions is passed as parameter.
+     * @see #Minus(List&lt;Expression&gt;, Notation)
      */
-  public int op(int l, int r) {
-<span class="fc" id="L50">  	return (l-r);</span>
-  }
+    public Minus(List&lt;Expression&gt; elist) throws IllegalConstruction {
+<span class="fc" id="L24">        this(elist, null);</span>
+<span class="fc" id="L25">    }</span>
+
+    /**
+     * Class constructor specifying a number of Expressions to subtract,
+     * as well as the Notation used to represent the operation.
+     *
+     * @param elist The list of Expressions to subtract.
+     * @param n The Notation to be used to represent the operation.
+     * @throws IllegalConstruction If an empty list of expressions is passed as parameter.
+     * @see #Minus(List&lt;Expression&gt;)
+     * @see Operation#Operation(List&lt;Expression&gt;, Notation)
+     */
+    public Minus(List&lt;Expression&gt; elist, Notation n) throws IllegalConstruction {
+<span class="fc" id="L38">        super(elist, n);</span>
+<span class="fc" id="L39">        symbol = &quot;-&quot;;</span>
+<span class="fc" id="L40">        neutral = 0;</span>
+<span class="fc" id="L41">    }</span>
+
+    /**
+     * Performs the subtraction operation on two NumericValue objects.
+     * This method leverages the subtract method defined in the NumericValue interface.
+     *
+     * @param l The first numeric value.
+     * @param r The second numeric value.
+     * @return The result of the subtraction as a NumericValue.
+     */
+    @Override
+    public calculator.values.NumericValue op(calculator.values.NumericValue l, calculator.values.NumericValue r) {
+<span class="fc" id="L53">        return l.subtract(r);</span>
+    }
+
+    /**
+     * The actual computation of the (binary) arithmetic subtraction of two integers.
+     * This method is maintained for backward compatibility.
+     *
+     * @param l The first integer.
+     * @param r The second integer that should be subtracted from the first.
+     * @return The integer that is the result of the subtraction.
+     */
+    public int op(int l, int r) {
+<span class="nc" id="L65">        return (l - r);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

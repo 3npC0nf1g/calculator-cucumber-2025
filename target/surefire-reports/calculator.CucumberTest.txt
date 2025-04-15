@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: calculator.CucumberTest
 -------------------------------------------------------------------------------
-Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.765 s -- in calculator.CucumberTest
+Tests run: 28, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.141 s -- in calculator.CucumberTest

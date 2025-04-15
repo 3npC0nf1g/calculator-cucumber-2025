@@ -13,6 +13,12 @@
 /home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/api/controller/CalculatorRestController.java
 /home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/api/model/CalculatorModel.java
 /home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/service/CalculatorService.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/util/AngleConverter.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/values/ComplexValue.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/values/IntegerValue.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/values/NumericValue.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/values/RationalValue.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/values/RealValue.java
 /home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/visitor/Evaluator.java
 /home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/visitor/PrintVisitor.java
 /home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/visitor/Visitor.java
