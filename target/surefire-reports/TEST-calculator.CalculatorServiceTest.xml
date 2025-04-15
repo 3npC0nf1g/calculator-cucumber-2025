@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="calculator.TestMinus" time="0.011" tests="6" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="calculator.CalculatorServiceTest" time="0.029" tests="6" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="23"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -53,10 +53,13 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="67.0"/>
   </properties>
-  <testcase name="testNull" classname="calculator.TestMinus" time="0.001"/>
-  <testcase name="testConstructor1" classname="calculator.TestMinus" time="0.001"/>
-  <testcase name="testConstructor2" classname="calculator.TestMinus" time="0.001"/>
-  <testcase name="testHashCode" classname="calculator.TestMinus" time="0.001"/>
-  <testcase name="testNullParamList" classname="calculator.TestMinus" time="0.001"/>
-  <testcase name="testEquals" classname="calculator.TestMinus" time="0.0"/>
+  <testcase name="testInvalidOperator" classname="calculator.CalculatorServiceTest" time="0.008"/>
+  <testcase name="testMultiplication" classname="calculator.CalculatorServiceTest" time="0.005">
+    <system-out><![CDATA[( 3 * 4 )
+]]></system-out>
+  </testcase>
+  <testcase name="testAddition" classname="calculator.CalculatorServiceTest" time="0.002"/>
+  <testcase name="testDivisionByZero" classname="calculator.CalculatorServiceTest" time="0.002"/>
+  <testcase name="testDivision" classname="calculator.CalculatorServiceTest" time="0.002"/>
+  <testcase name="testSubtraction" classname="calculator.CalculatorServiceTest" time="0.002"/>
 </testsuite>
