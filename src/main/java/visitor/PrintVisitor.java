@@ -4,9 +4,6 @@ import calculator.Expression;
 import calculator.MyNumber;
 import calculator.Operation;
 import calculator.Notation;
-import calculator.values.ComplexValue;
-import calculator.values.IntegerValue;
-import calculator.values.RealValue;
 
 public class PrintVisitor extends Visitor {
 
@@ -34,18 +31,8 @@ public class PrintVisitor extends Visitor {
 
     @Override
     public void visit(MyNumber n) {
-        // Vérifie le type de NumericValue contenu dans MyNumber
-        if (n.getValue() instanceof IntegerValue) {
-            result = Integer.toString(((IntegerValue) n.getValue()).getValue());  // Si c'est un IntegerValue
-        } else if (n.getValue() instanceof RealValue) {
-            result = ((RealValue) n.getValue()).getValue().toString();  // Si c'est un RealValue (BigDecimal)
-        } else if (n.getValue() instanceof ComplexValue) {
-            result = n.getValue().toString();  // Si c'est un ComplexValue
-        } else {
-            throw new IllegalArgumentException("Unsupported NumericValue type");
-        }
+        result = Integer.toString(n.getValue());
     }
-
 
     @Override
     public void visit(Operation o) {
