@@ -26,8 +26,8 @@ jobs:
           distribution: 'temurin'
           java-version: '23'
 
-      - name: Compiler le projet
-        run: mvn clean compile   # Commande adaptée à votre projet
+      - name: Compiler et tester avec JaCoCo
+        run: mvn clean verify
 
       - name: Analyse avec SonarCloud
         uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
@@ -38,5 +38,5 @@ jobs:
             -Dsonar.projectKey=3npC0nf1g_calculator-cucumber-2025
             -Dsonar.organization=3npc0nf1g
             -Dsonar.scm.provider=git
-            -Dsonar.java.binaries=target/classes  # Chemin vers les classes compilées
-          projectBaseDir: .
+            -Dsonar.java.binaries=target/classes
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
