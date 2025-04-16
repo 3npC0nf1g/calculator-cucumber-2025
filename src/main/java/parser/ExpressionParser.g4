@@ -12,8 +12,8 @@ expression : infixExpr
 // Infix expressions
 
 infixExpr
-    : infixExpr op=(MULT | DIV) infixExpr     # InfixMulDiv
-    | infixExpr op=(PLUS | MINUS) infixExpr     # InfixAddSub
+    : infixExpr (MULT | DIV) infixExpr     # InfixMulDiv
+    | infixExpr (PLUS | MINUS) infixExpr     # InfixAddSub
     | MINUS? NUM                             # InfixInteger
     | '(' infixExpr ')'                      # InfixGrouped
     ;
@@ -21,8 +21,8 @@ infixExpr
 // Prefix expressions
 
 prefixExpr
-    : op=(MULT | DIV) '(' prefixExpr ((',' prefixExpr)+)? ')'   # PrefixMulDiv
-    | op=(PLUS | MINUS) '(' prefixExpr ((',' prefixExpr)+)? ')'   # PrefixAddSub
+    : (MULT | DIV) '(' prefixExpr ((',' prefixExpr)+)? ')'   # PrefixMulDiv
+    | (PLUS | MINUS) '(' prefixExpr ((',' prefixExpr)+)? ')'   # PrefixAddSub
     | MINUS? NUM                                               # PrefixInteger
     | '(' prefixExpr ')'                                       # PrefixGrouped
     ;
@@ -32,8 +32,8 @@ prefixExpr
 // Postfix expressions
 
 postfixExpr
-    : '(' postfixExpr ((',' postfixExpr)+)? ')' op=(MULT | DIV)   # PostfixMulDiv
-    | '(' postfixExpr ((',' postfixExpr)+)? ')' op=(PLUS | MINUS)   # PostfixAddSub
+    : '(' postfixExpr ((',' postfixExpr)+)? ')' (MULT | DIV)   # PostfixMulDiv
+    | '(' postfixExpr ((',' postfixExpr)+)? ')' (PLUS | MINUS)   # PostfixAddSub
     | MINUS? NUM                                                 # PostfixInteger
     | '(' postfixExpr ')'                                        # PostfixGrouped
     ;
