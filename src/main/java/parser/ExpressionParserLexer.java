@@ -22,6 +22,7 @@ public class ExpressionParserLexer extends Lexer {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
 
+
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
 	};

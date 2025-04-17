@@ -2,6 +2,7 @@
 package parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
+
 /**
  * This interface defines a complete generic visitor for a parse tree produced
  * by {@link LogicExprParserParser}.
@@ -24,56 +25,56 @@ public interface LogicExprParserVisitor<T> extends ParseTreeVisitor<T> {
 	T visitLogicExpr(LogicExprParserParser.LogicExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixEquiv}
-	 * labeled alternative in {@link LogicExprParserParser#infixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInfixEquiv(LogicExprParserParser.InfixEquivContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixNegation}
-	 * labeled alternative in {@link LogicExprParserParser#infixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInfixNegation(LogicExprParserParser.InfixNegationContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixImplies}
-	 * labeled alternative in {@link LogicExprParserParser#infixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInfixImplies(LogicExprParserParser.InfixImpliesContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixAnd}
-	 * labeled alternative in {@link LogicExprParserParser#infixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInfixAnd(LogicExprParserParser.InfixAndContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixLiteral}
-	 * labeled alternative in {@link LogicExprParserParser#infixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInfixLiteral(LogicExprParserParser.InfixLiteralContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixOr}
-	 * labeled alternative in {@link LogicExprParserParser#infixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInfixOr(LogicExprParserParser.InfixOrContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixXor}
-	 * labeled alternative in {@link LogicExprParserParser#infixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInfixXor(LogicExprParserParser.InfixXorContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixGroup}
-	 * labeled alternative in {@link LogicExprParserParser#infixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -136,56 +137,56 @@ public interface LogicExprParserVisitor<T> extends ParseTreeVisitor<T> {
 	T visitPrefixGroup(LogicExprParserParser.PrefixGroupContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code PostfixImplies}
-	 * labeled alternative in {@link LogicExprParserParser#postfixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPostfixImplies(LogicExprParserParser.PostfixImpliesContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code PostfixNegation}
-	 * labeled alternative in {@link LogicExprParserParser#postfixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPostfixNegation(LogicExprParserParser.PostfixNegationContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code PostfixXor}
-	 * labeled alternative in {@link LogicExprParserParser#postfixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPostfixXor(LogicExprParserParser.PostfixXorContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code PostfixAnd}
-	 * labeled alternative in {@link LogicExprParserParser#postfixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPostfixAnd(LogicExprParserParser.PostfixAndContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code PostfixOr}
-	 * labeled alternative in {@link LogicExprParserParser#postfixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPostfixOr(LogicExprParserParser.PostfixOrContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code PostfixEquiv}
-	 * labeled alternative in {@link LogicExprParserParser#postfixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPostfixEquiv(LogicExprParserParser.PostfixEquivContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code PostfixLiteral}
-	 * labeled alternative in {@link LogicExprParserParser#postfixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPostfixLiteral(LogicExprParserParser.PostfixLiteralContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code PostfixGroup}
-	 * labeled alternative in {@link LogicExprParserParser#postfixForm}.
+	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */

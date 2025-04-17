@@ -1,5 +1,6 @@
 grammar LogicExprParser;
 
+
 // Entry rule
 start : logicExpr ;
 
