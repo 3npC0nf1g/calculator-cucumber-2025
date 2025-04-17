@@ -56,7 +56,6 @@ public interface LogicExprParserListener extends ParseTreeListener {
 	 * labeled alternative in {@link LogicExprParserParser#}.
 	 * @param ctx the parse tree
 	 */
-
 	void enterInfixImplies(LogicExprParserParser.InfixImpliesContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixImplies}
