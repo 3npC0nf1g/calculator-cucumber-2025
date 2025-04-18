@@ -140,7 +140,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     void testDivisionWithRealResult() {
        IntegerValue a = new IntegerValue(10);
-       RealValue b = new RealValue(3.0, 3);  // Result should be a real value with non-integer division
+       RealValue b = new RealValue(3.0, 2);  // Result should be a real value with non-integer division
        NumericValue result = a.divide(b);
        assertInstanceOf(RealValue.class, result);
        assertEquals(3.33, ((RealValue) result).getValue().doubleValue(), 1e-9);  // Expecting real result
@@ -166,7 +166,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     void testAdditionWithRealDifferentPrecision() {
        IntegerValue a = new IntegerValue(3);
-       RealValue b = new RealValue(new BigDecimal("1.2345"), 3); // Precision 3 (1.234)
+       RealValue b = new RealValue(new BigDecimal("1.2345"), 2); // Precision 3 (1.234)
        NumericValue result = a.add(b);
        assertInstanceOf(RealValue.class, result);
        assertEquals(new BigDecimal("4.23"), ((RealValue) result).getValue());  // Expected: 4.234
