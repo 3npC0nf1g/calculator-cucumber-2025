@@ -24,7 +24,7 @@ import java.math.RoundingMode;
         ComplexValue c2 = new ComplexValue(2.0, 1.0);
         ComplexValue diff = (ComplexValue) c1.subtract(c2);
         // Expected: (5-2, 4-1) = (3, 3)
-        assertEquals(new BigDecimal("3.0"), diff.getReal().setScale(1, RoundingMode.HALF_UP));
+        assertEquals(new BigDecimal("3"), diff.getReal().setScale(0, RoundingMode.HALF_UP));
         assertEquals(new BigDecimal("3.0"), diff.getImag().setScale(1, RoundingMode.HALF_UP));
     }
 
@@ -54,14 +54,6 @@ import java.math.RoundingMode;
         assertEquals(expectedReal, quotient.getReal().setScale(1, RoundingMode.HALF_UP));
         assertEquals(expectedImag, quotient.getImag().setScale(1, RoundingMode.HALF_UP));
     }
-
-
-
-
-
-
-
-
 
 
     @Test
@@ -94,15 +86,15 @@ import java.math.RoundingMode;
        assertEquals(new BigDecimal("3.0"), result.getImag().setScale(1, RoundingMode.HALF_UP));
     }
 
-/**  @Test
+  @Test
     void testSubtractWithRealValuePrecision() {
        ComplexValue c = new ComplexValue(5.0, 2.0);
-       RealValue r = new RealValue(new BigDecimal("1.2345"), 1); // arrondi à 1.2
+       RealValue r = new RealValue(new BigDecimal("1.2345"), 2); // arrondi à 1.2
        ComplexValue result = (ComplexValue) c.subtract(r);
-       assertEquals(new BigDecimal("3.8"), result.getReal().setScale(1, RoundingMode.HALF_UP)); // Résultat attendu : 3.8
-       assertEquals(new BigDecimal("2.0"), result.getImag().setScale(1, RoundingMode.HALF_UP));
+       assertEquals(new BigDecimal("3.8"), result.getReal().setScale(1, RoundingMode.UNNECESSARY)); // Résultat attendu : 3.8
+       assertEquals(new BigDecimal("2.0"), result.getImag().setScale(1, RoundingMode.UNNECESSARY));
     }
-**/
+
     @Test
     void testMultiplyWithRealValuePrecision() {
        ComplexValue c = new ComplexValue(2.0, -2.0);

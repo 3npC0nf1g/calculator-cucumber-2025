@@ -176,7 +176,7 @@ import java.math.MathContext;
        RealValue r = new RealValue(2.0, 3);
        ComplexValue c = new ComplexValue(new BigDecimal("1.0"), new BigDecimal("1.0"));
        NumericValue result = r.add(c);
-       assertTrue(result instanceof ComplexValue);
+        assertInstanceOf(ComplexValue.class, result);
     }
 
     // === Division by zero ===
@@ -258,7 +258,7 @@ import java.math.MathContext;
        RealValue r = new RealValue(2.0, 3);
        ComplexValue c = new ComplexValue(new BigDecimal("1.0"), new BigDecimal("1.0"));
        NumericValue result = r.subtract(c);
-       assertTrue(result instanceof ComplexValue);
+        assertInstanceOf(ComplexValue.class, result);
     }
 
     @Test
@@ -274,7 +274,7 @@ import java.math.MathContext;
        RealValue r = new RealValue(3.0, 3);
        ComplexValue c = new ComplexValue(new BigDecimal("0.0"), new BigDecimal("1.0"));
        NumericValue result = r.multiply(c);
-       assertTrue(result instanceof ComplexValue);
+        assertInstanceOf(ComplexValue.class, result);
     }
 
 
@@ -291,7 +291,7 @@ import java.math.MathContext;
        RealValue r = new RealValue(6.0, 3);
        ComplexValue c = new ComplexValue(new BigDecimal("2.0"), new BigDecimal("2.0"));
        NumericValue result = r.divide(c);
-       assertTrue(result instanceof ComplexValue);
+        assertInstanceOf(ComplexValue.class, result);
     }
 
 

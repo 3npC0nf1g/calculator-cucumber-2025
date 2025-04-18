@@ -230,7 +230,7 @@ import java.math.BigInteger;
        ComplexValue c = new ComplexValue(new BigDecimal("1.0"), new BigDecimal("1.0"));
 
        NumericValue result = r.divide(c);
-       assertTrue(result instanceof ComplexValue, "Le résultat doit être un ComplexValue");
+        assertInstanceOf(ComplexValue.class, result, "Le résultat doit être un ComplexValue");
 
        ComplexValue complexResult = (ComplexValue) result;
        assertEquals(new BigDecimal("0.25"), complexResult.getReal(), "Partie réelle attendue : 0.25");
