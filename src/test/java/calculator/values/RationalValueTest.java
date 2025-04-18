@@ -114,7 +114,7 @@ import java.math.BigInteger;
        RationalValue r = new RationalValue(1, 2);
        RealValue real = new RealValue(0.25, 2); // 1/2 + 0.25 = 0.75
        NumericValue result = r.add(real);
-       assertTrue(result instanceof RealValue);
+        assertInstanceOf(RealValue.class, result);
        assertEquals("0.75", result.toString());
     }
 
@@ -123,7 +123,7 @@ import java.math.BigInteger;
        RationalValue r = new RationalValue(3, 4);
        RealValue real = new RealValue(0.25, 2); // 3/4 - 0.25 = 0.5
        NumericValue result = r.subtract(real);
-       assertTrue(result instanceof RealValue);
+        assertInstanceOf(RealValue.class, result);
        assertEquals("0.5", result.toString()); // dépend du toString de RealValue
     }
 
@@ -132,7 +132,7 @@ import java.math.BigInteger;
        RationalValue r = new RationalValue(1, 2);
        RealValue real = new RealValue(4.0, 1); // 0.5 * 4 = 2.0
        NumericValue result = r.multiply(real);
-       assertTrue(result instanceof RealValue);
+        assertInstanceOf(RealValue.class, result);
        assertEquals("2", result.toString());
     }
 
@@ -141,7 +141,7 @@ import java.math.BigInteger;
        RationalValue r = new RationalValue(1, 2);
        RealValue real = new RealValue(0.25, 2); // 0.5 / 0.25 = 2.0
        NumericValue result = r.divide(real);
-       assertTrue(result instanceof RealValue);
+        assertInstanceOf(RealValue.class, result);
        assertEquals("2", result.toString()); // selon précision
     }
 
@@ -150,7 +150,7 @@ import java.math.BigInteger;
        RationalValue r = new RationalValue(1, 2);
        ComplexValue complex = new ComplexValue(BigDecimal.ONE, BigDecimal.ONE); // 0.5 + (1 + i) = 1.5 + i
        NumericValue result = r.add(complex);
-       assertTrue(result instanceof ComplexValue);
+        assertInstanceOf(ComplexValue.class, result);
        assertEquals("1.5 + 1i", result.toString()); // dépend du toString() de ComplexValue
     }
 
@@ -185,6 +185,57 @@ import java.math.BigInteger;
 
 
 
+    @Test
+    void testMultiplyWithIntegerValueConvertsToRational() {
+       // (3/4) * 2 = 6/4 = 3/2
+       RationalValue r = new RationalValue(3, 4);
+       IntegerValue i = new IntegerValue(2);
+       RationalValue result = (RationalValue) r.multiply(i);
+
+       assertEquals(BigInteger.valueOf(3), result.getNumerator(), "Numérateur doit être 3 après simplification");
+       assertEquals(BigInteger.valueOf(2), result.getDenominator(), "Dénominateur doit être 2 après simplification");
+       assertEquals("3/2", result.toString(), "toString() doit rendre la fraction simplifiée \"3/2\"");
+    }
+
+    @Test
+    void testMultiplyWithComplexValueReturnsComplex() {
+       // (1/2) * (1 + 2i) = 0.5 + i
+       RationalValue r = new RationalValue(1, 2);
+       ComplexValue c = new ComplexValue(new BigDecimal("1.0"), new BigDecimal("2.0"));
+
+       NumericValue result = r.multiply(c);
+        assertInstanceOf(ComplexValue.class, result, "Le résultat doit être un ComplexValue");
+
+       ComplexValue complexResult = (ComplexValue) result;
+       assertEquals(new BigDecimal("0.50"), complexResult.getReal(), "Partie réelle attendue : 0.5");
+       assertEquals(new BigDecimal("1.00"), complexResult.getImag(), "Partie imaginaire attendue : 1.0");
+    }
+
+    @Test
+    void testDivideWithIntegerValueConvertsToRational() {
+       // (3/4) / 2 = 3/8
+       RationalValue r = new RationalValue(3, 4);
+       IntegerValue i = new IntegerValue(2);
+       RationalValue result = (RationalValue) r.divide(i);
+
+       assertEquals(BigInteger.valueOf(3), result.getNumerator(), "Numérateur doit être 3");
+       assertEquals(BigInteger.valueOf(8), result.getDenominator(), "Dénominateur doit être 8");
+       assertEquals("3/8", result.toString(), "toString() doit rendre \"3/8\"");
+    }
+
+    @Test
+    void testDivideWithComplexValueReturnsComplex() {
+       // (1/2) / (1 + i) = 0.25 - 0.25i
+       RationalValue r = new RationalValue(1, 2);
+       ComplexValue c = new ComplexValue(new BigDecimal("1.0"), new BigDecimal("1.0"));
+
+       NumericValue result = r.divide(c);
+       assertTrue(result instanceof ComplexValue, "Le résultat doit être un ComplexValue");
+
+       ComplexValue complexResult = (ComplexValue) result;
+       assertEquals(new BigDecimal("0.25"), complexResult.getReal(), "Partie réelle attendue : 0.25");
+       assertEquals(new BigDecimal("-0.25"), complexResult.getImag(), "Partie imaginaire attendue : -0.25");
+    }
 
 
  }
