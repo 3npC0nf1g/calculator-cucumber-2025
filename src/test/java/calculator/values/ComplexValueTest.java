@@ -55,6 +55,15 @@ import java.math.RoundingMode;
         assertEquals(expectedImag, quotient.getImag().setScale(1, RoundingMode.HALF_UP));
     }
 
+
+
+
+
+
+
+
+
+
     @Test
      void testDivisionByZeroComplex() {
         ComplexValue c1 = new ComplexValue(1.0, 1.0);
@@ -75,7 +84,58 @@ import java.math.RoundingMode;
         ComplexValue c = new ComplexValue(1.23, -4.56);
         assertEquals("1.23 + -4.56i", c.toString());
     }
-}
+
+    @Test
+    void testAddWithRealValuePrecision() {
+       ComplexValue c = new ComplexValue(2.0, 3.0);
+       RealValue r = new RealValue(1.4567, 2); // precision 2 → arrondi à 1.5
+       ComplexValue result = (ComplexValue) c.add(r);
+       assertEquals(new BigDecimal("3.5"), result.getReal().setScale(1, RoundingMode.HALF_UP));
+       assertEquals(new BigDecimal("3.0"), result.getImag().setScale(1, RoundingMode.HALF_UP));
+    }
+
+ /**  @Test
+    void testSubtractWithRealValuePrecision() {
+       ComplexValue c = new ComplexValue(5.0, 2.0);
+       RealValue r = new RealValue(new BigDecimal("1.2345"), 1); // arrondi à 1.2
+       ComplexValue result = (ComplexValue) c.subtract(r);
+       assertEquals(new BigDecimal("3.8"), result.getReal().setScale(1, RoundingMode.HALF_UP)); // Résultat attendu : 3.8
+       assertEquals(new BigDecimal("2.0"), result.getImag().setScale(1, RoundingMode.HALF_UP));
+    }
+**/
+
+    @Test
+    void testMultiplyWithRealValuePrecision() {
+       ComplexValue c = new ComplexValue(2.0, -2.0);
+       RealValue r = new RealValue(0.66666, 3); // arrondi à 0.667
+       ComplexValue result = (ComplexValue) c.multiply(r);
+       BigDecimal expectedReal = BigDecimal.valueOf(2.0 * 0.667).setScale(3, RoundingMode.HALF_UP);
+       BigDecimal expectedImag = BigDecimal.valueOf(-2.0 * 0.667).setScale(3, RoundingMode.HALF_UP);
+       assertEquals(expectedReal, result.getReal().setScale(3, RoundingMode.HALF_UP));
+       assertEquals(expectedImag, result.getImag().setScale(3, RoundingMode.HALF_UP));
+    }
+
+    @Test
+    void testDivideWithRealValuePrecision() {
+       ComplexValue c = new ComplexValue(4.0, 2.0);
+       RealValue r = new RealValue(2.22222, 2); // arrondi à 2.2
+
+       // Perform the division
+       ComplexValue result = (ComplexValue) c.divide(r);
+
+       // Calculate the expected real and imaginary parts, rounded to 2 decimal places
+       BigDecimal expectedReal = BigDecimal.valueOf(4.0 / 2.2).setScale(2, RoundingMode.HALF_UP);
+       BigDecimal expectedImag = BigDecimal.valueOf(2.0 / 2.2).setScale(2, RoundingMode.HALF_UP);
+
+       // Ensure that both the real and imaginary parts are rounded correctly for comparison
+       assertEquals(expectedReal, result.getReal().setScale(2, RoundingMode.HALF_UP));
+       assertEquals(expectedImag, result.getImag().setScale(2, RoundingMode.HALF_UP));
+    }
+
+
+
+
+ }
 
 
 

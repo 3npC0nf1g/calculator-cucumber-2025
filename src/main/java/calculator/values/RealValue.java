@@ -7,12 +7,13 @@ public class RealValue implements NumericValue {
     private final BigDecimal value;
     private final MathContext mathContext;
 
+
     public RealValue(double value, int precision) {
         this.mathContext = new MathContext(precision);
-        this.value = new BigDecimal(value, mathContext);
+        this.value = new BigDecimal(Double.toString(value), mathContext);
     }
 
-    public RealValue(BigDecimal value, int precision) {
+   public RealValue(BigDecimal value, int precision) {
         this.mathContext = new MathContext(precision);
         this.value = value.round(mathContext);
     }
