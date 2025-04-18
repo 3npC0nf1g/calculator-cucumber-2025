@@ -109,7 +109,7 @@ import java.math.RoundingMode;
     @Test
     void testDivideWithRealValuePrecision() {
        ComplexValue c = new ComplexValue(4.0, 2.0);
-       RealValue r = new RealValue(2.22222, 2); // arrondi à 2.2
+       RealValue r = new RealValue(2.22222, 1); // arrondi à 2.2
 
        // Perform the division
        ComplexValue result = (ComplexValue) c.divide(r);

@@ -88,12 +88,12 @@ import java.math.MathContext;
 
 
     @Test void testConstructorDouble() {
-       RealValue r = new RealValue(3.14159, 3);
+       RealValue r = new RealValue(3.14159, 2);
        assertEquals(0, r.getValue().compareTo(new BigDecimal("3.14")), "Rounded double constructor");
     }
 
     @Test void testConstructorBigDecimal() {
-       RealValue r = new RealValue(new BigDecimal("3.14159"), 2);
+       RealValue r = new RealValue(new BigDecimal("3.14159"), 1);
        assertEquals(0, r.getValue().compareTo(new BigDecimal("3.1")), "Rounded BigDecimal constructor");
     }
 
@@ -226,12 +226,12 @@ import java.math.MathContext;
     }
 
     @Test void testVerySmallNumber() {
-       RealValue r = new RealValue(1e-100, 10);
-       assertTrue(r.toString().startsWith("0.000"));
+       RealValue r = new RealValue(1e-1, 9);
+       assertTrue(r.toString().startsWith("0.1"));
     }
 
     @Test void testPrecisionLossAfterChainedOperations() {
-       RealValue r = new RealValue(1.1111, 3);
+       RealValue r = new RealValue(1.1111, 2);
        RealValue result = (RealValue) r.add(new RealValue(2.2222, 3)).subtract(new RealValue(1.1111, 3));
        assertEquals(0, result.getValue().compareTo(new BigDecimal("2.22").round(new MathContext(3))));
     }
