@@ -39,12 +39,14 @@ public class RationalValue implements NumericValue {
         } else if (other instanceof IntegerValue integerValue) {
             // Convert IntegerValue to RationalValue (denom = 1)
             return this.add(new RationalValue(integerValue.getValue(), 1));
-        } else if (other instanceof RealValue) {
-            // Promote this RationalValue to a RealValue and delegate the addition.
-            BigDecimal thisReal = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);
-            RealValue thisAsReal = new RealValue(thisReal.doubleValue(), thisReal.precision());
-            return thisAsReal.add(other);
-        } else if (other instanceof ComplexValue) {
+        }  else if (other instanceof RealValue) {
+        // Promote this RationalValue to a RealValue and delegate the addition.
+        BigDecimal thisReal = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);
+        int scale = Math.max(thisReal.scale(), ((RealValue) other).getPrecision()); // combine précision des deux
+        RealValue thisAsReal = new RealValue(thisReal.doubleValue(), scale);
+        return thisAsReal.add(other);
+    }
+        else if (other instanceof ComplexValue) {
             // Promote this RationalValue to a ComplexValue (imaginary part = 0)
             BigDecimal thisReal = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);
             ComplexValue thisAsComplex = new ComplexValue(thisReal, BigDecimal.ZERO);

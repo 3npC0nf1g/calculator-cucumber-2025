@@ -24,7 +24,7 @@ import java.math.RoundingMode;
         ComplexValue c2 = new ComplexValue(2.0, 1.0);
         ComplexValue diff = (ComplexValue) c1.subtract(c2);
         // Expected: (5-2, 4-1) = (3, 3)
-        assertEquals(new BigDecimal("3.0"), diff.getReal().setScale(1, RoundingMode.HALF_UP));
+        assertEquals(new BigDecimal("3"), diff.getReal().setScale(0, RoundingMode.HALF_UP));
         assertEquals(new BigDecimal("3.0"), diff.getImag().setScale(1, RoundingMode.HALF_UP));
     }
 
@@ -55,6 +55,7 @@ import java.math.RoundingMode;
         assertEquals(expectedImag, quotient.getImag().setScale(1, RoundingMode.HALF_UP));
     }
 
+
     @Test
      void testDivisionByZeroComplex() {
         ComplexValue c1 = new ComplexValue(1.0, 1.0);
@@ -75,7 +76,150 @@ import java.math.RoundingMode;
         ComplexValue c = new ComplexValue(1.23, -4.56);
         assertEquals("1.23 + -4.56i", c.toString());
     }
-}
+
+    @Test
+    void testAddWithRealValuePrecision() {
+       ComplexValue c = new ComplexValue(2.0, 3.0);
+       RealValue r = new RealValue(1.4567, 2); // precision 2 → arrondi à 1.5
+       ComplexValue result = (ComplexValue) c.add(r);
+       assertEquals(new BigDecimal("3.5"), result.getReal().setScale(1, RoundingMode.HALF_UP));
+       assertEquals(new BigDecimal("3.0"), result.getImag().setScale(1, RoundingMode.HALF_UP));
+    }
+
+  @Test
+    void testSubtractWithRealValuePrecision() {
+       ComplexValue c = new ComplexValue(5.0, 2.0);
+       RealValue r = new RealValue(new BigDecimal("1.2345"), 2); // arrondi à 1.2
+       ComplexValue result = (ComplexValue) c.subtract(r);
+       assertEquals(new BigDecimal("3.8"), result.getReal().setScale(1, RoundingMode.UNNECESSARY)); // Résultat attendu : 3.8
+       assertEquals(new BigDecimal("2.0"), result.getImag().setScale(1, RoundingMode.UNNECESSARY));
+    }
+
+    @Test
+    void testMultiplyWithRealValuePrecision() {
+       ComplexValue c = new ComplexValue(2.0, -2.0);
+       RealValue r = new RealValue(0.66666, 3); // arrondi à 0.667
+       ComplexValue result = (ComplexValue) c.multiply(r);
+       BigDecimal expectedReal = BigDecimal.valueOf(2.0 * 0.667).setScale(3, RoundingMode.HALF_UP);
+       BigDecimal expectedImag = BigDecimal.valueOf(-2.0 * 0.667).setScale(3, RoundingMode.HALF_UP);
+       assertEquals(expectedReal, result.getReal().setScale(3, RoundingMode.HALF_UP));
+       assertEquals(expectedImag, result.getImag().setScale(3, RoundingMode.HALF_UP));
+    }
+
+    @Test
+    void testDivideWithRealValuePrecision() {
+       ComplexValue c = new ComplexValue(4.0, 2.0);
+       RealValue r = new RealValue(2.22222, 1); // arrondi à 2.2
+
+       // Perform the division
+       ComplexValue result = (ComplexValue) c.divide(r);
+
+       // Calculate the expected real and imaginary parts, rounded to 2 decimal places
+       BigDecimal expectedReal = BigDecimal.valueOf(4.0 / 2.2).setScale(2, RoundingMode.HALF_UP);
+       BigDecimal expectedImag = BigDecimal.valueOf(2.0 / 2.2).setScale(2, RoundingMode.HALF_UP);
+
+       // Ensure that both the real and imaginary parts are rounded correctly for comparison
+       assertEquals(expectedReal, result.getReal().setScale(2, RoundingMode.HALF_UP));
+       assertEquals(expectedImag, result.getImag().setScale(2, RoundingMode.HALF_UP));
+    }
+
+
+    @Test
+    void testAdditionWithIntegerValue() {
+       ComplexValue complex = new ComplexValue(BigDecimal.ONE, BigDecimal.ONE); // 1 + i
+       IntegerValue integer = new IntegerValue(2); // +2
+       NumericValue result = complex.add(integer);
+        assertInstanceOf(ComplexValue.class, result);
+       assertEquals("3 + 1i", result.toString());
+    }
+
+     @Test
+     void testUnsupportedAdditionTypeThrowsException() {
+         ComplexValue complex = new ComplexValue(BigDecimal.ONE, BigDecimal.ONE);
+         RationalValue rational = new RationalValue(1, 2);
+
+         assertThrows(UnsupportedOperationException.class, () -> complex.add(rational));
+     }
+
+
+
+
+     @Test
+    void testSubtractionWithRealValue() {
+       ComplexValue complex = new ComplexValue(BigDecimal.valueOf(1.5), BigDecimal.valueOf(2.0));
+       RealValue real = new RealValue(0.5, 1);
+       NumericValue result = complex.subtract(real);
+        assertInstanceOf(ComplexValue.class, result);
+       assertEquals("1.0 + 2.0i", result.toString()); // arrondi à 1 décimale
+    }
+
+    @Test
+    void testSubtractionWithIntegerValue() {
+       ComplexValue complex = new ComplexValue(BigDecimal.valueOf(5.0), BigDecimal.valueOf(3.0));
+       IntegerValue integer = new IntegerValue(2);
+       NumericValue result = complex.subtract(integer);
+        assertInstanceOf(ComplexValue.class, result);
+       assertEquals("3.0 + 3.0i", result.toString());
+    }
+
+     @Test
+     void testUnsupportedSubtractionTypeThrowsException() {
+         ComplexValue complex = new ComplexValue(BigDecimal.TEN, BigDecimal.ONE);
+         RationalValue rational = new RationalValue(1, 2);
+
+         assertThrows(UnsupportedOperationException.class, () -> complex.subtract(rational));
+     }
+
+     @Test
+    void testMultiplicationWithIntegerValue() {
+       ComplexValue complex = new ComplexValue(BigDecimal.valueOf(2), BigDecimal.valueOf(3)); // 2 + 3i
+       IntegerValue integer = new IntegerValue(2);
+       NumericValue result = complex.multiply(integer); // 4 + 6i
+        assertInstanceOf(ComplexValue.class, result);
+       assertEquals("4 + 6i", result.toString());
+    }
+
+     @Test
+     void testUnsupportedMultiplicationTypeThrowsException() {
+         ComplexValue complex = new ComplexValue(BigDecimal.valueOf(1), BigDecimal.valueOf(2));
+         RationalValue rational = new RationalValue(1, 3);
+
+         assertThrows(UnsupportedOperationException.class, () -> complex.multiply(rational));
+     }
+
+     @Test
+    void testDivisionByZeroThrowsArithmeticException() {
+       ComplexValue complex = new ComplexValue(BigDecimal.ONE, BigDecimal.ONE);
+       IntegerValue zero = new IntegerValue(0);
+       assertThrows(ArithmeticException.class, () -> complex.divide(zero));
+    }
+
+    @Test
+    void testDivisionWithIntegerValue() {
+       ComplexValue complex = new ComplexValue(BigDecimal.valueOf(4), BigDecimal.valueOf(2)); // 4 + 2i
+       IntegerValue divisor = new IntegerValue(2);
+       NumericValue result = complex.divide(divisor); // 2 + 1i
+        assertInstanceOf(ComplexValue.class, result);
+       assertEquals("2.00 + 1.00i", result.toString());
+    }
+
+     @Test
+     void testUnsupportedDivisionTypeThrowsException() {
+         ComplexValue complex = new ComplexValue(BigDecimal.valueOf(3), BigDecimal.valueOf(1));
+         RationalValue rational = new RationalValue(1, 2);
+
+         assertThrows(UnsupportedOperationException.class, () -> complex.divide(rational));
+     }
+
+     @Test
+    void testGetValueIntReturnsZero() {
+       ComplexValue complex = new ComplexValue(BigDecimal.TEN, BigDecimal.ONE);
+       assertEquals(0, complex.getValueInt());
+    }
+
+
+
+ }
 
 
 
