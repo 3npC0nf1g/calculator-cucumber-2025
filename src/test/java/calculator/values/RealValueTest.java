@@ -245,7 +245,96 @@ import java.math.MathContext;
        assertEquals("3", r3.toString());
     }
 
+    @Test
+    void testSubtractRationalValue() {
+       RealValue r = new RealValue(3.0, 3);
+       RationalValue rational = new RationalValue(1, 2); // 0.5
+       RealValue result = (RealValue) r.subtract(rational);
+       assertEquals(0, result.getValue().compareTo(new BigDecimal("2.5")));
+    }
+
+    @Test
+    void testSubtractComplexReturnsComplex() {
+       RealValue r = new RealValue(2.0, 3);
+       ComplexValue c = new ComplexValue(new BigDecimal("1.0"), new BigDecimal("1.0"));
+       NumericValue result = r.subtract(c);
+       assertTrue(result instanceof ComplexValue);
+    }
+
+    @Test
+    void testMultiplyRationalValue() {
+       RealValue r = new RealValue(4.0, 3);
+       RationalValue rational = new RationalValue(1, 2); // 0.5
+       RealValue result = (RealValue) r.multiply(rational);
+       assertEquals(0, result.getValue().compareTo(new BigDecimal("2.0")));
+    }
+
+    @Test
+    void testMultiplyComplexReturnsComplex() {
+       RealValue r = new RealValue(3.0, 3);
+       ComplexValue c = new ComplexValue(new BigDecimal("0.0"), new BigDecimal("1.0"));
+       NumericValue result = r.multiply(c);
+       assertTrue(result instanceof ComplexValue);
+    }
 
 
+    @Test
+    void testDivideIntegerValue() {
+       RealValue r = new RealValue(10.0, 3);
+       IntegerValue i = new IntegerValue(2);
+       RealValue result = (RealValue) r.divide(i);
+       assertEquals(0, result.getValue().compareTo(new BigDecimal("5.0")));
+    }
 
-}
+    @Test
+    void testDivideComplexReturnsComplex() {
+       RealValue r = new RealValue(6.0, 3);
+       ComplexValue c = new ComplexValue(new BigDecimal("2.0"), new BigDecimal("2.0"));
+       NumericValue result = r.divide(c);
+       assertTrue(result instanceof ComplexValue);
+    }
+
+
+    @Test
+    void testSubtractUnsupportedNumericTypeThrows() {
+       RealValue r = new RealValue(1.0, 3);
+       NumericValue unknown = new NumericValue() {
+          @Override public NumericValue add(NumericValue other) { return null; }
+          @Override public NumericValue subtract(NumericValue other) { return null; }
+          @Override public NumericValue multiply(NumericValue other) { return null; }
+          @Override public NumericValue divide(NumericValue other) { return null; }
+          @Override public int getValueInt() { return 0; }
+       };
+       assertThrows(UnsupportedOperationException.class, () -> r.subtract(unknown));
+    }
+
+
+    @Test
+    void testMultiplyUnsupportedNumericTypeThrows() {
+       RealValue r = new RealValue(1.0, 3);
+       NumericValue unknown = new NumericValue() {
+          @Override public NumericValue add(NumericValue other) { return null; }
+          @Override public NumericValue subtract(NumericValue other) { return null; }
+          @Override public NumericValue multiply(NumericValue other) { return null; }
+          @Override public NumericValue divide(NumericValue other) { return null; }
+          @Override public int getValueInt() { return 0; }
+       };
+       assertThrows(UnsupportedOperationException.class, () -> r.multiply(unknown));
+    }
+
+
+    @Test
+    void testDivideUnsupportedNumericTypeThrows() {
+       RealValue r = new RealValue(1.0, 3);
+       NumericValue unknown = new NumericValue() {
+          @Override public NumericValue add(NumericValue other) { return null; }
+          @Override public NumericValue subtract(NumericValue other) { return null; }
+          @Override public NumericValue multiply(NumericValue other) { return null; }
+          @Override public NumericValue divide(NumericValue other) { return null; }
+          @Override public int getValueInt() { return 0; }
+       };
+       assertThrows(UnsupportedOperationException.class, () -> r.divide(unknown));
+    }
+
+
+ }
