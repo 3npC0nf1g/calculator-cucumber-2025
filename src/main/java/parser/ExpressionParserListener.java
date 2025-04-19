@@ -29,49 +29,49 @@ public interface ExpressionParserListener extends ParseTreeListener {
 	void exitExpression(ExpressionParserParser.ExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixInteger}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterInfixInteger(ExpressionParserParser.InfixIntegerContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixInteger}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixInteger(ExpressionParserParser.InfixIntegerContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixMulDiv}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterInfixMulDiv(ExpressionParserParser.InfixMulDivContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixMulDiv}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixMulDiv(ExpressionParserParser.InfixMulDivContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixAddSub}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterInfixAddSub(ExpressionParserParser.InfixAddSubContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixAddSub}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixAddSub(ExpressionParserParser.InfixAddSubContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixGrouped}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterInfixGrouped(ExpressionParserParser.InfixGroupedContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixGrouped}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixGrouped(ExpressionParserParser.InfixGroupedContext ctx);

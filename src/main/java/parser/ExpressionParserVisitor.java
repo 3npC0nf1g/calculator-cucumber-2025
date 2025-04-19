@@ -24,28 +24,28 @@ public interface ExpressionParserVisitor<T> extends ParseTreeVisitor<T> {
 	T visitExpression(ExpressionParserParser.ExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixInteger}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInfixInteger(ExpressionParserParser.InfixIntegerContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixMulDiv}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInfixMulDiv(ExpressionParserParser.InfixMulDivContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixAddSub}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInfixAddSub(ExpressionParserParser.InfixAddSubContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code InfixGrouped}
-	 * labeled alternative in {@link ExpressionParserParser#}.
+	 * labeled alternative in {@link ExpressionParserParser}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
