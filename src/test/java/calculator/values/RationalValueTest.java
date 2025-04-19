@@ -61,7 +61,7 @@ import java.math.BigInteger;
         RationalValue r1 = new RationalValue(1, 2);
         // Créer une fraction nulle (0/5) pour simuler une division par zéro
         RationalValue zero = new RationalValue(0, 5);
-        assertThrows(ArithmeticException.class, () -> r1.divide(zero));
+       assertEquals("NaN", r1.divide(zero).toString(),"Rational : 0/5 is NaN");
     }
 
     @Test
@@ -141,7 +141,8 @@ import java.math.BigInteger;
        RationalValue r = new RationalValue(1, 2);
        RealValue real = new RealValue(0.25, 2); // 0.5 / 0.25 = 2.0
        NumericValue result = r.divide(real);
-        assertInstanceOf(RealValue.class, result);
+       assertInstanceOf(RealValue.class, result);
+
        assertEquals("2", result.toString()); // selon précision
     }
 
@@ -180,7 +181,8 @@ import java.math.BigInteger;
 
     @Test
     void testDenominatorZeroThrowsException() {
-       assertThrows(ArithmeticException.class, () -> new RationalValue(1, 0));
+
+       assertEquals("NaN", new RationalValue(1, 0).toString(), "RationalValue : 1 / 0 should be NaN");
     }
 
 
@@ -230,7 +232,7 @@ import java.math.BigInteger;
        ComplexValue c = new ComplexValue(new BigDecimal("1.0"), new BigDecimal("1.0"));
 
        NumericValue result = r.divide(c);
-        assertInstanceOf(ComplexValue.class, result, "Le résultat doit être un ComplexValue");
+       assertInstanceOf(ComplexValue.class, result, "Le résultat doit être un ComplexValue");
 
        ComplexValue complexResult = (ComplexValue) result;
        assertEquals(new BigDecimal("0.25"), complexResult.getReal(), "Partie réelle attendue : 0.25");

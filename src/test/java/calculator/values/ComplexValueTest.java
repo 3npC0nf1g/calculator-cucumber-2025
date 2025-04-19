@@ -60,7 +60,9 @@ import java.math.RoundingMode;
      void testDivisionByZeroComplex() {
         ComplexValue c1 = new ComplexValue(1.0, 1.0);
         ComplexValue zero = new ComplexValue(0.0, 0.0);
-        assertThrows(ArithmeticException.class, () -> c1.divide(zero));
+        ComplexValue quotient = (ComplexValue) c1.divide(zero);
+
+        assertEquals("NaN", quotient.toString(), "Complex : (1+1i) / (O+0i) should be NaN");
     }
 
     @Test
@@ -191,7 +193,7 @@ import java.math.RoundingMode;
     void testDivisionByZeroThrowsArithmeticException() {
        ComplexValue complex = new ComplexValue(BigDecimal.ONE, BigDecimal.ONE);
        IntegerValue zero = new IntegerValue(0);
-       assertThrows(ArithmeticException.class, () -> complex.divide(zero));
+         assertEquals("NaN", complex.divide(zero).toString(), "Complex : (1+1i) / (0) should be NaN");
     }
 
     @Test

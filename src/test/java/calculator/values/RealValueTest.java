@@ -58,7 +58,8 @@ import java.math.MathContext;
      void testDivisionByZero() {
         RealValue r1 = new RealValue(5.0, 3);
         RealValue rZero = new RealValue(0.0, 3);
-        assertThrows(ArithmeticException.class, () -> r1.divide(rZero), "Division by zero should throw ArithmeticException");
+        assertEquals("NaN", r1.divide(rZero).toString(), "Rational : 5 / 0 should be NaN");
+
     }
 
     @Test
@@ -184,19 +185,20 @@ import java.math.MathContext;
     @Test void testDivisionByZeroRealValue() {
        RealValue r = new RealValue(5.0, 3);
        RealValue zero = new RealValue(0.0, 3);
-       assertThrows(ArithmeticException.class, () -> r.divide(zero));
+       assertEquals("NaN", r.divide(zero).toString(), "Rational : 5 / (0.0) should be NaN");
     }
 
     @Test void testDivisionByZeroRationalValue() {
        RealValue r = new RealValue(5.0, 3);
        RationalValue zero = new RationalValue(0, 1);
-       assertThrows(ArithmeticException.class, () -> r.divide(zero));
+       assertEquals("NaN", r.divide(zero).toString(), "Rational : 5 / (0) should be NaN");
+
     }
 
     @Test void testDivisionByZeroIntegerValue() {
        RealValue r = new RealValue(5.0, 3);
        IntegerValue zero = new IntegerValue(0);
-       assertThrows(ArithmeticException.class, () -> r.divide(zero));
+       assertEquals("NaN", r.divide(zero).toString(), "Rational : 10 / 0 should be NaN");
     }
 
     // === Unsupported type ===
