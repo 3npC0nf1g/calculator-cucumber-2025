@@ -29,98 +29,97 @@ public interface LogicExprParserListener extends ParseTreeListener {
 	void exitLogicExpr(LogicExprParserParser.LogicExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixEquiv}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterInfixEquiv(LogicExprParserParser.InfixEquivContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixEquiv}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixEquiv(LogicExprParserParser.InfixEquivContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixNegation}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterInfixNegation(LogicExprParserParser.InfixNegationContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixNegation}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixNegation(LogicExprParserParser.InfixNegationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixImplies}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
-
 	void enterInfixImplies(LogicExprParserParser.InfixImpliesContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixImplies}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixImplies(LogicExprParserParser.InfixImpliesContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixAnd}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterInfixAnd(LogicExprParserParser.InfixAndContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixAnd}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixAnd(LogicExprParserParser.InfixAndContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixLiteral}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterInfixLiteral(LogicExprParserParser.InfixLiteralContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixLiteral}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixLiteral(LogicExprParserParser.InfixLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixOr}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterInfixOr(LogicExprParserParser.InfixOrContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixOr}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixOr(LogicExprParserParser.InfixOrContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixXor}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterInfixXor(LogicExprParserParser.InfixXorContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixXor}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixXor(LogicExprParserParser.InfixXorContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code InfixGroup}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterInfixGroup(LogicExprParserParser.InfixGroupContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code InfixGroup}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitInfixGroup(LogicExprParserParser.InfixGroupContext ctx);
@@ -222,97 +221,97 @@ public interface LogicExprParserListener extends ParseTreeListener {
 	void exitPrefixGroup(LogicExprParserParser.PrefixGroupContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PostfixImplies}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterPostfixImplies(LogicExprParserParser.PostfixImpliesContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code PostfixImplies}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitPostfixImplies(LogicExprParserParser.PostfixImpliesContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PostfixNegation}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterPostfixNegation(LogicExprParserParser.PostfixNegationContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code PostfixNegation}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitPostfixNegation(LogicExprParserParser.PostfixNegationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PostfixXor}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterPostfixXor(LogicExprParserParser.PostfixXorContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code PostfixXor}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitPostfixXor(LogicExprParserParser.PostfixXorContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PostfixAnd}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterPostfixAnd(LogicExprParserParser.PostfixAndContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code PostfixAnd}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitPostfixAnd(LogicExprParserParser.PostfixAndContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PostfixOr}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterPostfixOr(LogicExprParserParser.PostfixOrContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code PostfixOr}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitPostfixOr(LogicExprParserParser.PostfixOrContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PostfixEquiv}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterPostfixEquiv(LogicExprParserParser.PostfixEquivContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code PostfixEquiv}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitPostfixEquiv(LogicExprParserParser.PostfixEquivContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PostfixLiteral}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterPostfixLiteral(LogicExprParserParser.PostfixLiteralContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code PostfixLiteral}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitPostfixLiteral(LogicExprParserParser.PostfixLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code PostfixGroup}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void enterPostfixGroup(LogicExprParserParser.PostfixGroupContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code PostfixGroup}
-	 * labeled alternative in {@link LogicExprParserParser#}.
+	 * labeled alternative in {@link LogicExprParserParser}.
 	 * @param ctx the parse tree
 	 */
 	void exitPostfixGroup(LogicExprParserParser.PostfixGroupContext ctx);

@@ -42,7 +42,6 @@ public class LogicExprParserParser extends Parser {
 			"TRUTH", "SPACE"
 		};
 	}
-
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
