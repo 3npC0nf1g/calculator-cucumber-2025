@@ -19,6 +19,7 @@ infixExpr
     | '(' infixExpr ')'                      # InfixGrouped
     ;
 
+
 // Prefix expressions
 
 prefixExpr

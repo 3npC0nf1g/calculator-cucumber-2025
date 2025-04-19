@@ -2,7 +2,6 @@
 package parser;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
-
 /**
  * This class provides an empty implementation of {@link ExpressionParserVisitor},
  * which can be extended to create a visitor which only needs to handle a subset

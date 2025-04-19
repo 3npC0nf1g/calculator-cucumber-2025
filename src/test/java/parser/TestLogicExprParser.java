@@ -30,7 +30,7 @@ public class TestLogicExprParser {
         LogicExprParserParser parser = new LogicExprParserParser(tokens);
 
         // optional: display tokens
-        // tokens.getTokens().forEach(System.out::println);
+        tokens.getTokens().forEach(System.out::println);
 
         ParseTree tree = parser.start(); // entry rule
         System.out.println("✅ Parsed tree: " + tree.toStringTree(parser));
