@@ -9,6 +9,16 @@ import java.math.RoundingMode;
 public class RealValue implements NumericValue {
     private final BigDecimal value;
     private final int scale;
+    private  boolean isNaN=false;
+
+    public static final RealValue NaN = new RealValue();
+
+    // Constructs a RealValue from NaN
+    private RealValue() {
+        this.value = BigDecimal.ZERO;
+        this.scale = 0;
+        this.isNaN = true;
+    }
 
     /**
      * Constructs a RealValue from a double with specified decimal precision.
@@ -50,8 +60,15 @@ public class RealValue implements NumericValue {
         return scale;
     }
 
+    public boolean isNaN() {
+        return isNaN;
+    }
+
     @Override
     public NumericValue add(NumericValue other) {
+        if (this.isNaN) return NaN;
+        if (other instanceof RealValue realValue && realValue.isNaN()) return NaN;
+
         if (other instanceof RealValue realValue) {
             return new RealValue(this.value.add(realValue.value), scale);
         } else if (other instanceof RationalValue rationalValue) {
@@ -69,6 +86,9 @@ public class RealValue implements NumericValue {
 
     @Override
     public NumericValue subtract(NumericValue other) {
+        if (this.isNaN) return NaN;
+        if (other instanceof RealValue realValue && realValue.isNaN()) return NaN;
+
         if (other instanceof RealValue realValue) {
             return new RealValue(this.value.subtract(realValue.value), scale);
         } else if (other instanceof RationalValue rationalValue) {
@@ -86,6 +106,9 @@ public class RealValue implements NumericValue {
 
     @Override
     public NumericValue multiply(NumericValue other) {
+        if (this.isNaN) return NaN;
+        if (other instanceof RealValue realValue && realValue.isNaN()) return NaN;
+
         if (other instanceof RealValue realValue) {
             return new RealValue(this.value.multiply(realValue.value).setScale(scale, RoundingMode.HALF_UP), scale);
         } else if (other instanceof RationalValue rationalValue) {
@@ -103,16 +126,18 @@ public class RealValue implements NumericValue {
 
     @Override
     public NumericValue divide(NumericValue other) {
+        if (this.isNaN) return NaN;
+
         if (other instanceof RealValue realValue) {
-            if (realValue.value.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException("Division by zero");
+            if (realValue.isNaN() || realValue.value.compareTo(BigDecimal.ZERO) == 0) return NaN;
             return new RealValue(this.value.divide(realValue.value, scale, RoundingMode.HALF_UP), scale);
         } else if (other instanceof RationalValue rationalValue) {
             BigDecimal rVal = new BigDecimal(rationalValue.getNumerator())
                     .divide(new BigDecimal(rationalValue.getDenominator()), scale, RoundingMode.HALF_UP);
-            if (rVal.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException("Division by zero");
+            if (rVal.compareTo(BigDecimal.ZERO) == 0) return NaN;
             return new RealValue(this.value.divide(rVal, scale, RoundingMode.HALF_UP), scale);
         } else if (other instanceof IntegerValue integerValue) {
-            if (integerValue.getValue() == 0) throw new ArithmeticException("Division by zero");
+            if (integerValue.getValue() == 0) return NaN;
             return new RealValue(this.value.divide(BigDecimal.valueOf(integerValue.getValue()), scale, RoundingMode.HALF_UP), scale);
         } else if (other instanceof ComplexValue) {
             ComplexValue c = new ComplexValue(this.value, BigDecimal.ZERO);
@@ -128,7 +153,7 @@ public class RealValue implements NumericValue {
      */
    @Override
     public String toString() {
-        return value.stripTrailingZeros().toPlainString();
+       return isNaN ? "NaN" : value.stripTrailingZeros().toPlainString();
     }
 
 
@@ -141,16 +166,18 @@ public class RealValue implements NumericValue {
      */
     @Override
     public int getValueInt() {
-        return value.intValue();
+        return isNaN ? 0 : value.intValue();
     }
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof RealValue realValue && this.value.compareTo(realValue.value) == 0;
+        if (!(o instanceof RealValue other)) return false;
+        if (this.isNaN && other.isNaN) return true;
+        return !this.isNaN && !other.isNaN && this.value.compareTo(other.value) == 0;
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return isNaN ? 0 : value.hashCode();
     }
 }

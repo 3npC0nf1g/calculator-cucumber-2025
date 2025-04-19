@@ -2,10 +2,7 @@ package calculator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import calculator.values.ComplexValue;
-import calculator.values.IntegerValue;
-import calculator.values.NumericValue;
-import calculator.values.RealValue;
+import calculator.values.*;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -214,13 +211,23 @@ public class CalculatorSteps {
 	@Then("the operation evaluates to {double}")
 	public void thenTheOperationEvaluatesToDouble(double expected) {
 		NumericValue result = c.eval(op);
+		System.out.println(result.getClass());
+		System.out.println(result);
+
 
 		double actual;
 		if (result instanceof RealValue) {
 			actual = ((RealValue) result).getValue().doubleValue();
-		} else if (result instanceof IntegerValue) {
+		}
+		else if (result instanceof IntegerValue) {
 			actual = ((IntegerValue) result).getValue();
-		} else {
+		}
+
+		else if (result instanceof RationalValue) {
+			actual = ((IntegerValue) result).getValue();
+		}
+
+		else {
 			fail("Expected numeric result but got: " + result.getClass().getSimpleName());
 			return;
 		}
