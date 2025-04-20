@@ -59,11 +59,15 @@ public class IntegerValue implements NumericValue {
     public NumericValue divide(NumericValue other) {
         if (other instanceof IntegerValue integerValue) {
             int divisor = integerValue.value;
-            if (divisor == 0) throw new ArithmeticException("Division by zero");
-            return new IntegerValue(this.value / divisor);
+            if (divisor == 0) return new RationalValue(1,0);
+            if (this.value % divisor == 0) {
+                return new IntegerValue(this.value / divisor);
+            } else {
+                return new RealValue((double) this.value / divisor, 2); // ou adapte la précision
+            }
         } else if (other instanceof RealValue realValue) {
             double divisor = realValue.getValue().doubleValue();
-            if (divisor == 0.0) throw new ArithmeticException("Division by zero");
+            if (divisor == 0.0) new RationalValue(1,0);
             return new RealValue(this.value / divisor, realValue.getPrecision());
         } else if (other instanceof ComplexValue) {
             return new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).divide(other);

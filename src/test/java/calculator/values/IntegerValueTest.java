@@ -69,7 +69,7 @@ import static org.junit.jupiter.api.Assertions.*;
      void testDivisionByZeroInteger() {
         IntegerValue a = new IntegerValue(10);
         IntegerValue zero = new IntegerValue(0);
-        assertThrows(ArithmeticException.class, () -> a.divide(zero));
+        assertEquals("NaN", a.divide(zero).toString(), "Complex : 10 / 0 should be NaN");
     }
 
     @Test
