@@ -39,6 +39,6 @@ MUL : '*' ;
 DIV : '/' ;
 ADD : '+' ;
 SUB : '-' ;
-FRAC : ':' ;
+FRAC : '÷' ;
 DIGIT : [0-9]+ ;
 WS : [ \t\r\n]+ -> skip ;

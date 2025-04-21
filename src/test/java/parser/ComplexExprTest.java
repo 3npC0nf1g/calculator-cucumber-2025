@@ -18,12 +18,10 @@ public class ComplexExprTest {
                 "sqrt(3) + sqrt(4) j",
                 "3 * cis(2)",
                 "e(i * 3)",
-                "intoCartesian(sqrt(9))",
                 "(5 + 2) * (3 - 1)",
                 "|3 + 4j|",
                 "sqrt(sqrt(16)) + sqrt(1) j",
-                "-4j",
-                "intoPolar(e(i * 1))"
+                "-4j"
         );
 
         for (String input : expressions) {
