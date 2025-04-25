@@ -2,50 +2,48 @@ grammar ComplexExpr;
 
 
 // Entrée
-prog : formInfix | formPrefix | formPosfix;
+entry : formInfix | formPrefix | formPosfix;
 
-// Forme infixée (renommée)
+// Infix form
 formInfix
-    : 'sqrt' '(' formInfix ')' ADD 'sqrt' '(' formInfix ')' I             # ComboRootInfix
+    : 'sqrt' '(' formInfix ')' op=(ADD|SUB)? ('sqrt' '(' formInfix ')' I)?   # ComboRootInfix
     | (NUMBER MUL)? 'cis' '(' formInfix ')'                           # ArgCisInfix
     | (NUMBER MUL)? 'e' '(' I MUL formInfix ')'                       # EulerExpInfix
-    | 'sqrt' '(' formInfix ')'                                        # RootOnlyInfix
-    | formInfix op1=(MUL | DIV) formInfix                                 # BinaryMulDivInfix
-    | formInfix op2=(ADD | SUB) formInfix                                 # BinaryAddSubInfix
+    | formInfix op=(MUL | DIV) formInfix                                 # BinaryMulDivInfix
+    | formInfix op=(ADD | SUB) formInfix                                 # BinaryAddSubInfix
     | '|' formInfix '|'                                               # AbsValInfix
-    | SUB? NUMBER? I                                              # ImagInfix
-    | SUB? NUMBER                                                 # NumInfix
-    | '(' formInfix ')'                                               # GroupInfix
     | 'asCoord' '(' formInfix ')'                                     # CartesianInfix
     | 'asAngle' '(' formInfix ')'                                     # PolarInfix
     | 'asExp' '(' formInfix ')'                                       # ExpoInfix
+    | SUB? NUMBER? I                                              # ImagInfix
+    | SUB? NUMBER                                                 # NumInfix
+    | '(' formInfix ')'                                               # GroupInfix
+
     ;
 
-// Forme préfixée
+// Prefix form
 formPrefix
-    : 'sqrt' '(' formPrefix ')' ADD 'sqrt' '(' formPrefix ')' I             # ComboRootPrefix
-    | 'sqrt' '(' formPrefix ')'                                        # RootOnlyPrefix
+    : op = (ADD|SUB)?  '(' 'sqrt' '(' formPrefix ')' (',' 'sqrt' '(' formPrefix ')' I)? ')'   # ComboRootPrefix
     | (NUMBER MUL)? 'cis' '(' formPrefix ')'                           # ArgCisPrefix
     | (NUMBER MUL)? 'e' '(' I MUL formPrefix ')'                     # EulerExpPrefix
-    | op=(MUL | DIV) '(' formPrefix ((',' formPrefix)*) ')'                 # MultiOpMulDivPrefix
-    | op=(ADD | SUB) '(' formPrefix ((',' formPrefix)*) ')'                 # MultiOpAddSubPrefix
+    | op=(MUL | DIV) '(' formPrefix ((',')? formPrefix)* ')'                 # MultiOpMulDivPrefix
+    | op=(ADD | SUB) '(' formPrefix ((',')? formPrefix)* ')'                 # MultiOpAddSubPrefix
     | '|' formPrefix '|'                                               # AbsValPrefix
+    | '(' formPrefix ')'                                               # GroupPrefix
     | SUB? NUMBER? I                                              # ImagPrefix
     | SUB? NUMBER                                                 # NumPrefix
-    | '(' formPrefix ')'                                               # GroupPrefix
     | 'asCoord' '(' formPrefix ')'                                     # CartesianPrefix
     | 'asAngle' '(' formPrefix ')'                                     # PolarPrefix
     | 'asExp' '(' formPrefix ')'                                       # ExpoPrefix
     ;
 
-// Forme postfixée
+//  Postfix form
 formPosfix
-    : 'sqrt' '(' formPosfix ')' ADD 'sqrt' '(' formPosfix ')' I             # ComboRootPosfix
-    | 'sqrt' '(' formPosfix ')' I?                                   # RootMaybeIPosfix
+    : '(' 'sqrt' '(' formPosfix ')' (',' 'sqrt' '(' formPosfix ')' I)?')'  op=(ADD|SUB)?    # ComboRootPosfix
     | (NUMBER MUL)? 'cis' '(' formPosfix ')'                           # ArgCisPosfix
     | (NUMBER MUL)? 'e' '(' I MUL formPosfix ')'                     # EulerExpPosfix
-    | '(' formPosfix ((',' formPosfix)*) ')' op=(MUL | DIV)                 # MultiOpMulDivPosfix
-    | '(' formPosfix ((',' formPosfix)*) ')' op=(ADD | SUB)                 # MultiOpAddSubPosfix
+    | '(' formPosfix ((',')? formPosfix)* ')' op=(MUL | DIV)                 # MultiOpMulDivPosfix
+    | '(' formPosfix ((',')? formPosfix)* ')' op=(ADD | SUB)                 # MultiOpAddSubPosfix
     | '|' formPosfix '|'                                               # AbsValPosfix
     | SUB? NUMBER? I                                              # ImagPosfix
     | SUB? NUMBER                                                 # NumPosfix

@@ -1,4 +1,4 @@
-// Generated from LogicExprParser.g4 by ANTLR 4.13.1
+// Generated from ./LogicExprParser.g4 by ANTLR 4.13.1
 package parser.logic;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import parser.logic.LogicExprParserParser;
@@ -20,7 +20,7 @@ public class LogicExprParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStart(LogicExprParserParser.StartContext ctx) { return visitChildren(ctx); }
+	@Override public T visitEntry(LogicExprParserParser.EntryContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

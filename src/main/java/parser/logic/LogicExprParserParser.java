@@ -1,4 +1,4 @@
-// Generated from LogicExprParser.g4 by ANTLR 4.13.1
+// Generated from ./LogicExprParser.g4 by ANTLR 4.13.1
 package parser.logic;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -20,11 +20,11 @@ public class LogicExprParserParser extends Parser {
 		T__0=1, T__1=2, T__2=3, NEG=4, CONJ=5, DISJ=6, IMPLY=7, XORR=8, EQUIV=9, 
 		TRUTH=10, SPACE=11;
 	public static final int
-		RULE_start = 0, RULE_logicExpr = 1, RULE_infixForm = 2, RULE_prefixForm = 3, 
+		RULE_entry = 0, RULE_logicExpr = 1, RULE_infixForm = 2, RULE_prefixForm = 3, 
 		RULE_postfixForm = 4;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"start", "logicExpr", "infixForm", "prefixForm", "postfixForm"
+			"entry", "logicExpr", "infixForm", "prefixForm", "postfixForm"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -94,32 +94,32 @@ public class LogicExprParserParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class StartContext extends ParserRuleContext {
+	public static class EntryContext extends ParserRuleContext {
 		public LogicExprContext logicExpr() {
 			return getRuleContext(LogicExprContext.class,0);
 		}
-		public StartContext(ParserRuleContext parent, int invokingState) {
+		public EntryContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_start; }
+		@Override public int getRuleIndex() { return RULE_entry; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LogicExprParserListener ) ((LogicExprParserListener)listener).enterStart(this);
+			if ( listener instanceof LogicExprParserListener ) ((LogicExprParserListener)listener).enterEntry(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LogicExprParserListener ) ((LogicExprParserListener)listener).exitStart(this);
+			if ( listener instanceof LogicExprParserListener ) ((LogicExprParserListener)listener).exitEntry(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LogicExprParserVisitor ) return ((LogicExprParserVisitor<? extends T>)visitor).visitStart(this);
+			if ( visitor instanceof LogicExprParserVisitor ) return ((LogicExprParserVisitor<? extends T>)visitor).visitEntry(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StartContext start() throws RecognitionException {
-		StartContext _localctx = new StartContext(_ctx, getState());
-		enterRule(_localctx, 0, RULE_start);
+	public final EntryContext entry() throws RecognitionException {
+		EntryContext _localctx = new EntryContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_entry);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{

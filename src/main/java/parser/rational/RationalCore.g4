@@ -12,8 +12,8 @@ modeInfix
     ;
 
 modePrefix
-    : sym=(MUL | DIV) '(' modePrefix ((',' modePrefix)+) ')'        # BinOpPrefix
-    | sym=(ADD | SUB) '(' modePrefix ((',' modePrefix)+) ')'        # AddSubPrefix
+    : sym=(MUL | DIV) '(' modePrefix (',' modePrefix)+ ')'        # BinOpPrefix
+    | sym=(ADD | SUB) '(' modePrefix (',' modePrefix)+ ')'        # AddSubPrefix
     | unit                                                 # AtomicPrefix
     | SUB? grouping(modePrefix)                                 # WrappedPrefix
     ;
@@ -27,7 +27,7 @@ modePosfix
 
 // fragment pour l’encapsulation
 grouping : '(' form ')' ;
-groupingList : '(' form ((',' form)+) ')' ;
+groupingList : '(' form (',' form)+ ')' ;
 
 // Unités numériques (rationnels)
 unit : num (FRAC num)?                                      # RationalUnit ;

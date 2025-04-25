@@ -1,11 +1,11 @@
-// Generated from ExpressionParser.g4 by ANTLR 4.13.1
+// Generated from ./ExpressionParser.g4 by ANTLR 4.13.1
 package parser.expression;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import parser.expression.ExpressionParserListener;
 import parser.expression.ExpressionParserParser;
+import parser.expression.ExpressionParserListener;
 
 /**
  * This class provides an empty implementation of {@link ExpressionParserListener},
@@ -19,13 +19,13 @@ public class ExpressionParserBaseListener implements ExpressionParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStart(ExpressionParserParser.StartContext ctx) { }
+	@Override public void enterEntry(ExpressionParserParser.EntryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStart(ExpressionParserParser.StartContext ctx) { }
+	@Override public void exitEntry(ExpressionParserParser.EntryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

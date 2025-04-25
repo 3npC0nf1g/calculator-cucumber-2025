@@ -1,4 +1,4 @@
-// Generated from ComplexExpr.g4 by ANTLR 4.13.1
+// Generated from ./ComplexExpr.g4 by ANTLR 4.13.1
 package parser.complex;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -11,18 +11,18 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface ComplexExprVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link ComplexExprParser#prog}.
+	 * Visit a parse tree produced by {@link ComplexExprParser#entry}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProg(ComplexExprParser.ProgContext ctx);
+	T visitEntry(ComplexExprParser.EntryContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code RootOnlyInfix}
+	 * Visit a parse tree produced by the {@code AbsValInfix}
 	 * labeled alternative in {@link ComplexExprParser#formInfix}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRootOnlyInfix(ComplexExprParser.RootOnlyInfixContext ctx);
+	T visitAbsValInfix(ComplexExprParser.AbsValInfixContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code CartesianInfix}
 	 * labeled alternative in {@link ComplexExprParser#formInfix}.
@@ -45,6 +45,13 @@ public interface ComplexExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNumInfix(ComplexExprParser.NumInfixContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ArgCisInfix}
+	 * labeled alternative in {@link ComplexExprParser#formInfix}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArgCisInfix(ComplexExprParser.ArgCisInfixContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code PolarInfix}
 	 * labeled alternative in {@link ComplexExprParser#formInfix}.
 	 * @param ctx the parse tree
@@ -58,27 +65,6 @@ public interface ComplexExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBinaryMulDivInfix(ComplexExprParser.BinaryMulDivInfixContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ComboRootInfix}
-	 * labeled alternative in {@link ComplexExprParser#formInfix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitComboRootInfix(ComplexExprParser.ComboRootInfixContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code AbsValInfix}
-	 * labeled alternative in {@link ComplexExprParser#formInfix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAbsValInfix(ComplexExprParser.AbsValInfixContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ArgCisInfix}
-	 * labeled alternative in {@link ComplexExprParser#formInfix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArgCisInfix(ComplexExprParser.ArgCisInfixContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code GroupInfix}
 	 * labeled alternative in {@link ComplexExprParser#formInfix}.
@@ -101,6 +87,13 @@ public interface ComplexExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitImagInfix(ComplexExprParser.ImagInfixContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ComboRootInfix}
+	 * labeled alternative in {@link ComplexExprParser#formInfix}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComboRootInfix(ComplexExprParser.ComboRootInfixContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code EulerExpInfix}
 	 * labeled alternative in {@link ComplexExprParser#formInfix}.
 	 * @param ctx the parse tree
@@ -114,13 +107,6 @@ public interface ComplexExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitComboRootPrefix(ComplexExprParser.ComboRootPrefixContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code RootOnlyPrefix}
-	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRootOnlyPrefix(ComplexExprParser.RootOnlyPrefixContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ArgCisPrefix}
 	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
@@ -157,6 +143,13 @@ public interface ComplexExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAbsValPrefix(ComplexExprParser.AbsValPrefixContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code GroupPrefix}
+	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGroupPrefix(ComplexExprParser.GroupPrefixContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ImagPrefix}
 	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
 	 * @param ctx the parse tree
@@ -170,13 +163,6 @@ public interface ComplexExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNumPrefix(ComplexExprParser.NumPrefixContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code GroupPrefix}
-	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGroupPrefix(ComplexExprParser.GroupPrefixContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code CartesianPrefix}
 	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
@@ -205,13 +191,6 @@ public interface ComplexExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitComboRootPosfix(ComplexExprParser.ComboRootPosfixContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code RootMaybeIPosfix}
-	 * labeled alternative in {@link ComplexExprParser#formPosfix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRootMaybeIPosfix(ComplexExprParser.RootMaybeIPosfixContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ArgCisPosfix}
 	 * labeled alternative in {@link ComplexExprParser#formPosfix}.

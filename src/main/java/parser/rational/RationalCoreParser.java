@@ -1,4 +1,4 @@
-// Generated from RationalCore.g4 by ANTLR 4.13.1
+// Generated from ./RationalCore.g4 by ANTLR 4.13.1
 package parser.rational;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -114,7 +114,7 @@ public class RationalCoreParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RationalCoreVisitor) return ((RationalCoreVisitor<? extends T>)visitor).visitEntry(this);
+			if ( visitor instanceof RationalCoreVisitor ) return ((RationalCoreVisitor<? extends T>)visitor).visitEntry(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -583,7 +583,6 @@ public class RationalCoreParser extends Parser {
 				match(T__0);
 				setState(48);
 				modePrefix();
-				{
 				setState(51); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -600,7 +599,6 @@ public class RationalCoreParser extends Parser {
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==T__1 );
-				}
 				setState(55);
 				match(T__2);
 				}
@@ -624,7 +622,6 @@ public class RationalCoreParser extends Parser {
 				match(T__0);
 				setState(59);
 				modePrefix();
-				{
 				setState(62); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -641,7 +638,6 @@ public class RationalCoreParser extends Parser {
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==T__1 );
-				}
 				setState(66);
 				match(T__2);
 				}
@@ -914,7 +910,7 @@ public class RationalCoreParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RationalCoreVisitor ) return ((RationalCoreVisitor<? extends T>)visitor).visitGrouping(this);
+			if ( visitor instanceof RationalCoreVisitor) return ((RationalCoreVisitor<? extends T>)visitor).visitGrouping(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -982,7 +978,6 @@ public class RationalCoreParser extends Parser {
 			match(T__0);
 			setState(98);
 			form();
-			{
 			setState(101); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -999,7 +994,6 @@ public class RationalCoreParser extends Parser {
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==T__1 );
-			}
 			setState(105);
 			match(T__2);
 			}

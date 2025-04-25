@@ -3,7 +3,7 @@ grammar LogicExprParser;
 
 
 // Entry rule
-start : logicExpr ;
+entry : logicExpr ;
 
 // Entry for all notations
 logicExpr : infixForm
@@ -11,8 +11,8 @@ logicExpr : infixForm
           | postfixForm
           ;
 
-// Infix logical expressions
 
+// Infix logical expressions
 infixForm
     : NEG infixForm                     # InfixNegation
     | infixForm CONJ infixForm         # InfixAnd
@@ -23,6 +23,7 @@ infixForm
     | TRUTH                            # InfixLiteral
     | '(' infixForm ')'                # InfixGroup
     ;
+
 
 
 // Prefix logical expressions

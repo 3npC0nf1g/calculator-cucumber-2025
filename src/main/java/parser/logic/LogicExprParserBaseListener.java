@@ -1,4 +1,4 @@
-// Generated from LogicExprParser.g4 by ANTLR 4.13.1
+// Generated from ./LogicExprParser.g4 by ANTLR 4.13.1
 package parser.logic;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -19,13 +19,13 @@ public class LogicExprParserBaseListener implements LogicExprParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStart(LogicExprParserParser.StartContext ctx) { }
+	@Override public void enterEntry(LogicExprParserParser.EntryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStart(LogicExprParserParser.StartContext ctx) { }
+	@Override public void exitEntry(LogicExprParserParser.EntryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

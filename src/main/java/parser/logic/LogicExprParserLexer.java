@@ -1,4 +1,4 @@
-// Generated from LogicExprParser.g4 by ANTLR 4.13.1
+// Generated from ./LogicExprParser.g4 by ANTLR 4.13.1
 package parser.logic;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

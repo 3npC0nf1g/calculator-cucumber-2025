@@ -1,4 +1,4 @@
-// Generated from LogicExprParser.g4 by ANTLR 4.13.1
+// Generated from ./LogicExprParser.g4 by ANTLR 4.13.1
 package parser.logic;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -11,11 +11,11 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface LogicExprParserVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link LogicExprParserParser#start}.
+	 * Visit a parse tree produced by {@link LogicExprParserParser#entry}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStart(LogicExprParserParser.StartContext ctx);
+	T visitEntry(LogicExprParserParser.EntryContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LogicExprParserParser#logicExpr}.
 	 * @param ctx the parse tree

@@ -1,4 +1,4 @@
-// Generated from ComplexExpr.g4 by ANTLR 4.13.1
+// Generated from ./ComplexExpr.g4 by ANTLR 4.13.1
 package parser.complex;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -19,25 +19,25 @@ public class ComplexExprBaseListener implements ComplexExprListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProg(ComplexExprParser.ProgContext ctx) { }
+	@Override public void enterEntry(ComplexExprParser.EntryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProg(ComplexExprParser.ProgContext ctx) { }
+	@Override public void exitEntry(ComplexExprParser.EntryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRootOnlyInfix(ComplexExprParser.RootOnlyInfixContext ctx) { }
+	@Override public void enterAbsValInfix(ComplexExprParser.AbsValInfixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRootOnlyInfix(ComplexExprParser.RootOnlyInfixContext ctx) { }
+	@Override public void exitAbsValInfix(ComplexExprParser.AbsValInfixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -79,6 +79,18 @@ public class ComplexExprBaseListener implements ComplexExprListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterArgCisInfix(ComplexExprParser.ArgCisInfixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArgCisInfix(ComplexExprParser.ArgCisInfixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPolarInfix(ComplexExprParser.PolarInfixContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -98,42 +110,6 @@ public class ComplexExprBaseListener implements ComplexExprListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBinaryMulDivInfix(ComplexExprParser.BinaryMulDivInfixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterComboRootInfix(ComplexExprParser.ComboRootInfixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitComboRootInfix(ComplexExprParser.ComboRootInfixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAbsValInfix(ComplexExprParser.AbsValInfixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAbsValInfix(ComplexExprParser.AbsValInfixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArgCisInfix(ComplexExprParser.ArgCisInfixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArgCisInfix(ComplexExprParser.ArgCisInfixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -175,6 +151,18 @@ public class ComplexExprBaseListener implements ComplexExprListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterComboRootInfix(ComplexExprParser.ComboRootInfixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitComboRootInfix(ComplexExprParser.ComboRootInfixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterEulerExpInfix(ComplexExprParser.EulerExpInfixContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -194,18 +182,6 @@ public class ComplexExprBaseListener implements ComplexExprListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitComboRootPrefix(ComplexExprParser.ComboRootPrefixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRootOnlyPrefix(ComplexExprParser.RootOnlyPrefixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRootOnlyPrefix(ComplexExprParser.RootOnlyPrefixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -271,6 +247,18 @@ public class ComplexExprBaseListener implements ComplexExprListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterGroupPrefix(ComplexExprParser.GroupPrefixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGroupPrefix(ComplexExprParser.GroupPrefixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterImagPrefix(ComplexExprParser.ImagPrefixContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -290,18 +278,6 @@ public class ComplexExprBaseListener implements ComplexExprListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNumPrefix(ComplexExprParser.NumPrefixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterGroupPrefix(ComplexExprParser.GroupPrefixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitGroupPrefix(ComplexExprParser.GroupPrefixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -350,18 +326,6 @@ public class ComplexExprBaseListener implements ComplexExprListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitComboRootPosfix(ComplexExprParser.ComboRootPosfixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRootMaybeIPosfix(ComplexExprParser.RootMaybeIPosfixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRootMaybeIPosfix(ComplexExprParser.RootMaybeIPosfixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

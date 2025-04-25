@@ -1,4 +1,4 @@
-// Generated from ExpressionParser.g4 by ANTLR 4.13.1
+// Generated from ./ExpressionParser.g4 by ANTLR 4.13.1
 package parser.expression;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -11,11 +11,11 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface ExpressionParserVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link ExpressionParserParser#start}.
+	 * Visit a parse tree produced by {@link ExpressionParserParser#entry}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStart(ExpressionParserParser.StartContext ctx);
+	T visitEntry(ExpressionParserParser.EntryContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExpressionParserParser#expression}.
 	 * @param ctx the parse tree

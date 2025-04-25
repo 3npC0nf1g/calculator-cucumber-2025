@@ -1,4 +1,4 @@
-// Generated from ComplexExpr.g4 by ANTLR 4.13.1
+// Generated from ./ComplexExpr.g4 by ANTLR 4.13.1
 package parser.complex;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import parser.complex.ComplexExprParser;
@@ -9,27 +9,27 @@ import parser.complex.ComplexExprParser;
  */
 public interface ComplexExprListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link ComplexExprParser#prog}.
+	 * Enter a parse tree produced by {@link ComplexExprParser#entry}.
 	 * @param ctx the parse tree
 	 */
-	void enterProg(ComplexExprParser.ProgContext ctx);
+	void enterEntry(ComplexExprParser.EntryContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ComplexExprParser#prog}.
+	 * Exit a parse tree produced by {@link ComplexExprParser#entry}.
 	 * @param ctx the parse tree
 	 */
-	void exitProg(ComplexExprParser.ProgContext ctx);
+	void exitEntry(ComplexExprParser.EntryContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code RootOnlyInfix}
+	 * Enter a parse tree produced by the {@code AbsValInfix}
 	 * labeled alternative in {@link ComplexExprParser#formInfix}.
 	 * @param ctx the parse tree
 	 */
-	void enterRootOnlyInfix(ComplexExprParser.RootOnlyInfixContext ctx);
+	void enterAbsValInfix(ComplexExprParser.AbsValInfixContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code RootOnlyInfix}
+	 * Exit a parse tree produced by the {@code AbsValInfix}
 	 * labeled alternative in {@link ComplexExprParser#formInfix}.
 	 * @param ctx the parse tree
 	 */
-	void exitRootOnlyInfix(ComplexExprParser.RootOnlyInfixContext ctx);
+	void exitAbsValInfix(ComplexExprParser.AbsValInfixContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CartesianInfix}
 	 * labeled alternative in {@link ComplexExprParser#formInfix}.
@@ -67,6 +67,18 @@ public interface ComplexExprListener extends ParseTreeListener {
 	 */
 	void exitNumInfix(ComplexExprParser.NumInfixContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ArgCisInfix}
+	 * labeled alternative in {@link ComplexExprParser#formInfix}.
+	 * @param ctx the parse tree
+	 */
+	void enterArgCisInfix(ComplexExprParser.ArgCisInfixContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArgCisInfix}
+	 * labeled alternative in {@link ComplexExprParser#formInfix}.
+	 * @param ctx the parse tree
+	 */
+	void exitArgCisInfix(ComplexExprParser.ArgCisInfixContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code PolarInfix}
 	 * labeled alternative in {@link ComplexExprParser#formInfix}.
 	 * @param ctx the parse tree
@@ -90,42 +102,6 @@ public interface ComplexExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBinaryMulDivInfix(ComplexExprParser.BinaryMulDivInfixContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ComboRootInfix}
-	 * labeled alternative in {@link ComplexExprParser#formInfix}.
-	 * @param ctx the parse tree
-	 */
-	void enterComboRootInfix(ComplexExprParser.ComboRootInfixContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ComboRootInfix}
-	 * labeled alternative in {@link ComplexExprParser#formInfix}.
-	 * @param ctx the parse tree
-	 */
-	void exitComboRootInfix(ComplexExprParser.ComboRootInfixContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code AbsValInfix}
-	 * labeled alternative in {@link ComplexExprParser#formInfix}.
-	 * @param ctx the parse tree
-	 */
-	void enterAbsValInfix(ComplexExprParser.AbsValInfixContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code AbsValInfix}
-	 * labeled alternative in {@link ComplexExprParser#formInfix}.
-	 * @param ctx the parse tree
-	 */
-	void exitAbsValInfix(ComplexExprParser.AbsValInfixContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ArgCisInfix}
-	 * labeled alternative in {@link ComplexExprParser#formInfix}.
-	 * @param ctx the parse tree
-	 */
-	void enterArgCisInfix(ComplexExprParser.ArgCisInfixContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ArgCisInfix}
-	 * labeled alternative in {@link ComplexExprParser#formInfix}.
-	 * @param ctx the parse tree
-	 */
-	void exitArgCisInfix(ComplexExprParser.ArgCisInfixContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code GroupInfix}
 	 * labeled alternative in {@link ComplexExprParser#formInfix}.
@@ -163,6 +139,18 @@ public interface ComplexExprListener extends ParseTreeListener {
 	 */
 	void exitImagInfix(ComplexExprParser.ImagInfixContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ComboRootInfix}
+	 * labeled alternative in {@link ComplexExprParser#formInfix}.
+	 * @param ctx the parse tree
+	 */
+	void enterComboRootInfix(ComplexExprParser.ComboRootInfixContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ComboRootInfix}
+	 * labeled alternative in {@link ComplexExprParser#formInfix}.
+	 * @param ctx the parse tree
+	 */
+	void exitComboRootInfix(ComplexExprParser.ComboRootInfixContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code EulerExpInfix}
 	 * labeled alternative in {@link ComplexExprParser#formInfix}.
 	 * @param ctx the parse tree
@@ -186,18 +174,6 @@ public interface ComplexExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitComboRootPrefix(ComplexExprParser.ComboRootPrefixContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code RootOnlyPrefix}
-	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
-	 * @param ctx the parse tree
-	 */
-	void enterRootOnlyPrefix(ComplexExprParser.RootOnlyPrefixContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code RootOnlyPrefix}
-	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
-	 * @param ctx the parse tree
-	 */
-	void exitRootOnlyPrefix(ComplexExprParser.RootOnlyPrefixContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ArgCisPrefix}
 	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
@@ -259,6 +235,18 @@ public interface ComplexExprListener extends ParseTreeListener {
 	 */
 	void exitAbsValPrefix(ComplexExprParser.AbsValPrefixContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code GroupPrefix}
+	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
+	 * @param ctx the parse tree
+	 */
+	void enterGroupPrefix(ComplexExprParser.GroupPrefixContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code GroupPrefix}
+	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
+	 * @param ctx the parse tree
+	 */
+	void exitGroupPrefix(ComplexExprParser.GroupPrefixContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ImagPrefix}
 	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
 	 * @param ctx the parse tree
@@ -282,18 +270,6 @@ public interface ComplexExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNumPrefix(ComplexExprParser.NumPrefixContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code GroupPrefix}
-	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
-	 * @param ctx the parse tree
-	 */
-	void enterGroupPrefix(ComplexExprParser.GroupPrefixContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code GroupPrefix}
-	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
-	 * @param ctx the parse tree
-	 */
-	void exitGroupPrefix(ComplexExprParser.GroupPrefixContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CartesianPrefix}
 	 * labeled alternative in {@link ComplexExprParser#formPrefix}.
@@ -342,18 +318,6 @@ public interface ComplexExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitComboRootPosfix(ComplexExprParser.ComboRootPosfixContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code RootMaybeIPosfix}
-	 * labeled alternative in {@link ComplexExprParser#formPosfix}.
-	 * @param ctx the parse tree
-	 */
-	void enterRootMaybeIPosfix(ComplexExprParser.RootMaybeIPosfixContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code RootMaybeIPosfix}
-	 * labeled alternative in {@link ComplexExprParser#formPosfix}.
-	 * @param ctx the parse tree
-	 */
-	void exitRootMaybeIPosfix(ComplexExprParser.RootMaybeIPosfixContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ArgCisPosfix}
 	 * labeled alternative in {@link ComplexExprParser#formPosfix}.

@@ -23,7 +23,7 @@ NUM
 SPACE
 
 rule names:
-start
+entry
 expression
 infixExpr
 prefixExpr

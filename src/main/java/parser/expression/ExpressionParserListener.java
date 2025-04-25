@@ -1,4 +1,4 @@
-// Generated from ExpressionParser.g4 by ANTLR 4.13.1
+// Generated from ./ExpressionParser.g4 by ANTLR 4.13.1
 package parser.expression;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import parser.expression.ExpressionParserParser;
@@ -9,15 +9,15 @@ import parser.expression.ExpressionParserParser;
  */
 public interface ExpressionParserListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link ExpressionParserParser#start}.
+	 * Enter a parse tree produced by {@link ExpressionParserParser#entry}.
 	 * @param ctx the parse tree
 	 */
-	void enterStart(ExpressionParserParser.StartContext ctx);
+	void enterEntry(ExpressionParserParser.EntryContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ExpressionParserParser#start}.
+	 * Exit a parse tree produced by {@link ExpressionParserParser#entry}.
 	 * @param ctx the parse tree
 	 */
-	void exitStart(ExpressionParserParser.StartContext ctx);
+	void exitEntry(ExpressionParserParser.EntryContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ExpressionParserParser#expression}.
 	 * @param ctx the parse tree

@@ -27,7 +27,7 @@ TRUTH
 SPACE
 
 rule names:
-start
+entry
 logicExpr
 infixForm
 prefixForm

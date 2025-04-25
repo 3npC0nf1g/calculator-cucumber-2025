@@ -1,4 +1,4 @@
-// Generated from ExpressionParser.g4 by ANTLR 4.13.1
+// Generated from ./ExpressionParser.g4 by ANTLR 4.13.1
 package parser.expression;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import parser.expression.ExpressionParserParser;
@@ -20,7 +20,7 @@ public class ExpressionParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStart(ExpressionParserParser.StartContext ctx) { return visitChildren(ctx); }
+	@Override public T visitEntry(ExpressionParserParser.EntryContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

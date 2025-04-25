@@ -1,4 +1,4 @@
-// Generated from ExpressionParser.g4 by ANTLR 4.13.1
+// Generated from ./ExpressionParser.g4 by ANTLR 4.13.1
 package parser.expression;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -21,11 +21,11 @@ public class ExpressionParserParser extends Parser {
 	public static final int
 		T__0=1, T__1=2, T__2=3, MULT=4, DIV=5, PLUS=6, MINUS=7, NUM=8, SPACE=9;
 	public static final int
-		RULE_start = 0, RULE_expression = 1, RULE_infixExpr = 2, RULE_prefixExpr = 3, 
+		RULE_entry = 0, RULE_expression = 1, RULE_infixExpr = 2, RULE_prefixExpr = 3, 
 		RULE_postfixExpr = 4;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"start", "expression", "infixExpr", "prefixExpr", "postfixExpr"
+			"entry", "expression", "infixExpr", "prefixExpr", "postfixExpr"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -93,32 +93,32 @@ public class ExpressionParserParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class StartContext extends ParserRuleContext {
+	public static class EntryContext extends ParserRuleContext {
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public StartContext(ParserRuleContext parent, int invokingState) {
+		public EntryContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_start; }
+		@Override public int getRuleIndex() { return RULE_entry; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ExpressionParserListener ) ((ExpressionParserListener)listener).enterStart(this);
+			if ( listener instanceof ExpressionParserListener ) ((ExpressionParserListener)listener).enterEntry(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ExpressionParserListener ) ((ExpressionParserListener)listener).exitStart(this);
+			if ( listener instanceof ExpressionParserListener ) ((ExpressionParserListener)listener).exitEntry(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ExpressionParserVisitor) return ((ExpressionParserVisitor<? extends T>)visitor).visitStart(this);
+			if ( visitor instanceof ExpressionParserVisitor ) return ((ExpressionParserVisitor<? extends T>)visitor).visitEntry(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final StartContext start() throws RecognitionException {
-		StartContext _localctx = new StartContext(_ctx, getState());
-		enterRule(_localctx, 0, RULE_start);
+	public final EntryContext entry() throws RecognitionException {
+		EntryContext _localctx = new EntryContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_entry);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{

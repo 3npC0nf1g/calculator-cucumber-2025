@@ -1,4 +1,4 @@
-// Generated from LogicExprParser.g4 by ANTLR 4.13.1
+// Generated from ./LogicExprParser.g4 by ANTLR 4.13.1
 package parser.logic;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import parser.logic.LogicExprParserParser;
@@ -9,15 +9,15 @@ import parser.logic.LogicExprParserParser;
  */
 public interface LogicExprParserListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link LogicExprParserParser#start}.
+	 * Enter a parse tree produced by {@link LogicExprParserParser#entry}.
 	 * @param ctx the parse tree
 	 */
-	void enterStart(LogicExprParserParser.StartContext ctx);
+	void enterEntry(LogicExprParserParser.EntryContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LogicExprParserParser#start}.
+	 * Exit a parse tree produced by {@link LogicExprParserParser#entry}.
 	 * @param ctx the parse tree
 	 */
-	void exitStart(LogicExprParserParser.StartContext ctx);
+	void exitEntry(LogicExprParserParser.EntryContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LogicExprParserParser#logicExpr}.
 	 * @param ctx the parse tree

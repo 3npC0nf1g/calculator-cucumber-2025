@@ -1,4 +1,4 @@
-// Generated from RationalCore.g4 by ANTLR 4.13.1
+// Generated from ./RationalCore.g4 by ANTLR 4.13.1
 package parser.rational;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import parser.rational.RationalCoreParser;
