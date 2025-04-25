@@ -1,7 +1,7 @@
 grammar ExpressionParser;
 
 // Entry point
-start : expression ;
+entry : expression ;
 
 // Expression entry for all types
 expression : infixExpr
