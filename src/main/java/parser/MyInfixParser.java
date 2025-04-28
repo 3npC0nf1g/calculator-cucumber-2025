@@ -6,7 +6,7 @@ import calculator.values.RealValue;
 import java.math.BigDecimal;
 import java.util.*;
 
-public class Custom_ExpressionTree_Infix {
+public class MyInfixParser {
     private static class Node {
         public String value;
         public Node left;
