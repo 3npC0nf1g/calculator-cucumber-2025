@@ -127,7 +127,7 @@ public class Custom_ExpressionTree_Infix {
     // Évalue l'arbre
     public static NumericValue evaluate(Node root) {
         if (root.left == null && root.right == null) {
-            return new RealValue(new BigDecimal(Double.parseDouble(root.value)),5);
+            return new RealValue(new BigDecimal(Double.parseDouble(root.value)),10);
         }
 
         NumericValue leftVal = evaluate(root.left);
@@ -143,8 +143,8 @@ public class Custom_ExpressionTree_Infix {
     }
 
     public static void main(String[] args) {
-        //String expr = "((4 + 5 + 6) * (7 + (5 / 2 / 7)) * 9)";
-        String expr = "2.5 +1";
+        String expr = "((4 + 5 + 6) * (7 + (5 / 2 / 7)) * 9)";
+        //String expr = "2.5 +1";
 
         try {
             Node root = buildTree(expr);

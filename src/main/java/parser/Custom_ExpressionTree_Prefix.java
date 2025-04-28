@@ -39,7 +39,7 @@ public class Custom_ExpressionTree_Prefix {
                 if (tokenizer.hasNext() && tokenizer.peek().equals(",")) tokenizer.next(); // Skip commas
             }
             tokenizer.next(); // consume ')'
-            NumericValue sum = new RealValue(1,5);
+            NumericValue sum = new RealValue(1,10);
             for (NumericValue v : values) {
                 sum=sum.multiply(v);
             }
@@ -68,7 +68,7 @@ public class Custom_ExpressionTree_Prefix {
         // Otherwise it must be a number
         token = tokenizer.next(); // consume the number
         //System.out.println("Number parsed: " + token);
-        return new RealValue(new BigDecimal(Double.parseDouble(token)),5);
+        return new RealValue(new BigDecimal(Double.parseDouble(token)),10);
     }
 
     private static boolean isOperator(String token) {
@@ -78,7 +78,7 @@ public class Custom_ExpressionTree_Prefix {
     private static NumericValue applyOperator(String operator, List<NumericValue> args) {
         switch (operator) {
             case "+":
-                NumericValue sum = new RealValue(0,5);
+                NumericValue sum = new RealValue(0,10);
                 for (NumericValue v : args) {
                     sum=sum.add(v);
                 }
@@ -89,7 +89,7 @@ public class Custom_ExpressionTree_Prefix {
                 for (int i = 1; i < args.size(); i++) result=result.subtract(args.get(i));
                 return result;
             case "*":
-                NumericValue mult = new RealValue(1,5);
+                NumericValue mult = new RealValue(1,10);
                 for (NumericValue arg : args) mult=mult.multiply(arg);
                 return mult;
             case "/":
