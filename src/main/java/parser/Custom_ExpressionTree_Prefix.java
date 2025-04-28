@@ -39,9 +39,9 @@ public class Custom_ExpressionTree_Prefix {
                 if (tokenizer.hasNext() && tokenizer.peek().equals(",")) tokenizer.next(); // Skip commas
             }
             tokenizer.next(); // consume ')'
-            NumericValue sum = new RealValue(0,5);
+            NumericValue sum = new RealValue(1,5);
             for (NumericValue v : values) {
-                sum=sum.add(v);
+                sum=sum.multiply(v);
             }
 
             //System.out.println("Sum inside (): " + sum);

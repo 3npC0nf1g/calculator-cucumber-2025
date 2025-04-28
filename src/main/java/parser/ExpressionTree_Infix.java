@@ -140,8 +140,7 @@ public class ExpressionTree_Infix {
     }
 
     public static void main(String[] args) {
-        String expr = "((4 + 5 + 6) * (7 + (5 / 2 / 7)) * 9)" +
-                "";
+        String expr = "((4 + 5 + 6) * (7 + (5 / 2 / 7)) * 9)";
         try {
             Node root = buildTree(expr);
             double result = evaluate(root);

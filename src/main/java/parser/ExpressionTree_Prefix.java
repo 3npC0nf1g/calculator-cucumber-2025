@@ -36,7 +36,10 @@ public class ExpressionTree_Prefix {
                 if (tokenizer.hasNext() && tokenizer.peek().equals(",")) tokenizer.next(); // Skip commas
             }
             tokenizer.next(); // consume ')'
-            double sum = values.stream().mapToDouble(Double::doubleValue).sum();
+            double sum = 1;
+            for (Double v : values) {
+                sum *= v;
+            }
             //System.out.println("Sum inside (): " + sum);
             return sum;
         }
