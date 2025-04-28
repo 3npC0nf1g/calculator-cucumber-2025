@@ -16,27 +16,51 @@ public class Tokenizer {
 
     private List<String> tokenize(String input) {
         List<String> result = new ArrayList<>();
-        StringBuilder number = new StringBuilder();
+        StringBuilder buffer = new StringBuilder();
+        boolean insideBracket = false;
+
         for (char c : input.toCharArray()) {
-            if (Character.isWhitespace(c)) {
-                if (number.length() > 0) {
-                    result.add(number.toString());
-                    number.setLength(0);
+            if (insideBracket) {
+                buffer.append(c);
+                if (c == ']') {
+                    result.add(buffer.toString());
+                    buffer.setLength(0);
+                    insideBracket = false;
                 }
                 continue;
             }
+
+            if (Character.isWhitespace(c)) {
+                if (buffer.length() > 0) {
+                    result.add(buffer.toString());
+                    buffer.setLength(0);
+                }
+                continue;
+            }
+
+            if (c == '[') {
+                if (buffer.length() > 0) {
+                    result.add(buffer.toString());
+                    buffer.setLength(0);
+                }
+                buffer.append(c);
+                insideBracket = true;
+                continue;
+            }
+
             if (c == '(' || c == ')' || c == ',' || c == '+' || c == '-' || c == '*' || c == '/') {
-                if (number.length() > 0) {
-                    result.add(number.toString());
-                    number.setLength(0);
+                if (buffer.length() > 0) {
+                    result.add(buffer.toString());
+                    buffer.setLength(0);
                 }
                 result.add(Character.toString(c));
             } else {
-                number.append(c);
+                buffer.append(c);
             }
         }
-        if (number.length() > 0) {
-            result.add(number.toString());
+
+        if (buffer.length() > 0) {
+            result.add(buffer.toString());
         }
         return result;
     }
@@ -66,26 +90,31 @@ public class Tokenizer {
             case "+":
                 NumericValue sum = new RealValue(0,10);
                 for (NumericValue v : args) {
-                    sum=sum.add(v);
+                    sum = sum.add(v);
                 }
                 return sum;
             case "-":
                 if (args.isEmpty()) throw new RuntimeException("No arguments for subtraction");
                 NumericValue result = args.get(0);
-                for (int i = 1; i < args.size(); i++) result=result.subtract(args.get(i));
+                for (int i = 1; i < args.size(); i++) {
+                    result = result.subtract(args.get(i));
+                }
                 return result;
             case "*":
                 NumericValue mult = new RealValue(1,10);
-                for (NumericValue arg : args) mult=mult.multiply(arg);
+                for (NumericValue arg : args) {
+                    mult = mult.multiply(arg);
+                }
                 return mult;
             case "/":
                 if (args.isEmpty()) throw new RuntimeException("No arguments for division");
                 result = args.get(0);
-                for (int i = 1; i < args.size(); i++) result=result.divide(args.get(i));
+                for (int i = 1; i < args.size(); i++) {
+                    result = result.divide(args.get(i));
+                }
                 return result;
             default:
                 throw new RuntimeException("Unknown operator: " + operator);
         }
     }
-
 }
