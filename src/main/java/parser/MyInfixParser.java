@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public class MyInfixParser {
-    private static class Node {
+    public static class Node {
         public String value;
         public Node left;
         public Node right;
@@ -279,7 +279,7 @@ public class MyInfixParser {
 
     public static void main(String[] args) {
         ExpressionParser.mycalculator.setUseRadians(false);
-        String expr = "2 * ([1+2i] + [3-4i]) * (sin(30)+cos(60))";
+        String expr = "((4 + 5 + 6) * (7 + (5 / 2 / 7)) * 9)";
 
         try {
             Node root = buildTree(expr);

@@ -15,6 +15,7 @@ public class Tokenizer {
     }
 
     private List<String> tokenize(String input) {
+        input=input.replaceAll(","," ");
         List<String> result = new ArrayList<>();
         StringBuilder buffer = new StringBuilder();
         boolean insideBracket = false;
@@ -103,6 +104,7 @@ public class Tokenizer {
             case "*":
                 NumericValue mult = new RealValue(1,10);
                 for (NumericValue arg : args) {
+                    System.out.println("arg : "+arg);
                     mult = mult.multiply(arg);
                 }
                 return mult;
