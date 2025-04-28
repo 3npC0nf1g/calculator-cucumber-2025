@@ -1,5 +1,6 @@
 package visitor;
 
+import calculator.Expression;
 import calculator.MyNumber;
 import calculator.Operation;
 
@@ -19,5 +20,13 @@ public abstract class Visitor {
      * The Visitor can traverse an operation (a subtype of Expression)
      *
      * @param o The operation being visited
-     */   public abstract void visit(Operation o);
+     */
+    public abstract void visit(Operation o);
+
+    /**
+     * The Visitor can traverse an Expression (a subtype of Expression)
+     *
+     * @param e The operation being visited
+     */
+    public abstract void visit(Expression e);
 }
