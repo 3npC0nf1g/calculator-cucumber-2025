@@ -6,11 +6,11 @@ import calculator.values.RealValue;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tokenizer {
+public class TokenizerPrefix {
     private final List<String> tokens;
     private int pos = 0;
 
-    public Tokenizer(String input) {
+    public TokenizerPrefix(String input) {
         tokens = tokenize(input);
     }
 

@@ -1,73 +1,121 @@
 package parser;
 
+import calculator.Calculator;
 import calculator.values.NumericValue;
-import calculator.values.RealValue;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
-import static parser.Tokenizer.applyOperator;
-import static parser.Tokenizer.isOperator;
+import static parser.TokenizerPostfix.*;
 
 public class MyPostfixParser {
 
     public static void main(String[] args) {
         String expr1 = "((4,5,6)+,(7,(5,2,7)/)+,9)";
-        String expr2 = "((4 5 6)+ (7 (5 2 7)/)+ 9)";
+        String expr2 = "((2 ([1+2i] [3-4i]+) (sin(30) cos(60)+)*))";
+        String expr3 = "((2,([1+2i],[3-4i]+),(sin(30)),(cos(60))+)*)";
+        String expr4 = "((2 ([1+2i] [3-4i]+) sin(30) cos(60)+)*)";
 
-        System.out.print(expr1+" = ");
-        System.out.println(evaluate(expr1)); // Should print the result
-        System.out.print(expr2+" = ");
-        System.out.println(evaluate(expr2)); // Should print the result
+        ExpressionParser.mycalculator.setUseRadians(false);
+        MyPostfixParser myPostfixParser = new MyPostfixParser();
+
+        System.out.print(expr1 + " = ");
+        System.out.println(myPostfixParser.evaluate(expr1));
+        System.out.print(expr2 + " = ");
+        System.out.println(myPostfixParser.evaluate(expr2));
+        System.out.print(expr3 + " = ");
+        System.out.println(myPostfixParser.evaluate(expr3));
+        System.out.println();
+        System.out.print(expr4 + " = ");
+        System.out.println(myPostfixParser.evaluate(expr4));
     }
 
-    public static NumericValue evaluate(String expression) {
-        Tokenizer tokenizer = new Tokenizer(expression);
-        //System.out.println("Tokens: " + tokenizer.getTokens());
-        return parseExpression(tokenizer);
+    public MyPostfixParser() {};
+
+    public NumericValue evaluate(String expression) {
+        expression = expression.replaceAll(",", " ");
+        if(expression.charAt(0) != '(') {
+            expression = "(" + expression + ")";
+        }
+        String prefix = custompostfixToPrefix(expression);
+        System.out.println("Converted to prefix: " + prefix);
+        MyPrefixParser myPrefixParser = new MyPrefixParser();
+        return myPrefixParser.evaluate(prefix);
     }
 
-    private static NumericValue parseExpression(Tokenizer tokenizer) {
-        if (!tokenizer.hasNext()) throw new RuntimeException("Unexpected end of expression");
-
-        String token = tokenizer.peek();
-        //System.out.println("Parsing token: " + token);
-
-        if (token.equals("(")) {
-            tokenizer.next(); // consume '('
-            List<NumericValue> values = new ArrayList<>();
-            while (!tokenizer.peek().equals(")")) {
-                values.add(parseExpression(tokenizer));
-                if (tokenizer.hasNext() && tokenizer.peek().equals(",")) tokenizer.next(); // Skip commas
+    public String custompostfixToPrefix(String postfixExpression) {
+        TokenizerPostfix tokenizer = new TokenizerPostfix(postfixExpression);
+        String res="";
+        List<String> tokens = tokenizer.getTokens();
+        int last_parentheses = 0;
+        for(int i=0; i<tokens.size(); i++) {
+            if(tokens.get(i).equals("(")) {
+                last_parentheses = i;
             }
-            tokenizer.next(); // consume ')'
+            else if(isOperator(tokens.get(i))) {
+                last_parentheses=getOpenParenthesisOf(tokens,i);
+                tokens.add(last_parentheses, tokens.get(i));
+                tokens.remove(i+1);
+            }
+        }
+        for(int i=0; i<tokens.size(); i++) {
+            res+=tokens.get(i)+" ";
+        }
+        return res;
+    }
 
-            // Now check if there is an operator AFTER the parenthesis
-            if (tokenizer.hasNext() && isOperator(tokenizer.peek())) {
-                String operator = tokenizer.next(); // consume operator
-                //System.out.println("Applying operator: " + operator + " on values: " + values);
-                return applyOperator(operator, values);
-            } else {
-                // No operator found: MULTIPLY all results
-                if (values.isEmpty()) throw new RuntimeException("Empty group without operator");
-                NumericValue result = new RealValue(1,10);
-                for (NumericValue v : values) {
-                    result=result.multiply(v);
+    private int getOpenParenthesisOf(List<String> list,int end)
+    {
+        int res=0;
+        int dept_target=0;
+        for(int i=0; i<end; i++) {
+            if(list.get(i).equals("(")) {
+                res=i;
+                dept_target++;
+            }
+            else if(list.get(i).equals(")")) {
+                dept_target--;
+            }
+        }
+        int dept=0;
+        int pos=end-1;
+
+        if(!list.get(pos).equals(")"))
+        {
+            for(int i=0;i<end-1;i++)
+            {
+                if(list.get(i).equals("("))
+                {
+                    pos=i;
                 }
-                //System.out.println("Multiplying grouped values: " + values + " = " + result);
-                return result;
+            }
+            pos=pos+1;
+        }
+        else {
+            while (pos > 0) {
+
+                if (list.get(pos).equals(")")) {
+                    dept += 1;
+                } else if (list.get(pos).equals("(")) {
+                    dept -= 1;
+
+                }
+
+                if (dept == 0)
+                    break;
+
+                pos -= 1;
+
+
             }
         }
+        return pos;
+    }
 
-        if (isOperator(token)) {
-            throw new RuntimeException("Operator should come after operands in postfix notation: found " + token);
-        }
-
-        // Otherwise it must be a number
-        token = tokenizer.next();
-        //System.out.println("Parsed number: " + token);
-        return new RealValue(new BigDecimal(Double.parseDouble(token)),10);
+    private  boolean isOperator(String token) {
+        return token.equals("+") || token.equals("-") || token.equals("*") ||
+                token.equals("/") || token.equals("^") || token.equals("%");
     }
 
 }
