@@ -3,57 +3,68 @@ package visitor;
 import calculator.Expression;
 import calculator.MyNumber;
 import calculator.Operation;
+import calculator.values.NumericValue;
 
 import java.util.ArrayList;
 
-/** Evaluation is a concrete visitor that serves to
+/**
+ * Evaluation is a concrete visitor that serves to
  * compute and evaluate the results of arithmetic expressions.
  */
 public class Evaluator extends Visitor {
 
     /**
-     * Default constructor of the class. Does not initialise anything.
+     * Default constructor of the class. Does not initialize anything.
      */
     public Evaluator() {}
 
-    /** The result of the evaluation will be stored in this private variable */
-    private double computedValue;
-
-    /** getter method to obtain the result of the evaluation
-     *
-     * @return an Integer object containing the result of the evaluation
+    /**
+     * The result of the evaluation will be stored in this private variable.
      */
-    public double getResult() { return computedValue; }
+    private NumericValue computedValue;
 
-    /** Use the visitor design pattern to visit a number.
+    /**
+     * Getter method to obtain the result of the evaluation.
      *
-     * @param n The number being visited
+     * @return a NumericValue object containing the result of the evaluation.
      */
+    public NumericValue getResult() {
+        return computedValue;
+    }
+
+    /**
+     * Use the visitor design pattern to visit a number.
+     *
+     * @param n The number being visited.
+     */
+    @Override
     public void visit(MyNumber n) {
+        // On récupère directement la valeur contenue dans MyNumber (de type NumericValue)
         computedValue = n.getValue();
     }
 
-    /** Use the visitor design pattern to visit an operation
+    /**
+     * Use the visitor design pattern to visit an operation.
      *
-     * @param o The operation being visited
+     * @param o The operation being visited.
      */
+    @Override
     public void visit(Operation o) {
-        ArrayList<Double> evaluatedArgs = new ArrayList<>();
-        //first loop to recursively evaluate each subexpression
-        for(Expression a:o.args) {
+        ArrayList<NumericValue> evaluatedArgs = new ArrayList<>();
+        // Première boucle : évaluer récursivement chaque sous-expression
+        for (Expression a : o.getArgs()) {
             a.accept(this);
             evaluatedArgs.add(computedValue);
         }
-        //second loop to accumulate all the evaluated subresults
-        double temp = evaluatedArgs.get(0);
+
+        // Seconde boucle : accumuler les résultats évalués via l'opération op()
+        NumericValue temp = evaluatedArgs.get(0);
         int max = evaluatedArgs.size();
-        for(int counter=1; counter<max; counter++) {
-            temp = o.op(temp,evaluatedArgs.get(counter));
-            if(!Double.isNaN(temp))
-                temp=Math.round(temp * 100.0) / 100.0;
+        for (int counter = 1; counter < max; counter++) {
+            temp = o.op(temp, evaluatedArgs.get(counter));
         }
-        // store the accumulated result
+
+        // Stocke le résultat final
         computedValue = temp;
     }
-
 }

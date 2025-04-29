@@ -1,10 +1,19 @@
-[![](https://img.shields.io/github/v/release/University-of-Mons/calculator-cucumber-2025?label=Latest%20Release)](https://github.com/University-of-Mons/calculator-cucumber/releases/latest)
+[![Continuous Reporting](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/Continuous-reporting.yml/badge.svg)](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/Continuous-reporting.yml)
 
-Code quality: ![Maven Build](https://github.com/University-of-Mons/calculator-cucumber-2025/actions/workflows/maven.yml/badge.svg)
+Build and Test: [![Build and Test](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/maven.yml/badge.svg)](https://github.com/3npC0nf1g/calculator-cucumber-2025/actions/workflows/maven.yml)
 
 Test coverage: ![Coverage](.github/badges/jacoco.svg)
 ![Branches](.github/badges/branches.svg)
 
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)
+
+Code Quality: [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=3npC0nf1g_calculator-cucumber-2025&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)
+
+Code Smells: [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=3npC0nf1g_calculator-cucumber-2025&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)
+
+Bugs: [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=3npC0nf1g_calculator-cucumber-2025&metric=bugs)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)
+
+Duplicated lines: [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=3npC0nf1g_calculator-cucumber-2025&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=3npC0nf1g_calculator-cucumber-2025)
 
 # Calculating arithmetic expressions
 
@@ -15,7 +24,7 @@ This repository contains Java code for computing arithmetic expressions. It is d
 
 ### Unit testing and BDD
 
-*  All tests can be found in the src\test directory. They serve as executable documentation of the source code.
+*  All tests  can be found in the src\test directory. They serve as executable documentation of the source code.
 *  The source code is accompanied by a set of JUnit 5 unit tests. These tests can be written and run in the usual way. If you are not familiar with unit testing or JUnit 5, please refer to https://junit.org/junit5/.
 *  The source code is accompanied by a set of Cucumber BDD scenarios, also running in Junit. If you are not familiar with Cucumber and BDD, please refer to https://cucumber.io/docs/cucumber/.
 The BDD scenarios are specified as .feature files in the src\test\resources directory. Some classes defined in src\test take care of converting these scenarios to executable JUnit tests.
