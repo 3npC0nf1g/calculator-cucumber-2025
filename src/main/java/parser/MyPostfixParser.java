@@ -39,9 +39,11 @@ public class MyPostfixParser {
             expression = "(" + expression + ")";
         }
         String prefix = custompostfixToPrefix(expression);
-        System.out.println("Converted to prefix: " + prefix);
+        //System.out.println(prefix);
         MyPrefixParser myPrefixParser = new MyPrefixParser();
-        return myPrefixParser.evaluate(prefix);
+        NumericValue result = myPrefixParser.evaluate(prefix);
+
+        return result;
     }
 
     public String custompostfixToPrefix(String postfixExpression) {

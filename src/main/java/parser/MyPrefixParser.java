@@ -30,29 +30,28 @@ public class MyPrefixParser {
     List<String> tokens = new ArrayList<>();
 
     public NumericValue evaluate(String expression) {
-        System.out.println("prefix expr = "+expression);
+        //System.out.println("prefix expr = "+expression);
         if(expression.charAt(0) != '(') {
             expression = "(" + expression + ")";
         }
-        TokenizerPrefix tokenizerPrefix = new TokenizerPrefix(expression);
+        TokenizerPrefix tokenizerPrefix = new TokenizerPrefix(expression.toString().trim());
         tokens= tokenizerPrefix.getTokens();
         for (String token : tokens) {
             if (isOperator(token)) {
                 operators.add(token);
             }
         }
-        System.out.println("[DEBUG] operator restant= " + operators);
+        //System.out.println("[DEBUG] operator restant= " + operators);
 
 
-        System.out.println("Tokens: " + tokenizerPrefix.getTokens());
+        //System.out.println("Tokens: " + tokenizerPrefix.getTokens());
 
         NumericValue result = parseExpression(tokenizerPrefix);
+
 
         if (tokenizerPrefix.hasNext()) {
             throw new RuntimeException("Invalid expression: extra tokens remaining " + tokenizerPrefix.getTokens());
         }
-        tokens = new ArrayList<>();
-        lastOperator="";
         return result;
     }
     private  String lastOperator="";
@@ -63,11 +62,11 @@ public class MyPrefixParser {
         if (!tokenizerPrefix.hasNext()) throw new RuntimeException("Unexpected end of expression");
 
         String token = tokenizerPrefix.peek();
-        System.out.println("[DEBUG] peek token = " + token);
+        //System.out.println("[DEBUG] peek token = " + token);
 
         if (token.equals("(")) {
             tokenizerPrefix.next(); // consume '('
-            System.out.println("[DEBUG] found '('");
+            //System.out.println("[DEBUG] found '('");
 
             if (!tokenizerPrefix.hasNext()) throw new RuntimeException("Unexpected end after '('");
 
@@ -75,19 +74,19 @@ public class MyPrefixParser {
             if (isOperator(token)) {
                 lastOperator = token;
                 token = tokenizerPrefix.next(); // consume operator
-                System.out.println("[DEBUG] operator in group = " + token);
+                //System.out.println("[DEBUG] operator in group = " + token);
                 List<NumericValue> args = parseArguments(tokenizerPrefix);
-                System.out.println("[DEBUG] args = " + args);
+                //System.out.println("[DEBUG] args = " + args);
                 NumericValue product =new RealValue(0, 10);
-                System.out.println("[DEBUG] operator in group = " + token);
-                System.out.println("[DEBUG] operator restant= " + operators);
+                //System.out.println("[DEBUG] operator in group = " + token);
+                //System.out.println("[DEBUG] operator restant= " + operators);
                 if(operators.size()==0)
                 {
                     product = args.get(0);
                     for (int i = 1; i < args.size(); i++) {
                         product = product.multiply(args.get(i));
                     }
-                    System.out.println("[DEBUG] product of values last implicite" + args + " = " + product);
+                    //System.out.println("[DEBUG] product of values last implicite" + args + " = " + product);
 
                 }
                 else {
@@ -95,11 +94,11 @@ public class MyPrefixParser {
                     operators.remove(token);
                 }
 
-                System.out.println("[DEBUG] result of operator " + token + " on " + args + " = " + product);
+                //System.out.println("[DEBUG] result of operator " + token + " on " + args + " = " + product);
                 return product;
             } else if (isFunction(token)) {
                 token = tokenizerPrefix.next(); // consume function
-                System.out.println("[DEBUG] function in group = " + token);
+                //System.out.println("[DEBUG] function in group = " + token);
                 NumericValue arg = parseExpression(tokenizerPrefix);
                 if (!tokenizerPrefix.peek().equals(")")) throw new RuntimeException("Expected ')' after function argument");
                 tokenizerPrefix.next(); // consume ')'
@@ -126,16 +125,16 @@ public class MyPrefixParser {
                     for (int i = 1; i < values.size(); i++) {
                         product = product.multiply(values.get(i));
                     }
-                    System.out.println("[DEBUG] product of values last implicite" + values + " = " + product);
+                    //System.out.println("[DEBUG] product of values last implicite" + values + " = " + product);
                 }
                 else
                 {
-                    System.out.println("[DEBUG] lastOperator" + " = " + lastOperator);
-                    System.out.println("[DEBUG] values" + " = " + values);
+                    //System.out.println("[DEBUG] lastOperator" + " = " + lastOperator);
+                    //System.out.println("[DEBUG] values" + " = " + values);
                     product = applyOperator(lastOperator, values);
                     operators.remove(lastOperator);
                     lastOperator = "";
-                    System.out.println("[DEBUG] sum of values " + values + " = " + product);
+                    //System.out.println("[DEBUG] sum of values " + values + " = " + product);
 
                 }
                 return product;
@@ -149,7 +148,7 @@ public class MyPrefixParser {
 
         else if (isOperator(token)) {
             token = tokenizerPrefix.next();
-            System.out.println("[DEBUG] operator standalone = " + token);
+            //System.out.println("[DEBUG] operator standalone = " + token);
 
             List<NumericValue> args = new ArrayList<>();
             if (tokenizerPrefix.hasNext() && tokenizerPrefix.peek().equals("(")) {
@@ -162,21 +161,21 @@ public class MyPrefixParser {
 
             if (args.isEmpty()) throw new RuntimeException("No arguments for operator: " + token);
             NumericValue result = applyOperator(token, args);
-            System.out.println("[DEBUG] result of operator " + token + " on " + args + " = " + result);
+            //System.out.println("[DEBUG] result of operator " + token + " on " + args + " = " + result);
             operators.remove(token);
             return result;
         }
 
         else if (isFunction(token)) {
             token = tokenizerPrefix.next();
-            System.out.println("[DEBUG] function standalone = " + token);
+            //System.out.println("[DEBUG] function standalone = " + token);
             NumericValue arg = parseExpression(tokenizerPrefix);
             return applyFunction(token, arg);
         }
 
         else {
             token = tokenizerPrefix.next();
-            System.out.println("[DEBUG] raw token = " + token);
+            // System.out.println("[DEBUG] raw token = " + token);
 
             if (token.startsWith("[")) {
                 return parseComplex(token);
