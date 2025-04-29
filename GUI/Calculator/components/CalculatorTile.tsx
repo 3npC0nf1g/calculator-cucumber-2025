@@ -1,18 +1,22 @@
 
 
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import {useOperation} from "@/components/OperationContext";
+import { useOperation } from "@/components/OperationContext";
 
-type CalculatorTileProps={
-    type:"number"|"special"|"operation",
-    text:string,
+type CalculatorTileProps = {
+    type: "number" | "special" | "operation",
+    text: string,
+    value: string
+    form: "scientific" | "standard"
 }
 
-export default function CalculatorTile({type,text}: Readonly<CalculatorTileProps>) {
-    const { appendOperation, clearOperation,operation} = useOperation();
+export default function CalculatorTile({ type, text, value, form }: Readonly<CalculatorTileProps>) {
+    const { appendOperation, clearOperation, operation } = useOperation();
+
+    const big: boolean = Platform.OS !== "web" && form === "scientific";
 
     const handlePress = () => {
 
@@ -25,23 +29,24 @@ export default function CalculatorTile({type,text}: Readonly<CalculatorTileProps
             }
         } else {
             console.log(operation)
-            appendOperation(text);
+            appendOperation(value);
         }
     };
 
     return (
-        <ThemedView style={[styles.mainVIew, type=="number" && styles.numberTileBg,
-            type=="special" && styles.specialTileBg,
-            type=="operation" && styles.operationTileBg,
-            text==="="  && {flexGrow:2}
+        <ThemedView style={[!big ? styles.mainView : styles.mainViewSmall, type == "number" && styles.numberTileBg,
+        type == "special" && styles.specialTileBg,
+        type == "operation" && styles.operationTileBg,
+        text === "=" && { flexGrow: !big ? 1 : 1 }
+
         ]}
         >
             <TouchableOpacity
-            activeOpacity={0.2}
-            style={styles.btn}
-            onPress={handlePress}
+                activeOpacity={0.2}
+                style={styles.btn}
+                onPress={handlePress}
             >
-                <ThemedText type={'title'} style={styles.tileText}>
+                <ThemedText type={!big ? 'title' : 'default'} style={styles.tileText}>
                     {text}
                 </ThemedText>
             </TouchableOpacity>
@@ -51,31 +56,41 @@ export default function CalculatorTile({type,text}: Readonly<CalculatorTileProps
 }
 
 const styles = StyleSheet.create({
-    mainVIew:{
-        flex:1,
-        borderWidth:1,
-        borderRadius:10,
-        alignItems:'center',
-        justifyContent:'center',
-        borderColor:"white"
+    mainView: {
+        flex: 1,
+        borderWidth: 1,
+        borderRadius: Platform.OS === "web" ? 10 : 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: "white",
+        margin: 1
     },
-    specialTileBg:{
-        backgroundColor:'orange'
+    mainViewSmall: {
+        flex: 0.5,
+        borderWidth: 1,
+        borderRadius: Platform.OS === "web" ? 10 : 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: "white"
     },
-    numberTileBg:{
+    specialTileBg: {
+        backgroundColor: 'orange'
+    },
+    numberTileBg: {
         backgroundColor: "black"
     },
-    operationTileBg:{
-        backgroundColor:"grey"
+    operationTileBg: {
+        backgroundColor: "grey"
     },
-    tileText:{
-        color:'white',
-        alignSelf:'center'
+    tileText: {
+        color: 'white',
+        alignSelf: 'center'
     },
-    btn:{
-       flex:1,
-        width:'100%',
-        height:'100%',
-        alignItems:"center",justifyContent:"center"
-    }
+    btn: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        alignItems: "center", justifyContent: "center"
+    },
+
 })

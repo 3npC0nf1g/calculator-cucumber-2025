@@ -1,26 +1,15 @@
-import { StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import {useState} from "react";
 import CalculatorTile from "@/components/CalculatorTile";
+import { SCI_ROWS } from '@/constants/SciButtons';
 
-const SCI_ROWS: string[][] = [
-    ['↔',  'Rad',  '√',   'C',   '()',  '%',   '÷'  ],
-    ['sin','cos',  'tan', '7',   '8',   '9',   '×'  ],
-    ['ln', 'log',  '1/x', '4',   '5',   '6',   '−'  ],
-    ['eˣ', 'x²',   'xʸ',  '1',   '2',   '3',   '+'  ],
-    ['|x|','π',    'e',   '0',   ',',   '='  ],
-];
 
-function classify(text: string): 'number' | 'operation' | 'special' {
-    if (/^[0-9]$/.test(text)) return 'number';
-    if (['C','=', '±','()','↔','Rad'].includes(text)) return 'special';
-    return 'operation';
-}
 
-export default function CalculatorScience() {
-    const [numbers,setNumbers]=useState<number[]>([])
+
+
+
+export default function CalculatorScienceWeb() {
 
     return (
         <ThemedView style={styles.mainView}>
@@ -28,9 +17,11 @@ export default function CalculatorScience() {
                 <ThemedView style={styles.row} key={rowIdx}>
                     {row.map((txt) => (
                         <CalculatorTile
-                            key={txt}
-                            text={txt}
-                            type={classify(txt)}
+                            key={txt.key}
+                            text={txt.text}
+                            type={txt.type}
+                            value={txt.value}
+                            form='scientific'
                         />
                     ))}
                 </ThemedView>
@@ -41,8 +32,8 @@ export default function CalculatorScience() {
 
 const styles = StyleSheet.create({
 
-    mainView:{
-        flex:1
+    mainView: {
+        flex: 1
     },
     row: {
         flex: 1,

@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import {OperationProvider} from "@/components/OperationContext";
+import { OperationProvider } from "@/components/OperationContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -32,8 +32,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-          <Stack.Screen name="+not-found" />
-          <Stack.Screen name ="index"/>
+        <Stack.Screen name="+not-found" />
+        <Stack.Screen name="index" options={{ headerTitle: "Cucumber Calculator" }}
+        />
 
       </Stack>
       <StatusBar style="auto" />
