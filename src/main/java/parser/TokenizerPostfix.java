@@ -13,7 +13,7 @@ public class TokenizerPostfix {
     public TokenizerPostfix(String expression) {
         this.tokens = tokenize(expression);
         this.position = 0;
-        System.out.println("[Tokenizer] Tokens: " + tokens); // pour debug
+        //System.out.println("[Tokenizer] Tokens: " + tokens); // pour debug
     }
 
     public boolean hasNext() {

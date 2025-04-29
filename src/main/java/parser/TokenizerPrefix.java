@@ -104,7 +104,7 @@ public class TokenizerPrefix {
             case "*":
                 NumericValue mult = new RealValue(1,10);
                 for (NumericValue arg : args) {
-                    System.out.println("arg : "+arg);
+                    //System.out.println("arg : "+arg);
                     mult = mult.multiply(arg);
                 }
                 return mult;
