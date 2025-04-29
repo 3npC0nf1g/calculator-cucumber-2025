@@ -84,7 +84,7 @@ public class MyInfixParser {
                     }
                     while (!ops.isEmpty() && !ops.peek().equals("(")) {
                         String op = ops.pop();
-                        //System.out.println("Construction de sous-arbre avec opérateur : " + op);
+                        System.out.println("Construction de sous-arbre avec opérateur : " + op);
                         buildSubTree(nodes, op);
                     }
                     if (ops.isEmpty()) {
@@ -177,7 +177,7 @@ public class MyInfixParser {
     }
 
     private static boolean isFunctionName(String token) {
-        return token.equals("sin") || token.equals("cos") || token.equals("tan");
+        return token.equals("sin") || token.equals("cos") || token.equals("tan") || token.equals("E");
     }
 
     private static Node createNodeFromToken(String token) {
@@ -207,6 +207,8 @@ public class MyInfixParser {
                 case "sin": return new RealValue(c.sin(Double.parseDouble(argument.toString())), 10);
                 case "cos": return new RealValue(c.cos(Double.parseDouble(argument.toString())), 10);
                 case "tan": return new RealValue(c.tan(Double.parseDouble(argument.toString())), 10);
+                case "E": return new RealValue(Math.pow(10,Double.parseDouble(argument.toString())), 10);
+
                 default: throw new IllegalArgumentException("Fonction inconnue: " + root.value);
             }
         }
@@ -230,8 +232,6 @@ public class MyInfixParser {
             default: throw new IllegalArgumentException("Invalid operator: " + root.value);
         }
     }
-
-
 
     private static boolean isOperator(char c) {
         return c == '+' || c == '-' || c == '*' || c == '/';
@@ -279,7 +279,7 @@ public class MyInfixParser {
 
     public static void main(String[] args) {
         ExpressionParser.mycalculator.setUseRadians(false);
-        String expr = "((4 + 5 + 6) * (7 + (5 / 2 / 7)) * 9)";
+        String expr = "1.8 * E(2)";
 
         try {
             Node root = buildTree(expr);

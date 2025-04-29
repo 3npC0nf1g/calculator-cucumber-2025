@@ -51,6 +51,9 @@ public class ExpressionParser {
         if(input.contains("pi"))
             input=input.replaceAll("pi",""+Math.PI);
 
+        if(input.contains("pi"))
+            input=input.replaceAll("pi",""+Math.PI);
+
         if(isPrefix(input)) {
             //System.out.println("Prefix " + input);
             MyPrefixParser p = new MyPrefixParser();
