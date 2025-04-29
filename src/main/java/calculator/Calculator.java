@@ -22,6 +22,7 @@ public class Calculator {
      */
     public Calculator() {}
 
+
     /*
      * For the moment the calculator only contains a print method and an eval method.
      * It would be useful to complete this with a read method, so that we could implement

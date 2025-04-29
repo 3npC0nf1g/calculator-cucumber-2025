@@ -54,6 +54,16 @@ public final class Divides extends Operation {
         return l.divide(r);
     }
 
+    @Override
+    public MyNumber op(MyNumber l) {
+        return null;
+    }
+
+    @Override
+    public MyNumber op(MyNumber l, MyNumber r) {
+        return null;
+    }
+
     /**
      * The actual computation of the (binary) arithmetic division of two integers.
      * This method is maintained for backward compatibility.

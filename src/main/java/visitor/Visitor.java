@@ -23,10 +23,5 @@ public abstract class Visitor {
      */
     public abstract void visit(Operation o);
 
-    /**
-     * The Visitor can traverse an Expression (a subtype of Expression)
-     *
-     * @param e The operation being visited
-     */
-    public abstract void visit(Expression e);
+
 }

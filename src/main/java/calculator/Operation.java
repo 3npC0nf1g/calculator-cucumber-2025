@@ -192,4 +192,8 @@ public abstract class Operation implements Expression {
 		result = prime * result + args.hashCode();
 		return result;
 	}
+
+	public abstract MyNumber op(MyNumber l);
+
+	public abstract MyNumber op(MyNumber l, MyNumber r);
 }

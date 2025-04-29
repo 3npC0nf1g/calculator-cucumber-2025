@@ -1,6 +1,8 @@
 package calculator.values;
 
-public interface NumericValue {
+import calculator.Expression;
+
+public interface NumericValue extends Expression {
     NumericValue add(NumericValue other);
     NumericValue subtract(NumericValue other);
     NumericValue multiply(NumericValue other);
@@ -11,5 +13,6 @@ public interface NumericValue {
     String toString();
 
     int getValueInt();
+
 
 }
