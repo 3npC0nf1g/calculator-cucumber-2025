@@ -4,7 +4,7 @@ import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useOperation } from "@/components/OperationContext";
+import { useOperation } from "@/context/OperationContext";
 
 type CalculatorTileProps = {
     type: "number" | "special" | "operation",
@@ -14,7 +14,7 @@ type CalculatorTileProps = {
 }
 
 export default function CalculatorTile({ type, text, value, form }: Readonly<CalculatorTileProps>) {
-    const { appendOperation, clearOperation, operation } = useOperation();
+    const { appendOperation, clearOperation, operation, sendOperation, clearOperationHistory } = useOperation();
 
     const big: boolean = Platform.OS !== "web" && form === "scientific";
 
@@ -22,13 +22,18 @@ export default function CalculatorTile({ type, text, value, form }: Readonly<Cal
 
         if (type === "special") {
             if (text === "C") {
+                clearOperationHistory();
                 clearOperation();
             } else if (text === "=") {
-                // Optionally trigger evaluation here or leave it for another component.
-                // For now, we'll do nothing.
+                sendOperation();
             }
-        } else {
-            console.log(operation)
+        } if (type === "operation") {
+            if (value == "%") {
+                appendOperation("/100")
+            }
+        }
+        else {
+
             appendOperation(value);
         }
     };

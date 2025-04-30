@@ -1,14 +1,13 @@
-import {KeyboardAvoidingView, StyleSheet, TextInput} from 'react-native';
+import { useOperation } from '@/context/OperationContext';
+import { KeyboardAvoidingView, StyleSheet, TextInput } from 'react-native';
 
-import { ThemedView } from '@/components/ThemedView';
-import {useOperation} from "@/components/OperationContext";
 
 
 
 
 export default function DisplayScience() {
     // Access the operation value from the context.
-    const { operation ,appendOperation} = useOperation();
+    const { operation, appendOperation } = useOperation();
 
     return (
         <TextInput
@@ -21,16 +20,16 @@ export default function DisplayScience() {
         />
     );
 }
-const styles= StyleSheet.create({
-    textInput:{
-        minHeight:60,
-        height:"20%",
-        width:"100%",
-        borderRadius:10,
-        borderWidth:3,
-        backgroundColor:"white",
-        fontSize:25,
-        textAlign:"left",
-        textAlignVertical:'center'
+const styles = StyleSheet.create({
+    textInput: {
+        minHeight: 60,
+        height: "20%",
+        width: "100%",
+        borderRadius: 10,
+        borderWidth: 3,
+        backgroundColor: "white",
+        fontSize: 25,
+        textAlign: "left",
+        textAlignVertical: 'center'
     }
 })

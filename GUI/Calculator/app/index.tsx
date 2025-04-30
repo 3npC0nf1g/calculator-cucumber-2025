@@ -1,21 +1,22 @@
-import { Image, StyleSheet, Platform, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Platform, View, KeyboardAvoidingView, TouchableOpacity, Button } from 'react-native';
 
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import Calculator from "@/components/Calculator";
 import Display from "@/components/Display";
-import { OperationProvider } from "@/components/OperationContext";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { OperationProvider } from "@/context/OperationContext";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import DisplayScience from "@/components/DsiplayScience.web";
 
 import * as ScreenOrientation from 'expo-screen-orientation';
 import CalculatorScienceMobile from '@/components/CalculatorScience';
 import CalculatorScienceWeb from '@/components/CalculatorScience.web';
-
 export default function HomeScreen() {
     const isWeb = Platform.OS === 'web';
     const [type, setType] = useState<boolean>(true)
+
+
+
 
     // choose container component & props
     const Container = isWeb ? View : KeyboardAvoidingView;
@@ -56,7 +57,6 @@ export default function HomeScreen() {
 
 
                 </ThemedView>
-
 
                 <ThemedView style={styles.calculatorView}>
                     {/* on web: simple View; on mobile: KeyboardAvoidingView */}
