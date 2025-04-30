@@ -76,7 +76,7 @@ import java.math.RoundingMode;
     @Test
      void testToString() {
         ComplexValue c = new ComplexValue(1.23, -4.56);
-        assertEquals("1.23 + -4.56i", c.toString());
+        assertEquals("1.23 - 4.56i", c.toString());
     }
 
     @Test
@@ -132,7 +132,7 @@ import java.math.RoundingMode;
        IntegerValue integer = new IntegerValue(2); // +2
        NumericValue result = complex.add(integer);
         assertInstanceOf(ComplexValue.class, result);
-       assertEquals("3 + 1i", result.toString());
+       assertEquals("3 + i", result.toString());
     }
 
      @Test
@@ -152,7 +152,7 @@ import java.math.RoundingMode;
        RealValue real = new RealValue(0.5, 1);
        NumericValue result = complex.subtract(real);
         assertInstanceOf(ComplexValue.class, result);
-       assertEquals("1.0 + 2.0i", result.toString()); // arrondi à 1 décimale
+       assertEquals("1 + 2i", result.toString()); // arrondi à 1 décimale
     }
 
     @Test
@@ -161,7 +161,7 @@ import java.math.RoundingMode;
        IntegerValue integer = new IntegerValue(2);
        NumericValue result = complex.subtract(integer);
         assertInstanceOf(ComplexValue.class, result);
-       assertEquals("3.0 + 3.0i", result.toString());
+       assertEquals("3 + 3i", result.toString());
     }
 
      @Test
@@ -202,7 +202,7 @@ import java.math.RoundingMode;
        IntegerValue divisor = new IntegerValue(2);
        NumericValue result = complex.divide(divisor); // 2 + 1i
         assertInstanceOf(ComplexValue.class, result);
-       assertEquals("2.00 + 1.00i", result.toString());
+       assertEquals("2 + i", result.toString());
     }
 
      @Test

@@ -152,7 +152,7 @@ import java.math.BigInteger;
        ComplexValue complex = new ComplexValue(BigDecimal.ONE, BigDecimal.ONE); // 0.5 + (1 + i) = 1.5 + i
        NumericValue result = r.add(complex);
         assertInstanceOf(ComplexValue.class, result);
-       assertEquals("1.5 + 1i", result.toString()); // dépend du toString() de ComplexValue
+       assertEquals("1.5 + i", result.toString()); // dépend du toString() de ComplexValue
     }
 
     @Test
