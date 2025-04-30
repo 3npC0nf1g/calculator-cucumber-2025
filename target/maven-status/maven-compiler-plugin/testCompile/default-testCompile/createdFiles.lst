@@ -3,6 +3,7 @@ calculator/values/RationalValueTest.class
 calculator/TestNotation.class
 calculator/values/RealValueTest$3.class
 calculator/TestDivides.class
+calculator/TestApi.class
 calculator/values/RealValueTest.class
 calculator/TestNotation$1.class
 calculator/CucumberTest.class

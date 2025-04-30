@@ -297,4 +297,6 @@ public class CalculatorSteps {
 		return complex.replaceAll("(\\d+\\.\\d*?)0+(?=\\D|$)", "$1")
 				.replaceAll("\\.0+(?=\\D|$)", "");
 	}
+
+
 }
