@@ -1,14 +1,32 @@
 package parser;
-
 import calculator.Calculator;
 import calculator.values.NumericValue;
+import calculator.values.RationalValue;
 import calculator.values.RealValue;
 import calculator.values.ComplexValue;
-
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
+/**
+ * The MyInfixParser class provides functionality for parsing and evaluating
+ * arithmetic expressions written in infix notation.
+ *
+ * Features:
+ * - Supports integers, decimals, fractions (a/b), and complex numbers [a+bi]
+ * - Recognizes trigonometric functions: sin(x), cos(x), tan(x)
+ * - Allows scientific notation via E(x), equivalent to 10^x
+ * - Supports fraction vs. decimal display modes
+ * - Integrates with a shared Calculator instance for evaluation
+ *
+ * Author: Hugue
+ */
+
 public class MyInfixParser {
+
+    /**
+     * Represents a node in the expression tree.
+     */
     public static class Node {
         public String value;
         public Node left;
@@ -36,6 +54,11 @@ public class MyInfixParser {
         }
     }
 
+    /**
+     * Builds an expression tree from an infix string expression.
+     * @param expression the infix expression
+     * @return root node of the expression tree
+     */
     public static Node buildTree(String expression) {
         Stack<Node> nodes = new Stack<>();
         Stack<String> ops = new Stack<>();
@@ -142,6 +165,11 @@ public class MyInfixParser {
         return nodes.pop();
     }
 
+    /**
+     * Constructs a subtree with the given operator and operands from the stack.
+     * @param nodes stack of current nodes
+     * @param op operator or function name
+     */
     private static void buildSubTree(Stack<Node> nodes, String op) {
         Node parent = new Node(op);
 
@@ -164,22 +192,40 @@ public class MyInfixParser {
         nodes.push(parent);
     }
 
-
-
+    /**
+     * Checks whether the string is a supported operator.
+     * @param s token to check
+     * @return true if it's an operator, false otherwise
+     */
     private static boolean isOperator(String s) {
         return s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/");
     }
 
+    /**
+     * Returns the precedence of the given operator.
+     * @param op operator as a string
+     * @return integer representing precedence level
+     */
     private static int precedence(String op) {
         if (op.equals("+") || op.equals("-")) return 1;
         if (op.equals("*") || op.equals("/")) return 2;
         return 0;
     }
 
+    /**
+     * Determines if a token is a supported function.
+     * @param token token string
+     * @return true if token is a function name, false otherwise
+     */
     private static boolean isFunctionName(String token) {
         return token.equals("sin") || token.equals("cos") || token.equals("tan") || token.equals("E");
     }
 
+    /**
+     * Creates a Node from a token, marking it as function or complex if appropriate.
+     * @param token input token
+     * @return a new Node
+     */
     private static Node createNodeFromToken(String token) {
         Node node = new Node(token);
         if (isFunctionName(token)) {
@@ -190,6 +236,11 @@ public class MyInfixParser {
         return node;
     }
 
+    /**
+     * Evaluates the expression tree.
+     * @param root root of the tree
+     * @return result as a NumericValue
+     */
     public static NumericValue evaluate(Node root) {
         if (root == null) {
             throw new IllegalArgumentException("Nœud racine nul !");
@@ -218,6 +269,7 @@ public class MyInfixParser {
         }
 
         if (root.left == null && root.right == null) {
+
             return new RealValue(new BigDecimal(root.value), 10);
         }
 
@@ -228,22 +280,19 @@ public class MyInfixParser {
             case "+": return leftVal.add(rightVal);
             case "-": return leftVal.subtract(rightVal);
             case "*": return leftVal.multiply(rightVal);
-            case "/": return leftVal.divide(rightVal);
+            case "/":
+            {
+                if(ExpressionParser.getDisplay()== ExpressionParser.Display.FRACTION)
+                    return new RationalValue(new BigInteger(leftVal.toString()),new BigInteger(rightVal.toString()));
+                else
+                    return leftVal.divide(rightVal);
+
+            }
             default: throw new IllegalArgumentException("Invalid operator: " + root.value);
         }
     }
 
-    private static boolean isOperator(char c) {
-        return c == '+' || c == '-' || c == '*' || c == '/';
-    }
-
-    private static int precedence(char op) {
-        if (op == '+' || op == '-') return 1;
-        if (op == '*' || op == '/') return 2;
-        return 0;
-    }
-
-
+    /** Parses a complex number literal of the form [a+bi] */
     private static NumericValue parseComplex(String value) {
         String inside = value.substring(1, value.length() - 1);
         inside = inside.replace("i", "");
@@ -274,13 +323,12 @@ public class MyInfixParser {
         return new ComplexValue(Double.parseDouble(realPart), Double.parseDouble(imagPart));
     }
 
-
-    // (la partie evaluate() et parseComplex() reste bonne, pas besoin de modifier)
-
+    /**
+     * Entry point to test infix expressions.
+     */
     public static void main(String[] args) {
         ExpressionParser.mycalculator.setUseRadians(false);
         String expr = "1.8 * E(2)";
-
         try {
             Node root = buildTree(expr);
             NumericValue result = evaluate(root);

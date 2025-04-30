@@ -1,16 +1,30 @@
 package parser;
-
-import calculator.Calculator;
 import calculator.values.NumericValue;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
-import static parser.TokenizerPostfix.*;
+/**
+ * The MyPostfixParser class provides parsing and evaluation of arithmetic expressions
+ * written in a custom Postfix (Reverse Polish) notation.
+ *
+ * Postfix expressions are transformed into Prefix expressions and then evaluated
+ * using MyPrefixParser.
+ *
+ * Supported features:
+ * - Arithmetic operators: +, -, *, /, ^, %
+ * - Functions like sin, cos, etc. via MyPrefixParser
+ * - Complex numbers [a+bi] and nested expressions
+ *
+ * Example:
+ *   ((4,5,6)+,(7,(5,2,7)/)+,9) will be transformed and evaluated properly.
+ *
+ * Author: Hugue
+ */
 
 public class MyPostfixParser {
 
+    /**
+     * Entry point to test several example postfix expressions.
+     */
     public static void main(String[] args) {
         String expr1 = "((4,5,6)+,(7,(5,2,7)/)+,9)";
         String expr2 = "((2 ([1+2i] [3-4i]+) (sin(30) cos(60)+)*))";
@@ -31,8 +45,17 @@ public class MyPostfixParser {
         System.out.println(myPostfixParser.evaluate(expr4));
     }
 
+    /**
+     * Default constructor.
+     */
     public MyPostfixParser() {};
 
+    /**
+     * Evaluates a postfix expression by converting it to prefix and delegating to MyPrefixParser.
+     *
+     * @param expression Postfix arithmetic expression
+     * @return The result as a NumericValue
+     */
     public NumericValue evaluate(String expression) {
         expression = expression.replaceAll(",", " ");
         if(expression.charAt(0) != '(' || expression.charAt(expression.length()-1) != ')') {
@@ -46,6 +69,13 @@ public class MyPostfixParser {
         return result;
     }
 
+
+    /**
+     * Converts a custom postfix expression into prefix format for evaluation.
+     *
+     * @param postfixExpression the original postfix string
+     * @return a valid prefix-formatted expression
+     */
     public String custompostfixToPrefix(String postfixExpression) {
         TokenizerPostfix tokenizer = new TokenizerPostfix(postfixExpression);
         String res="";
@@ -67,6 +97,14 @@ public class MyPostfixParser {
         return res;
     }
 
+    /**
+     * Finds the index of the matching opening parenthesis for a given token index.
+     * Used during postfix-to-prefix transformation.
+     *
+     * @param list Token list
+     * @param end Current index
+     * @return Index of the matching opening parenthesis
+     */
     private int getOpenParenthesisOf(List<String> list,int end)
     {
         int res=0;
@@ -115,6 +153,12 @@ public class MyPostfixParser {
         return pos;
     }
 
+    /**
+     * Checks if the token is an arithmetic operator.
+     *
+     * @param token the token to check
+     * @return true if operator, false otherwise
+     */
     private  boolean isOperator(String token) {
         return token.equals("+") || token.equals("-") || token.equals("*") ||
                 token.equals("/") || token.equals("^") || token.equals("%");

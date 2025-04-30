@@ -1,3 +1,4 @@
+
 package parser;
 
 import calculator.values.NumericValue;
@@ -5,33 +6,61 @@ import calculator.values.NumericValue;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The MyPostfixParser class provides parsing and evaluation of arithmetic expressions
+ * written in a custom Postfix (Reverse Polish) notation.
+ *
+ * Postfix expressions are transformed into Prefix expressions and then evaluated
+ * using MyPrefixParser.
+ *
+ * Supported features:
+ * - Arithmetic operators: +, -, *, /, ^, %
+ * - Functions like sin, cos, etc. via MyPrefixParser
+ * - Complex numbers [a+bi] and nested expressions
+ *
+ * Example:
+ *   ((4,5,6)+,(7,(5,2,7)/)+,9) will be transformed and evaluated properly.
+ *
+ * Author: Hugue
+ */
+
 public class TokenizerPostfix {
 
+    /** List of parsed tokens extracted from the input expression */
     private final List<String> tokens;
+
+    /** Current read position in the token list */
     private int position;
 
+
+    /**
+     * Constructs a TokenizerPostfix instance and tokenizes the given expression.
+     *
+     * @param expression the postfix arithmetic expression to tokenize
+     */
     public TokenizerPostfix(String expression) {
         this.tokens = tokenize(expression);
         this.position = 0;
         //System.out.println("[Tokenizer] Tokens: " + tokens); // pour debug
     }
 
-    public boolean hasNext() {
-        return position < tokens.size();
-    }
-
+    /**
+     * Retrieves the list of all tokens parsed from the expression.
+     *
+     * @return the list of tokens
+     */
     public List<String> getTokens() {
         return tokens;
     }
 
-    public String next() {
-        return tokens.get(position++);
-    }
-
-    public String peek() {
-        return tokens.get(position);
-    }
-
+    /**
+     * Tokenizes a given arithmetic expression string into individual tokens.
+     * This method supports numbers, complex numbers, operators, and functions.
+     *
+     * @param expression the input expression to tokenize
+     * @return a list of string tokens
+     * @throws RuntimeException if an unknown character is encountered
+     */
     private List<String> tokenize(String expression) {
         List<String> result = new ArrayList<>();
         int i = 0;
@@ -92,27 +121,6 @@ public class TokenizerPostfix {
             }
             else {
                 throw new RuntimeException("Unknown character: " + c);
-            }
-        }
-        return result;
-    }
-
-    public static boolean isOperator(String token) {
-        return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/");
-    }
-
-    public static NumericValue applyOperator(String operator, List<NumericValue> values) {
-        if (values.isEmpty()) throw new RuntimeException("No values to apply operator");
-
-        NumericValue result = values.get(0);
-        for (int i = 1; i < values.size(); i++) {
-            NumericValue v = values.get(i);
-            switch (operator) {
-                case "+" -> result = result.add(v);
-                case "-" -> result = result.subtract(v);
-                case "*" -> result = result.multiply(v);
-                case "/" -> result = result.divide(v);
-                default -> throw new RuntimeException("Unknown operator: " + operator);
             }
         }
         return result;

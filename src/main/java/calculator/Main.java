@@ -123,6 +123,7 @@ public class Main {
 			Expression rational2 = new MyNumber(new RationalValue(25, 50)); // 12/18
 			c.print(rational2);  // Devrait simplifier à 2/3
 			c.eval(rational2);
+			System.out.println();
 
 			// Test de la division par zéro avec un nombre réel
 			Expression realDivByZero = new MyNumber(new RealValue(1.0, 3));  // 1/0.0
