@@ -84,7 +84,7 @@ public class MyInfixParser {
                     }
                     while (!ops.isEmpty() && !ops.peek().equals("(")) {
                         String op = ops.pop();
-                        System.out.println("Construction de sous-arbre avec opérateur : " + op);
+                        //System.out.println("Construction de sous-arbre avec opérateur : " + op);
                         buildSubTree(nodes, op);
                     }
                     if (ops.isEmpty()) {

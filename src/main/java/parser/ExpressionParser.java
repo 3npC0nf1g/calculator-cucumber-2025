@@ -10,14 +10,29 @@ import static parser.MyInfixParser.buildTree;
 public class ExpressionParser {
 
     public enum Mode { RAD, DEG }
+    public enum Notation {Infix, Prefix,Postfix,Auto }
     private static Mode mode = Mode.DEG;
+    private static Notation notation = Notation.Infix;
+
 
     public static void setMode(Mode m) {
         mode = m;
+        if(mode == Mode.RAD)
+            mycalculator.setUseRadians(false);
+        else
+            mycalculator.setUseRadians(true);
+    }
+
+    public static void setNotation(Notation n) {
+        notation = n;
     }
 
     public static Mode getMode() {
         return mode;
+    }
+
+    public static Notation getNotation() {
+        return notation;
     }
 
     public static NumericValue last_result=new IntegerValue(0);
@@ -51,30 +66,29 @@ public class ExpressionParser {
         if(input.contains("pi"))
             input=input.replaceAll("pi",""+Math.PI);
 
-        if(input.contains("pi"))
-            input=input.replaceAll("pi",""+Math.PI);
 
-        if(isPrefix(input)) {
-            //System.out.println("Prefix " + input);
-            MyPrefixParser p = new MyPrefixParser();
-            result=p.evaluate(input);
+        if(notation==Notation.Infix)
+        {
+            result=InfixEvaluator(input);
         }
-
-        else if(isInfix(input)) {
-            //System.out.println("Infix " + input);
-            MyInfixParser.Node root = buildTree(input);
-            result = MyInfixParser.evaluate(root);
+        else if(notation==Notation.Prefix)
+        {
+            result=PrefixEvaluator(input);
+        }
+        else if(notation==Notation.Postfix)
+        {
+            result=PostfixEvaluator(input);
         }
         else {
-            //System.out.println("Postfix " + input);
-            MyPostfixParser p = new MyPostfixParser();
-            result = p.evaluate(input);
+            result=AutoEvaluator(input);
+        }
+        if(result!=null) {
+            if (result.toString().equals("NaN"))
+                last_result = new IntegerValue(0);
+            else
+                last_result = result;
         }
 
-        if(result.toString().equals("NaN"))
-            last_result=new IntegerValue(0);
-        else
-            last_result=result;
         return result;
     }
 
@@ -158,5 +172,54 @@ public class ExpressionParser {
         return Arrays.asList("+", "-", "*", "/").contains(token);
     }
 
+    private NumericValue InfixEvaluator(String input) {
+        NumericValue result=null;
+        try {
+            MyInfixParser.Node root = buildTree(input);
+            result = MyInfixParser.evaluate(root);
+        } catch (Exception e) {
+            System.err.println("Erreur dans l'évaluation Infix : ");
+            System.err.println("    Veuillez vérifier votre expression et la notation");
+            return null;
+        }
+        return result;
+    }
 
+    private NumericValue PrefixEvaluator(String input) {
+        NumericValue result=null;
+        try {
+            MyPrefixParser p = new MyPrefixParser();
+            result=p.evaluate(input);
+        } catch (Exception e) {
+            System.err.println("Erreur dans l'évaluation Prefix : ");
+            System.err.println("    Veuillez vérifier votre expression et la notation");
+            return null;
+        }
+        return result;
+    }
+
+    private NumericValue PostfixEvaluator(String input) {
+        NumericValue result=null;
+        try {
+            MyPostfixParser p = new MyPostfixParser();
+            result=p.evaluate(input);
+        } catch (Exception e) {
+            System.err.println("Erreur dans l'évaluation Postfix : ");
+            System.err.println("    Veuillez vérifier votre expression et la notation");
+            return null;
+        }
+        return result;
+    }
+
+    private NumericValue AutoEvaluator(String input) {
+        NumericValue result=null;
+        if (isPrefix(input)) {
+            result =PrefixEvaluator(input);
+        } else if (isInfix(input) || ("" + input.charAt(0)).equals("s") || ("" + input.charAt(0)).equals("c") || ("" + input.charAt(0)).equals("s") || ("" + input.charAt(0)).equals("t") || ("" + input.charAt(0)).equals("[")) {
+            result = InfixEvaluator(input);
+        } else {
+            result = PostfixEvaluator(input);
+        }
+        return result;
+    }
 }

@@ -31,7 +31,7 @@ public class MyPrefixParser {
 
     public NumericValue evaluate(String expression) {
         //System.out.println("prefix expr = "+expression);
-        if(expression.charAt(0) != '(') {
+        if(expression.charAt(0) != '(' || expression.charAt(expression.length()-1) != ')') {
             expression = "(" + expression + ")";
         }
         TokenizerPrefix tokenizerPrefix = new TokenizerPrefix(expression.toString().trim());

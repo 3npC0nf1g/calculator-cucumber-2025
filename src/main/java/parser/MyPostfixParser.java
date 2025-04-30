@@ -35,7 +35,7 @@ public class MyPostfixParser {
 
     public NumericValue evaluate(String expression) {
         expression = expression.replaceAll(",", " ");
-        if(expression.charAt(0) != '(') {
+        if(expression.charAt(0) != '(' || expression.charAt(expression.length()-1) != ')') {
             expression = "(" + expression + ")";
         }
         String prefix = custompostfixToPrefix(expression);
