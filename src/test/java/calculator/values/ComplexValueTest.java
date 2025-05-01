@@ -220,6 +220,75 @@ import java.math.RoundingMode;
     }
 
 
+     @Test
+     void testModulus() {
+         ComplexValue c = new ComplexValue(3.0, 4.0);
+         assertEquals(5.0, c.modulus(), 1e-10, "Modulus of 3+4i should be 5");
+     }
+
+     @Test
+     void testInverse() {
+         ComplexValue c = new ComplexValue(1.0, 1.0);
+         ComplexValue inv = (ComplexValue) c.inverse();
+         // Inverse of 1+i is (1 - i)/2
+         assertEquals(0.5, inv.getReal().doubleValue(), 1e-10);
+         assertEquals(-0.5, inv.getImag().doubleValue(), 1e-10);
+     }
+
+     @Test
+     void testLnReal() {
+         ComplexValue c = new ComplexValue(2.0, 0.0);
+         ComplexValue ln = (ComplexValue) c.ln();
+         // ln(2) + i*0
+         assertEquals(Math.log(2.0), ln.getReal().doubleValue(), 1e-10);
+         assertEquals(0.0, ln.getImag().doubleValue(), 1e-10);
+     }
+
+     @Test
+     void testLnComplex() {
+         ComplexValue c = new ComplexValue(1.0, 1.0);
+         ComplexValue ln = (ComplexValue) c.ln();
+         // Expected: ln(sqrt(2)) + i*(pi/4)
+         assertEquals(Math.log(Math.sqrt(2)), ln.getReal().doubleValue(), 1e-10);
+         assertEquals(Math.PI / 4, ln.getImag().doubleValue(), 1e-10);
+     }
+
+     @Test
+     void testExpComplex() {
+         ComplexValue c = new ComplexValue(0.0, Math.PI);
+         ComplexValue exp = (ComplexValue) c.exp();
+         // exp(i*pi) = -1 + 0i
+         assertEquals(-1.0, exp.getReal().doubleValue(), 1e-10);
+         assertEquals(0.0, exp.getImag().doubleValue(), 1e-10);
+     }
+
+     @Test
+     void testPowIntegerExponent() {
+         ComplexValue c = new ComplexValue(2.0, 3.0);
+         ComplexValue squared = (ComplexValue) c.pow(new IntegerValue(2));
+         // (2+3i)^2 = -5 + 12i
+         assertEquals(-5.0, squared.getReal().doubleValue(), 1e-10);
+         assertEquals(12.0, squared.getImag().doubleValue(), 1e-10);
+     }
+
+     @Test
+     void testRootIntegerDegree() {
+         ComplexValue c = new ComplexValue(8.0, 0.0);
+         ComplexValue cubeRoot = (ComplexValue) c.root(new IntegerValue(3));
+         // ³√8 = 2 + 0i
+         assertEquals(2.0, cubeRoot.getReal().doubleValue(), 1e-10);
+         assertEquals(0.0, cubeRoot.getImag().doubleValue(), 1e-10);
+     }
+
+     @Test
+     void testLogBaseComplexSelf() {
+         ComplexValue b = new ComplexValue(1.0, 1.0);
+         ComplexValue result = (ComplexValue) b.log(b);
+         // log_b(b) = 1 + 0i
+         assertEquals(1.0, result.getReal().doubleValue(), 1e-10);
+         assertEquals(0.0, result.getImag().doubleValue(), 1e-10);
+     }
+
 
  }
 
