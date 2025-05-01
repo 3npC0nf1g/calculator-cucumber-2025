@@ -186,21 +186,31 @@ public class RealValue implements NumericValue {
 
 
 
+    // In RealValue.java
+
     @Override
     public NumericValue pow(NumericValue exponent) {
-        // (a) Integer exponent → BigDecimal.pow; else promote to real
+        // Delegate to ComplexValue if exponent is complex
+        if (exponent instanceof ComplexValue) {
+            ComplexValue baseC = new ComplexValue(this.value, BigDecimal.ZERO);
+            return baseC.pow(exponent);
+        }
+        // Integer exponent
         if (exponent instanceof IntegerValue iv) {
             int n = iv.getValue();
             BigDecimal result = value.pow(n, MathContext.DECIMAL128)
                     .setScale(scale, RoundingMode.HALF_UP);
             return new RealValue(result, scale);
-        } else if (exponent instanceof RealValue rv) {
+        }
+        // Real exponent
+        if (exponent instanceof RealValue rv) {
             double res = Math.pow(value.doubleValue(), rv.getValue().doubleValue());
             return new RealValue(res, scale);
         }
         throw new UnsupportedOperationException(
                 "Unsupported exponent type: " + exponent.getClass());
     }
+
 
     @Override
     public NumericValue root(NumericValue degree) {

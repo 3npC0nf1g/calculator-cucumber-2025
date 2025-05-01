@@ -108,7 +108,6 @@ public class ComplexValue implements NumericValue {
     public NumericValue divide(NumericValue other) {
         if (this.isNaN) return NaN;
 
-        String dividedZero = "Division by zero";
         // Handle division by complex number
         if (other instanceof ComplexValue c) {
             if (c.isNaN() || c.isZero()) return NaN;
@@ -184,29 +183,40 @@ public class ComplexValue implements NumericValue {
 
 
 
+    // In ComplexValue.java
+
     @Override
     public NumericValue pow(NumericValue exponent) {
-        // z^w = exp(w * ln(z))
-        if (!(exponent instanceof ComplexValue w)) {
-            throw new IllegalArgumentException("Exponent must be a ComplexValue");
-        }
-        // compute |z| and arg(z)
+        // 1) Promote exponent to ComplexValue
+        final ComplexValue w = switch (exponent) {
+            case ComplexValue cv -> cv;
+            case RealValue rv -> new ComplexValue(rv.getValue(), BigDecimal.ZERO);
+            case IntegerValue iv -> new ComplexValue(BigDecimal.valueOf(iv.getValue()), BigDecimal.ZERO);
+            default -> throw new IllegalArgumentException(
+                    "Unsupported exponent type: " + exponent.getClass()
+            );
+        };
+
+        // 2) Compute ln(z)
         BigDecimal re = realPart;
-        BigDecimal im = imaginaryPart;
-        BigDecimal magnitude = re.pow(2).add(im.pow(2))
+        BigDecimal       im = imaginaryPart;
+        BigDecimal modulus = re.pow(2)
+                .add(im.pow(2))
                 .sqrt(MathContext.DECIMAL128);
-        double r = magnitude.doubleValue();
+        double r = modulus.doubleValue();
         double theta = Math.atan2(im.doubleValue(), re.doubleValue());
-        // ln(z) = ln(r) + i·θ
         ComplexValue lnZ = new ComplexValue(
                 BigDecimal.valueOf(Math.log(r)),
                 BigDecimal.valueOf(theta)
         );
-        // w * ln(z)
+
+        // 3) w * ln(z)
         NumericValue wLnZ = w.multiply(lnZ);
-        // exp(w * ln(z))
+
+        // 4) exp(w * ln(z))
         return ((ComplexValue) wLnZ).exp();
     }
+
 
     @Override
     public NumericValue root(NumericValue degree) {
@@ -219,7 +229,7 @@ public class ComplexValue implements NumericValue {
                     BigDecimal.valueOf(invDeg),
                     BigDecimal.ZERO
             );
-            return (ComplexValue) this.pow(fractionalExp);
+            return this.pow(fractionalExp);
         }
         throw new UnsupportedOperationException(
                 "Root for complex with non-integer degree not supported."
