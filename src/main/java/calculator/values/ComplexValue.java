@@ -274,4 +274,12 @@ public class ComplexValue implements NumericValue {
         return new ComplexValue(BigDecimal.valueOf(expa * Math.cos(b)), BigDecimal.valueOf(expa * Math.sin(b)));
     }
 
+    public double modulus() {
+        if (isNaN) return Double.NaN;
+        return realPart.pow(2)
+                .add(imaginaryPart.pow(2))
+                .sqrt(MathContext.DECIMAL128)
+                .doubleValue();
+    }
+
 }

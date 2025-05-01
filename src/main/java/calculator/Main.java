@@ -103,7 +103,7 @@ public class Main {
 				logError("Erreur d'évaluation: " + ex.getMessage());
 			}
 
-			// Test de la division par zéro pour les entiers
+		/**	// Test de la division par zéro pour les entiers
 			List<Expression> divByZero = new ArrayList<>();
 			divByZero.add(new MyNumber(new IntegerValue(10)));
 			divByZero.add(new MyNumber(new IntegerValue(0)));
@@ -113,7 +113,7 @@ public class Main {
 				c.eval(e);
 			} catch(Exception ex) {
 				logError("Erreur d'évaluation: " + ex.getMessage());
-			}
+			} **/
 
 			// Test avec la racine carrée d'un nombre négatif
 			Expression sqrtNegative = new MyNumber(new RealValue(-1.0, 3));
