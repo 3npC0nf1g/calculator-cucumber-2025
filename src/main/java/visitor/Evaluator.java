@@ -3,6 +3,7 @@ package visitor;
 import calculator.Expression;
 import calculator.MyNumber;
 import calculator.Operation;
+import calculator.UnaryOperation;
 import calculator.values.NumericValue;
 
 import java.util.ArrayList;
@@ -51,20 +52,24 @@ public class Evaluator extends Visitor {
     @Override
     public void visit(Operation o) {
         ArrayList<NumericValue> evaluatedArgs = new ArrayList<>();
-        // Première boucle : évaluer récursivement chaque sous-expression
+        // 1) Evaluate each sub‐expression
         for (Expression a : o.getArgs()) {
             a.accept(this);
             evaluatedArgs.add(computedValue);
         }
 
-        // Seconde boucle : accumuler les résultats évalués via l'opération op()
-        NumericValue temp = evaluatedArgs.get(0);
-        int max = evaluatedArgs.size();
-        for (int counter = 1; counter < max; counter++) {
-            temp = o.op(temp, evaluatedArgs.get(counter));
+        // 2) If it's a unary operation, invoke its single‐arg op(val)
+        if (o instanceof UnaryOperation && evaluatedArgs.size() == 1) {
+            computedValue = ((UnaryOperation) o).op(evaluatedArgs.get(0));
+            return;
         }
 
-        // Stocke le résultat final
+        // 3) Otherwise fold all args through the binary op(l,r)
+        NumericValue temp = evaluatedArgs.get(0);
+        for (int i = 1; i < evaluatedArgs.size(); i++) {
+            temp = o.op(temp, evaluatedArgs.get(i));
+        }
         computedValue = temp;
     }
+
 }

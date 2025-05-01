@@ -1,6 +1,7 @@
 package calculator.values;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 
 /**
@@ -180,4 +181,80 @@ public class RealValue implements NumericValue {
     public int hashCode() {
         return isNaN ? 0 : value.hashCode();
     }
+
+
+
+
+
+    @Override
+    public NumericValue pow(NumericValue exponent) {
+        // (a) Integer exponent → BigDecimal.pow; else promote to real
+        if (exponent instanceof IntegerValue iv) {
+            int n = iv.getValue();
+            BigDecimal result = value.pow(n, MathContext.DECIMAL128)
+                    .setScale(scale, RoundingMode.HALF_UP);
+            return new RealValue(result, scale);
+        } else if (exponent instanceof RealValue rv) {
+            double res = Math.pow(value.doubleValue(), rv.getValue().doubleValue());
+            return new RealValue(res, scale);
+        }
+        throw new UnsupportedOperationException(
+                "Unsupported exponent type: " + exponent.getClass());
+    }
+
+    @Override
+    public NumericValue root(NumericValue degree) {
+        // nth root: x^(1/n)
+        if (degree instanceof IntegerValue iv) {
+            int n = iv.getValue();
+            double res = Math.pow(value.doubleValue(), 1.0 / n);
+            return new RealValue(res, scale);
+        } else if (degree instanceof RealValue rv) {
+            double res = Math.pow(value.doubleValue(), 1.0 / rv.getValue().doubleValue());
+            return new RealValue(res, scale);
+        }
+        throw new UnsupportedOperationException(
+                "Unsupported root degree type: " + degree.getClass());
+    }
+
+    @Override
+    public NumericValue log(NumericValue base) {
+        // log_base(x) = ln(x) / ln(base)
+        double x = value.doubleValue();
+        double b = (base instanceof IntegerValue iv)
+                ? iv.getValue()
+                : ((RealValue) base).getValue().doubleValue();
+        double res = Math.log(x) / Math.log(b);
+        return new RealValue(res, scale);
+    }
+
+    @Override
+    public NumericValue inverse() {
+        // 1 / x
+        if (value.compareTo(BigDecimal.ZERO) == 0) {
+            return NaN;
+        }
+        BigDecimal inv = BigDecimal.ONE
+                .divide(value, scale, RoundingMode.HALF_UP);
+        return new RealValue(inv, scale);
+    }
+
+    @Override
+    public NumericValue ln() {
+        // natural logarithm
+        double x = value.doubleValue();
+        if (x <= 0) {
+            return NaN;
+        }
+        double res = Math.log(x);
+        return new RealValue(res, scale);
+    }
+
+    @Override
+    public NumericValue exp() {
+        // exponential e^x
+        double res = Math.exp(value.doubleValue());
+        return new RealValue(res, scale);
+    }
+
 }

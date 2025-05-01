@@ -186,4 +186,91 @@ public class RationalValue implements NumericValue {
     public int hashCode() {
         return isNaN ? 0 : numerator.hashCode() ^ denominator.hashCode();
     }
+
+
+
+
+
+
+    @Override
+    public NumericValue pow(NumericValue exponent) {
+        // (a/b)^n = a^n / b^n for integer n, else promote to real
+        if (exponent instanceof IntegerValue iv) {
+            int exp = iv.getValue();
+            BigInteger numPow = numerator.pow(exp);
+            BigInteger denPow = denominator.pow(exp);
+            return new RationalValue(numPow, denPow);
+        } else {
+            // promote to real for non-integer exponent
+            BigDecimal realVal = new BigDecimal(numerator)
+                    .divide(new BigDecimal(denominator), MathContext.DECIMAL128);
+            double base = realVal.doubleValue();
+            double exp = ((RealValue) exponent).getValue().doubleValue();
+            double result = Math.pow(base, exp);
+            return new RealValue(result, ((RealValue) exponent).getPrecision());
+        }
+    }
+
+    @Override
+    public NumericValue root(NumericValue degree) {
+        // nth root: (a/b)^(1/n) = a^(1/n) / b^(1/n) for integer n, else promote to real
+        if (degree instanceof IntegerValue iv) {
+            int n = iv.getValue();
+            double numRoot = Math.pow(numerator.doubleValue(), 1.0 / n);
+            double denRoot = Math.pow(denominator.doubleValue(), 1.0 / n);
+            return new RealValue(numRoot / denRoot, 10);
+        }
+        // non-integer degree -> promote to real
+        BigDecimal realVal = new BigDecimal(numerator)
+                .divide(new BigDecimal(denominator), MathContext.DECIMAL128);
+        double val = realVal.doubleValue();
+        double deg = ((RealValue) degree).getValue().doubleValue();
+        double result = Math.pow(val, 1.0 / deg);
+        return new RealValue(result, ((RealValue) degree).getPrecision());
+    }
+
+    @Override
+    public NumericValue log(NumericValue base) {
+        // log_base(a/b) = ln(a/b) / ln(base)
+        BigDecimal realVal = new BigDecimal(numerator)
+                .divide(new BigDecimal(denominator), MathContext.DECIMAL128);
+        double z = realVal.doubleValue();
+        double b = (base instanceof IntegerValue iv)
+                ? iv.getValue()
+                : ((RealValue) base).getValue().doubleValue();
+        double result = Math.log(z) / Math.log(b);
+        return new RealValue(result, ((RealValue) base).getPrecision());
+    }
+
+    @Override
+    public NumericValue inverse() {
+        // 1/(a/b) = b/a
+        if (numerator.equals(BigInteger.ZERO)) {
+            return NaN;
+        }
+        return new RationalValue(denominator, numerator);
+    }
+
+    @Override
+    public NumericValue ln() {
+        // ln(a/b) = ln(a) - ln(b)
+        if (isNaN || numerator.signum() <= 0) {
+            return RealValue.NaN;
+        }
+        double a = numerator.doubleValue();
+        double b = denominator.doubleValue();
+        double result = Math.log(a) - Math.log(b);
+        return new RealValue(result, 10);
+    }
+
+    @Override
+    public NumericValue exp() {
+        // exp(a/b) = exp(a/b) as real
+        BigDecimal realVal = new BigDecimal(numerator)
+                .divide(new BigDecimal(denominator), MathContext.DECIMAL128);
+        double v = realVal.doubleValue();
+        double result = Math.exp(v);
+        return new RealValue(result, 10);
+    }
+
 }

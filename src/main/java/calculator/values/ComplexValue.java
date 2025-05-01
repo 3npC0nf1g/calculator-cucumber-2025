@@ -169,4 +169,99 @@ public class ComplexValue implements NumericValue {
     public int hashCode() {
         return isNaN ? 0 : realPart.hashCode() ^ imaginaryPart.hashCode();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public NumericValue pow(NumericValue exponent) {
+        // z^w = exp(w * ln(z))
+        if (!(exponent instanceof ComplexValue w)) {
+            throw new IllegalArgumentException("Exponent must be a ComplexValue");
+        }
+        // compute |z| and arg(z)
+        BigDecimal re = realPart;
+        BigDecimal im = imaginaryPart;
+        BigDecimal magnitude = re.pow(2).add(im.pow(2))
+                .sqrt(MathContext.DECIMAL128);
+        double r = magnitude.doubleValue();
+        double theta = Math.atan2(im.doubleValue(), re.doubleValue());
+        // ln(z) = ln(r) + i·θ
+        ComplexValue lnZ = new ComplexValue(
+                BigDecimal.valueOf(Math.log(r)),
+                BigDecimal.valueOf(theta)
+        );
+        // w * ln(z)
+        NumericValue wLnZ = w.multiply(lnZ);
+        // exp(w * ln(z))
+        return ((ComplexValue) wLnZ).exp();
+    }
+
+    @Override
+    public NumericValue root(NumericValue degree) {
+        // nth root: z^(1/n)
+        if (degree instanceof IntegerValue iv) {
+            double n = iv.getValue();
+            // reuse pow implementation with exponent 1/n
+            double invDeg = 1.0 / n;
+            ComplexValue fractionalExp = new ComplexValue(
+                    BigDecimal.valueOf(invDeg),
+                    BigDecimal.ZERO
+            );
+            return (ComplexValue) this.pow(fractionalExp);
+        }
+        throw new UnsupportedOperationException(
+                "Root for complex with non-integer degree not supported."
+        );
+    }
+
+    @Override
+    public NumericValue log(NumericValue base) {
+        // log_base(z) = ln(z) / ln(base)
+        if (!(base instanceof ComplexValue b)) {
+            throw new IllegalArgumentException("Base must be a ComplexValue");
+        }
+        ComplexValue lnZ = (ComplexValue) this.ln();
+        ComplexValue lnB = (ComplexValue) b.ln();
+        return lnZ.divide(lnB);
+    }
+
+
+    @Override
+    public NumericValue inverse() {
+        // 1/z = conjugate(z) / |z|^2
+        BigDecimal denom = realPart.pow(2).add(imaginaryPart.pow(2));
+        if (denom.compareTo(BigDecimal.ZERO) == 0) return NaN;
+        ComplexValue conj = new ComplexValue(realPart, imaginaryPart.negate());
+        return conj.divide(new ComplexValue(denom.doubleValue(), 0));
+    }
+
+    @Override
+    public NumericValue ln() {
+        // ln(z) = ln|z| + i*arg(z)
+        double r = realPart.pow(2).add(imaginaryPart.pow(2)).sqrt(MathContext.DECIMAL128).doubleValue();
+        double theta = Math.atan2(imaginaryPart.doubleValue(), realPart.doubleValue());
+        return new ComplexValue(BigDecimal.valueOf(Math.log(r)), BigDecimal.valueOf(theta));
+    }
+
+    @Override
+    public NumericValue exp() {
+        // exp(a + ib) = exp(a)*(cos(b) + i*sin(b))
+        double a = realPart.doubleValue();
+        double b = imaginaryPart.doubleValue();
+        double expa = Math.exp(a);
+        return new ComplexValue(BigDecimal.valueOf(expa * Math.cos(b)), BigDecimal.valueOf(expa * Math.sin(b)));
+    }
+
 }

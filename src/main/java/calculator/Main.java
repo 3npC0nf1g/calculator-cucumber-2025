@@ -137,6 +137,109 @@ public class Main {
 				System.out.println("Erreur d'évaluation: " + ex.getMessage() +"\n" ); // Devrait générer une exception pour NaN
 			}
 
+
+
+
+
+
+			// 1) Integer power: 2^10 = 1024
+			Expression powInt = new Power(
+					List.of(
+							new MyNumber(new IntegerValue(2)),
+							new MyNumber(new IntegerValue(10))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Integer Power (2^10)");
+			c.print(powInt);
+			c.eval(powInt);
+
+			// 2) Real power: 9^(0.5) = 3.0
+			Expression powReal = new Power(
+					List.of(
+							new MyNumber(new RealValue(9.0, 5)),
+							new MyNumber(new RealValue(0.5, 5))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Real Power (9^0.5)");
+			c.print(powReal);
+			c.eval(powReal);
+
+			// 3) Integer root: ³√27 = 3
+			Expression rootInt = new Root(
+					List.of(
+							new MyNumber(new IntegerValue(3)),
+							new MyNumber(new IntegerValue(27))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Integer Root (³√27)");
+			c.print(rootInt);
+			c.eval(rootInt);
+
+			// 4) Real root: ⁴√16.0 = 2.0
+			Expression rootReal = new Root(
+					List.of(
+							new MyNumber(new IntegerValue(4)),
+							new MyNumber(new RealValue(16.0, 5))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Real Root (⁴√16.0)");
+			c.print(rootReal);
+			c.eval(rootReal);
+
+			// 5) Logarithm base 2 of 8: log₂(8) = 3
+			Expression logBase = new Log(
+					List.of(
+							new MyNumber(new IntegerValue(2)),
+							new MyNumber(new IntegerValue(8))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Logarithm (log₂(8))");
+			c.print(logBase);
+			c.eval(logBase);
+
+			// 6) Natural log: ln(e) ≈ 1
+			Expression lnTest = new Ln(
+					List.of(new MyNumber(new RealValue(Math.E, 5))),
+					Notation.INFIX
+			);
+			System.out.println("Test: Natural Log (ln(e))");
+			c.print(lnTest);
+			c.eval(lnTest);
+
+			// 7) Exponential: exp(1) = e
+			Expression expTest = new Exp(
+					List.of(new MyNumber(new IntegerValue(1))),
+					Notation.INFIX
+			);
+			System.out.println("Test: Exponential (exp(1))");
+			c.print(expTest);
+			c.eval(expTest);
+
+			// 8) Inverse: inv(4) = 1/4
+			Expression invTest = new Inverse(
+					List.of(new MyNumber(new IntegerValue(4))),
+					Notation.INFIX
+			);
+			System.out.println("Test: Inverse (1/4)");
+			c.print(invTest);
+			c.eval(invTest);
+
+			// 9) Percentage: 50% = 0.5
+			Expression pctTest = new Percent(
+					List.of(new MyNumber(new RealValue(50.0, 2))),
+					Notation.INFIX
+			);
+			System.out.println("Test: Percentage (50%)");
+			c.print(pctTest);
+			c.eval(pctTest);
+
+
+
 		} catch (IllegalConstruction exception) {
 			System.out.println("Impossible de créer des opérations sans paramètres" +"\n" );
 		}

@@ -50,50 +50,71 @@ public class PrintVisitor extends Visitor {
     @Override
     public void visit(Operation o) {
         StringBuilder sb = new StringBuilder();
-        switch (notation) {
-            case INFIX:
-                sb.append("( ");
-                boolean firstInfix = true;
-                for (Expression e : o.getArgs()) {
-                    if (!firstInfix) {
-                        sb.append(" ").append(o.symbol).append(" ");
+        int argCount = o.getArgs().size();
+
+        if (argCount == 1) {
+            // Unary operation
+            Expression arg = o.getArgs().get(0);
+            PrintVisitor subVisitor = new PrintVisitor(notation);
+            arg.accept(subVisitor);
+            String subResult = subVisitor.getResult();
+
+            switch (notation) {
+                case INFIX -> sb.append("( ").append(o.symbol).append(" ").append(subResult).append(" )");
+                case PREFIX -> sb.append(o.symbol).append("(").append(subResult).append(")");
+                case POSTFIX -> sb.append("(").append(subResult).append(") ").append(o.symbol);
+            }
+        } else {
+            // Binary/n-ary operation (same as before)
+            switch (notation) {
+                case INFIX:
+                    sb.append("( ");
+                    boolean firstInfix = true;
+                    for (Expression e : o.getArgs()) {
+                        if (!firstInfix) {
+                            sb.append(" ").append(o.symbol).append(" ");
+                        }
+                        PrintVisitor pvInfix = new PrintVisitor(Notation.INFIX);
+                        e.accept(pvInfix);
+                        sb.append(pvInfix.getResult());
+                        firstInfix = false;
                     }
-                    PrintVisitor pvInfix = new PrintVisitor(Notation.INFIX);
-                    e.accept(pvInfix);
-                    sb.append(pvInfix.getResult());
-                    firstInfix = false;
-                }
-                sb.append(" )");
-                break;
-            case PREFIX:
-                sb.append(o.symbol).append(" (");
-                boolean firstPrefix = true;
-                for (Expression e : o.getArgs()) {
-                    if (!firstPrefix) {
-                        sb.append(", ");
+                    sb.append(" )");
+                    break;
+
+                case PREFIX:
+                    sb.append(o.symbol).append(" (");
+                    boolean firstPrefix = true;
+                    for (Expression e : o.getArgs()) {
+                        if (!firstPrefix) {
+                            sb.append(", ");
+                        }
+                        PrintVisitor pvPrefix = new PrintVisitor(Notation.PREFIX);
+                        e.accept(pvPrefix);
+                        sb.append(pvPrefix.getResult());
+                        firstPrefix = false;
                     }
-                    PrintVisitor pvPrefix = new PrintVisitor(Notation.PREFIX);
-                    e.accept(pvPrefix);
-                    sb.append(pvPrefix.getResult());
-                    firstPrefix = false;
-                }
-                sb.append(")");
-                break;
-            case POSTFIX:
-                sb.append("(");
-                boolean firstPostfix = true;
-                for (Expression e : o.getArgs()) {
-                    if (!firstPostfix) {
-                        sb.append(", ");
+                    sb.append(")");
+                    break;
+
+                case POSTFIX:
+                    sb.append("(");
+                    boolean firstPostfix = true;
+                    for (Expression e : o.getArgs()) {
+                        if (!firstPostfix) {
+                            sb.append(", ");
+                        }
+                        PrintVisitor pvPostfix = new PrintVisitor(Notation.POSTFIX);
+                        e.accept(pvPostfix);
+                        sb.append(pvPostfix.getResult());
+                        firstPostfix = false;
                     }
-                    PrintVisitor pvPostfix = new PrintVisitor(Notation.POSTFIX);
-                    e.accept(pvPostfix);
-                    sb.append(pvPostfix.getResult());
-                    firstPostfix = false;
-                }
-                sb.append(") ").append(o.symbol);
-                break;
+                    sb.append(") ").append(o.symbol);
+                    break;
+            }
         }
+
         result = sb.toString();
     }
+
 }
