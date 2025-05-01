@@ -239,6 +239,93 @@ public class Main {
 			c.eval(pctTest);
 
 
+			// -------- Advanced Complex/Real Tests --------
+			System.out.println("\n------ Advanced Complex/Real Tests ------");
+
+// 10) Complex Power: (2 + 3i) ^ 2
+			Expression complexPow = new Power(
+					List.of(
+							new MyNumber(new ComplexValue(2, 3)),
+							new MyNumber(new IntegerValue(2))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Complex Power ( (2 + 3i)^2 )");
+			c.print(complexPow);
+			c.eval(complexPow);
+
+// 11) Real ^ Complex: 2 ^ (1 + 1i)
+			Expression realToComplexPow = new Power(
+					List.of(
+							new MyNumber(new RealValue(2.0, 5)),
+							new MyNumber(new ComplexValue(1, 1))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Real to Complex Power ( 2 ^ (1 + 1i) )");
+			c.print(realToComplexPow);
+			c.eval(realToComplexPow);
+
+// 12) Complex Root: √2(4 + 0i)
+			Expression complexRoot = new Root(
+					List.of(
+							new MyNumber(new IntegerValue(2)),
+							new MyNumber(new ComplexValue(4, 0))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Complex Root ( √2(4 + 0i) )");
+			c.print(complexRoot);
+			c.eval(complexRoot);
+
+// 13) Root of Complex Number: ³√(8 + 27i)
+			Expression rootOfComplex = new Root(
+					List.of(
+							new MyNumber(new IntegerValue(3)),
+							new MyNumber(new ComplexValue(8, 27))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Root of Complex ( ³√(8 + 27i) )");
+			c.print(rootOfComplex);
+			c.eval(rootOfComplex);
+
+// 14) ln(1 + 1i)
+			Expression lnComplex = new Ln(
+					List.of(
+							new MyNumber(new ComplexValue(1, 1))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Natural Log of Complex ( ln(1 + 1i) )");
+			c.print(lnComplex);
+			c.eval(lnComplex);
+
+// 15) log base Complex: (1 + 1i) log (4)
+			Expression logBaseComplex = new Log(
+					List.of(
+							new MyNumber(new ComplexValue(1, 1)),
+							new MyNumber(new IntegerValue(4))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Log base Complex ( (1 + 1i) log 4 )");
+			c.print(logBaseComplex);
+			c.eval(logBaseComplex);
+
+// 16) exp(1 + πi)
+			Expression expComplex = new Exp(
+					List.of(
+							new MyNumber(new ComplexValue(1, Math.PI))
+					),
+					Notation.INFIX
+			);
+			System.out.println("Test: Exponential of Complex ( exp(1 + πi) )");
+			c.print(expComplex);
+			c.eval(expComplex);
+
+
+
 
 		} catch (IllegalConstruction exception) {
 			System.out.println("Impossible de créer des opérations sans paramètres" +"\n" );

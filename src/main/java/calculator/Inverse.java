@@ -1,9 +1,11 @@
 package calculator;
 
 import calculator.values.NumericValue;
-import calculator.values.RealValue;
 import java.util.List;
 
+/**
+ * Unary inverse operation: 1/x.
+ */
 public final class Inverse extends UnaryOperation {
 
     public Inverse(List<Expression> elist, Notation n) throws IllegalConstruction {
@@ -13,6 +15,8 @@ public final class Inverse extends UnaryOperation {
 
     @Override
     public NumericValue op(NumericValue val) {
-        return new RealValue(1,0).divide(val);
+        // Simply call the NumericValue API, which for IntegerValue returns a RationalValue(1,x),
+        // for RealValue returns BigDecimal.ONE.divide(...), etc.
+        return val.inverse();
     }
 }
