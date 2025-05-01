@@ -10,7 +10,7 @@ public final class Power extends Operation {
 
     public Power(List<Expression> elist, Notation n) throws IllegalConstruction {
         super(elist, n);
-        symbol = "^^"; // ou "^"
+        symbol = "^"; // ou "^"
         neutral = 1;   // neutre pour multiplication répétée
     }
 

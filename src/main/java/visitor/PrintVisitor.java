@@ -8,6 +8,8 @@ import calculator.values.ComplexValue;
 import calculator.values.IntegerValue;
 import calculator.values.RealValue;
 
+import java.util.stream.Collectors;
+
 public class PrintVisitor extends Visitor {
 
     private final Notation notation;
@@ -34,87 +36,69 @@ public class PrintVisitor extends Visitor {
 
     @Override
     public void visit(MyNumber n) {
-        // Vérifie le type de NumericValue contenu dans MyNumber
-        if (n.getValue() instanceof IntegerValue) {
-            result = Integer.toString(((IntegerValue) n.getValue()).getValue());  // Si c'est un IntegerValue
-        } else if (n.getValue() instanceof RealValue) {
-            result = ((RealValue) n.getValue()).getValue().toString();  // Si c'est un RealValue (BigDecimal)
-        } else if (n.getValue() instanceof ComplexValue) {
-            result = n.getValue().toString();  // Si c'est un ComplexValue
-        } else {
-            throw new IllegalArgumentException("Unsupported NumericValue type");
-        }
+        result = switch (n.getValue()) {
+            case IntegerValue iv -> Integer.toString(iv.getValue());
+            case RealValue rv -> rv.getValue().toString();
+            case ComplexValue cv -> cv.toString();
+            default -> throw new IllegalArgumentException("Unsupported NumericValue type");
+        };
     }
 
 
     @Override
     public void visit(Operation o) {
-        StringBuilder sb = new StringBuilder();
-        int argCount = o.getArgs().size();
-
-        if (argCount == 1) {
-            // Unary operation
-            Expression arg = o.getArgs().get(0);
-            PrintVisitor subVisitor = new PrintVisitor(notation);
-            arg.accept(subVisitor);
-            String subResult = subVisitor.getResult();
-
-            switch (notation) {
-                case INFIX -> sb.append("( ").append(o.symbol).append(" ").append(subResult).append(" )");
-                case PREFIX -> sb.append(o.symbol).append("(").append(subResult).append(")");
-                case POSTFIX -> sb.append("(").append(subResult).append(") ").append(o.symbol);
-            }
-        } else {
-            // Binary/n-ary operation (same as before)
-            switch (notation) {
-                case INFIX:
-                    sb.append("( ");
-                    boolean firstInfix = true;
-                    for (Expression e : o.getArgs()) {
-                        if (!firstInfix) {
-                            sb.append(" ").append(o.symbol).append(" ");
-                        }
-                        PrintVisitor pvInfix = new PrintVisitor(Notation.INFIX);
-                        e.accept(pvInfix);
-                        sb.append(pvInfix.getResult());
-                        firstInfix = false;
-                    }
-                    sb.append(" )");
-                    break;
-
-                case PREFIX:
-                    sb.append(o.symbol).append(" (");
-                    boolean firstPrefix = true;
-                    for (Expression e : o.getArgs()) {
-                        if (!firstPrefix) {
-                            sb.append(", ");
-                        }
-                        PrintVisitor pvPrefix = new PrintVisitor(Notation.PREFIX);
-                        e.accept(pvPrefix);
-                        sb.append(pvPrefix.getResult());
-                        firstPrefix = false;
-                    }
-                    sb.append(")");
-                    break;
-
-                case POSTFIX:
-                    sb.append("(");
-                    boolean firstPostfix = true;
-                    for (Expression e : o.getArgs()) {
-                        if (!firstPostfix) {
-                            sb.append(", ");
-                        }
-                        PrintVisitor pvPostfix = new PrintVisitor(Notation.POSTFIX);
-                        e.accept(pvPostfix);
-                        sb.append(pvPostfix.getResult());
-                        firstPostfix = false;
-                    }
-                    sb.append(") ").append(o.symbol);
-                    break;
-            }
-        }
-
-        result = sb.toString();
+        result = (o.getArgs().size() == 1)
+                ? formatUnaryOperation(o)
+                : formatNAryOperation(o);
     }
 
+    private String formatUnaryOperation(Operation o) {
+        String argResult = getFormattedArg(o.getArgs().getFirst());
+
+        return switch (notation) {
+            case INFIX -> String.format("( %s %s )", o.symbol, argResult);
+            case PREFIX -> String.format("%s(%s)", o.symbol, argResult);
+            case POSTFIX -> String.format("(%s) %s", argResult, o.symbol);
+        };
+    }
+
+    private String formatNAryOperation(Operation o) {
+        return switch (notation) {
+            case INFIX -> formatInfixOperation(o);
+            case PREFIX -> formatPrefixOperation(o);
+            case POSTFIX -> formatPostfixOperation(o);
+        };
+    }
+
+    private String formatInfixOperation(Operation o) {
+        return String.format("( %s )",
+                o.getArgs().stream()
+                        .map(this::getFormattedArg)
+                        .collect(Collectors.joining(" " + o.symbol + " "))
+        );
+    }
+
+    private String formatPrefixOperation(Operation o) {
+        return String.format("%s (%s)",
+                o.symbol,
+                o.getArgs().stream()
+                        .map(this::getFormattedArg)
+                        .collect(Collectors.joining(", "))
+        );
+    }
+
+    private String formatPostfixOperation(Operation o) {
+        return String.format("(%s) %s",
+                o.getArgs().stream()
+                        .map(this::getFormattedArg)
+                        .collect(Collectors.joining(", ")),
+                o.symbol
+        );
+    }
+
+    private String getFormattedArg(Expression arg) {
+        PrintVisitor subVisitor = new PrintVisitor(notation);
+        arg.accept(subVisitor);
+        return subVisitor.getResult();
+    }
 }

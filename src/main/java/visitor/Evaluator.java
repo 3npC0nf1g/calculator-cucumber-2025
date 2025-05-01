@@ -59,13 +59,13 @@ public class Evaluator extends Visitor {
         }
 
         // 2) If it's a unary operation, invoke its single‐arg op(val)
-        if (o instanceof UnaryOperation && evaluatedArgs.size() == 1) {
-            computedValue = ((UnaryOperation) o).op(evaluatedArgs.get(0));
+        if (o instanceof UnaryOperation unaryOp && evaluatedArgs.size() == 1) {
+            computedValue = unaryOp.op(evaluatedArgs.getFirst());
             return;
         }
 
         // 3) Otherwise fold all args through the binary op(l,r)
-        NumericValue temp = evaluatedArgs.get(0);
+        NumericValue temp = evaluatedArgs.getFirst();
         for (int i = 1; i < evaluatedArgs.size(); i++) {
             temp = o.op(temp, evaluatedArgs.get(i));
         }
