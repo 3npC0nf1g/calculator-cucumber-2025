@@ -3,50 +3,74 @@ import { Button, Text, ScrollView, StyleSheet, TextInput, TextInputKeyPressEvent
 import { useOperation } from "@/context/OperationContext";
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
 
 export default function Display() {
     // Access the operation value from the context.
-    const { operation, updateOperation, operationHistory } = useOperation();
+    const { operation, updateOperation, operationHistory, updateOperationRequest } = useOperation();
 
     const handleChangeText = (text: string) => {
         const filtered = text.replace(/^[0-9+\-*/.()×]/g, '');
         updateOperation(filtered);
     };
 
+    const scrollRef = useRef<ScrollView | null>(null);
 
 
     return (
         <ThemedView style={styles.mainView}>
-            {
-                operationHistory.length > 0 &&
+            <ThemedView style={styles.historyView}>
+                <Ionicons name="time-outline" size={35} color="orange" style={styles.icon} />
 
-                <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentView}>
+                {
+                    operationHistory.length > 0 &&
 
-                    {
-                        operationHistory.map((elem, index) => {
-                            return (
-                                <TouchableOpacity
-                                    style={styles.historyBtn}
-                                    key={index}
+                    <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentView}
 
-                                >
-                                    <Text
-                                        style={styles.historyBtnText}
+                        ref={scrollRef}
+                        onContentSizeChange={() => {
+                            scrollRef.current?.scrollToEnd({ animated: true });
+                        }}
+                        onLayout={() => {
+                            scrollRef.current?.scrollToEnd({ animated: true });
+                        }}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        keyboardShouldPersistTaps="handled"
+                        keyboardDismissMode="on-drag"
+
+                    >
+
+                        {
+                            operationHistory.map((elem, index) => {
+                                return (
+                                    <TouchableOpacity
+                                        style={styles.historyBtn}
+                                        key={index}
+                                        onPress={() => {
+                                            updateOperation(elem.operation);
+                                            updateOperationRequest(elem.request);
+                                        }}
+
                                     >
-                                        {"=> " + elem.operation + `\n = ` + elem.result}
-                                    </Text>
-                                </TouchableOpacity>
+                                        <Text
+                                            style={styles.historyBtnText}
+                                        >
+                                            {elem.operation + `\n = ` + elem.result}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )
+                            }
                             )
                         }
-                        )
-                    }
 
-                </ScrollView>
-            }
+                    </ScrollView>
+                }
+            </ThemedView>
             <TextInput
                 style={styles.textInput}
                 value={operation}
@@ -61,13 +85,24 @@ export default function Display() {
 }
 const styles = StyleSheet.create({
     mainView: {
-        borderRadius: 10,
-        borderWidth: 3,
+        minHeight: 300,
         maxHeight: 300,
         width: "100%",
         gap: 10,
         alignSelf: "center",
         marginVertical: 10,
+    },
+    icon: {
+        position: 'absolute',
+        right: 5,
+        top: 5,
+        zIndex: 3,
+    },
+    historyView: {
+        width: "100%",
+        height: "50%",
+        backgroundColor: "white",
+        borderColor: "black",
     },
     scrollView: {
         width: "100%",
@@ -77,6 +112,8 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         flexGrow: 1,
         alignItems: "flex-start",
+        marginTop: 10,
+
 
     },
     textInput: {
@@ -92,9 +129,13 @@ const styles = StyleSheet.create({
         textAlignVertical: "top"
     },
     historyBtn: {
+        borderWidth: 1,
+        borderColor: "grey",
         width: '100%',
         backgroundColor: "white",
-        borderBottomWidth: 2
+        borderRadius: 10,
+        marginBottom: 5,
+        padding: 10,
     },
     historyBtnText: {
         fontSize: 30,

@@ -2,17 +2,21 @@ import axios from 'axios';
 import React, { createContext, useContext, useMemo, useState, ReactNode } from 'react';
 import { Alert } from 'react-native';
 
-type HistoryEntry = { operation: string, result: string }
+type HistoryEntry = { operation: string, result: string, request: string };
 // Define the shape of our context
 type OperationContextType = {
     operation: string;
     operationRequest: string;
     updateOperation: (newOperation: string) => void;
+    updateOperationRequest: (newOperation: string) => void;
     appendOperation: (value: string) => void;
+    appendOperationRequest: (value: string) => void;
     clearOperation: () => void;
+    clearOperationRequest: () => void;
     sendOperation: () => Promise<string>;
     operationHistory: HistoryEntry[];
     clearOperationHistory: () => void;
+    clearAll: () => void;
     result: string;
 };
 
@@ -44,12 +48,18 @@ export const OperationProvider: React.FC<OperationProviderProps> = ({ children }
         setOperationHistory(prev => [...prev, entry]);
     };
     const clearOperationHistory = () => {
-        console.log("ééééé");
         setOperationHistory([])
     };
 
+
+    const clearAll = (): void => {
+        clearOperation();
+        clearOperationRequest();
+        clearOperationHistory();
+    };
     const sendOperation = async () => {
-        const encoded = encodeURIComponent(operation);
+        console.log("Sending operation:", operationRequest);
+        const encoded = encodeURIComponent(operationRequest);
 
         let result;
         try {
@@ -60,8 +70,9 @@ export const OperationProvider: React.FC<OperationProviderProps> = ({ children }
 
         console.log(result?.data);
         setResult(result?.data);
-        addOperationToHistory({ operation: operation, result: result?.data })
+        addOperationToHistory({ operation: operation, result: result?.data, request: operationRequest });
         clearOperation();
+        clearOperationRequest();
         return result?.data;
 
     }
@@ -75,7 +86,11 @@ export const OperationProvider: React.FC<OperationProviderProps> = ({ children }
         sendOperation,
         operationHistory,
         clearOperationHistory,
-        operationRequest
+        operationRequest,
+        updateOperationRequest,
+        appendOperationRequest,
+        clearOperationRequest,
+        clearAll
     }), [operation]);
 
     return (

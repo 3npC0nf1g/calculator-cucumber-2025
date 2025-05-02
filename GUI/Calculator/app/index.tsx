@@ -31,7 +31,7 @@ export default function HomeScreen() {
                             disabled={type}
                             onPress={() => {
                                 setType(true)
-                                ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+                                // ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
                             }}>
                             <MaterialCommunityIcons name={"calculator-variant-outline"} size={isWeb ? 60 : 30} style={styles.icon} />
                         </TouchableOpacity>
@@ -45,7 +45,7 @@ export default function HomeScreen() {
                             disabled={!type}
                             onPress={() => {
                                 setType(false)
-                                ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
+                                // ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
                             }}
                         >
                             <MaterialCommunityIcons name={"square-root"} size={isWeb ? 60 : 30} style={styles.icon} />

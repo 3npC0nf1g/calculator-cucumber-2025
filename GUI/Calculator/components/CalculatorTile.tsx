@@ -14,28 +14,47 @@ type CalculatorTileProps = {
 }
 
 export default function CalculatorTile({ type, text, value, form }: Readonly<CalculatorTileProps>) {
-    const { appendOperation, clearOperation, operation, sendOperation, clearOperationHistory } = useOperation();
+    const { appendOperation, clearOperation, operation, sendOperation, clearOperationRequest, appendOperationRequest, clearAll } = useOperation();
 
     const big: boolean = Platform.OS !== "web" && form === "scientific";
 
     const handlePress = () => {
 
-        if (type === "special") {
-            if (text === "C") {
-                clearOperationHistory();
-                clearOperation();
-            } else if (text === "=") {
-                sendOperation();
-            }
-        } if (type === "operation") {
-            if (value == "%") {
-                appendOperation("/100")
-            }
-        }
-        else {
+        switch (type) {
+            case "number":
+                if (operation === "0" && value !== ".") {
+                    clearOperation();
+                    clearOperationRequest();
+                }
+                appendOperation(value);
+                appendOperationRequest(value);
+                break;
+            case "special":
+                if (value === "C") {
+                    clearAll();
+                } else if (value === "=") {
+                    sendOperation();
+                };
+                break;
+            case "operation":
+                if (value == "%") {
+                    appendOperation("%")
+                    appendOperationRequest("/100");
+                    break;
+                }
+                if (value == "*") {
+                    appendOperation(text)
+                    appendOperationRequest(value);
+                    break;
+                }
 
-            appendOperation(value);
-        }
+                appendOperation(value);
+                appendOperationRequest(value);
+                break;
+            default:
+                break;
+
+        };
     };
 
     return (
