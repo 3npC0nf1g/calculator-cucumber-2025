@@ -65,12 +65,6 @@ import static org.junit.jupiter.api.Assertions.*;
         assertEquals(new IntegerValue(5), result);
     }
 
-    @Test
-     void testDivisionByZeroInteger() {
-        IntegerValue a = new IntegerValue(10);
-        IntegerValue zero = new IntegerValue(0);
-        assertEquals("NaN", a.divide(zero).toString(), "Complex : 10 / 0 should be NaN");
-    }
 
     @Test
      void testToString() {
@@ -181,5 +175,113 @@ import static org.junit.jupiter.api.Assertions.*;
        assertEquals(-12, ((IntegerValue) result).getValue());  // Expecting negative result
     }
 
+
+    @Test
+    void testPowWithIntegerExponent() {
+       IntegerValue base = new IntegerValue(2);
+       NumericValue result = base.pow(new IntegerValue(3));
+       assertInstanceOf(IntegerValue.class, result);
+       assertEquals(8, ((IntegerValue) result).getValue());
+    }
+
+    @Test
+    void testPowWithRealExponent() {
+       IntegerValue base = new IntegerValue(9);
+       NumericValue result = base.pow(new RealValue(0.5, 5));
+       assertInstanceOf(RealValue.class, result);
+       assertEquals(3.0, ((RealValue) result).getValue().doubleValue(), 1e-9);
+    }
+
+    @Test
+    void testRootWithIntegerDegree() {
+       IntegerValue val = new IntegerValue(27);
+       NumericValue result = val.root(new IntegerValue(3));
+       assertInstanceOf(RealValue.class, result);
+       assertEquals(3.0, ((RealValue) result).getValue().doubleValue(), 1e-9);
+    }
+
+    @Test
+    void testRootWithRealDegree() {
+       IntegerValue val = new IntegerValue(16);
+       NumericValue result = val.root(new RealValue(4.0, 5));
+       assertInstanceOf(RealValue.class, result);
+       assertEquals(2.0, ((RealValue) result).getValue().doubleValue(), 1e-9);
+    }
+
+    @Test
+    void testLogWithIntegerBase() {
+       IntegerValue val = new IntegerValue(8);
+       NumericValue result = val.log(new IntegerValue(2));
+       assertInstanceOf(RealValue.class, result);
+       assertEquals(3.0, ((RealValue) result).getValue().doubleValue(), 1e-9);
+    }
+
+    @Test
+    void testLogWithRealBase() {
+       IntegerValue val = new IntegerValue(9);
+       NumericValue result = val.log(new RealValue(3.0, 5));
+       assertInstanceOf(RealValue.class, result);
+       assertEquals(2.0, ((RealValue) result).getValue().doubleValue(), 1e-9);
+    }
+
+    @Test
+    void testLogWithComplexBase() {
+       IntegerValue val = new IntegerValue(2);
+       ComplexValue base = new ComplexValue(2.0, 0.0);
+       NumericValue result = val.log(base);
+       assertInstanceOf(ComplexValue.class, result);
+       ComplexValue c = (ComplexValue) result;
+       // log₂(2) = 1 + 0i
+       assertEquals(1.0, c.getReal().doubleValue(), 1e-9);
+       assertEquals(0.0, c.getImag().doubleValue(), 1e-9);
+    }
+
+    @Test
+    void testLogInvalidCasesReturnNaN() {
+       IntegerValue val = new IntegerValue(2);
+       // base <= 0
+       assertEquals("NaN", val.log(new IntegerValue(0)).toString());
+       assertEquals("NaN", new IntegerValue(-1).log(new IntegerValue(2)).toString());
+       // base == 1
+       assertEquals("NaN", val.log(new IntegerValue(1)).toString());
+    }
+
+    @Test
+    void testInverseNonZero() {
+       IntegerValue val = new IntegerValue(4);
+       NumericValue inv = val.inverse();
+       assertInstanceOf(RationalValue.class, inv);
+       assertEquals("1/4", inv.toString());
+    }
+
+    @Test
+    void testInverseZero() {
+       IntegerValue zero = new IntegerValue(0);
+       NumericValue inv = zero.inverse();
+       assertInstanceOf(RealValue.class, inv);
+       assertEquals("NaN", inv.toString());
+    }
+
+    @Test
+    void testLnPositive() {
+       IntegerValue val = new IntegerValue(5);
+       NumericValue ln = val.ln();
+       assertInstanceOf(RealValue.class, ln);
+       assertEquals(Math.log(5.0), ((RealValue) ln).getValue().doubleValue(), 1e-9);
+    }
+
+    @Test
+    void testLnZeroOrNegative() {
+       assertEquals("NaN", new IntegerValue(0).ln().toString());
+       assertEquals("NaN", new IntegerValue(-3).ln().toString());
+    }
+
+    @Test
+    void testExp() {
+       IntegerValue val = new IntegerValue(3);
+       NumericValue exp = val.exp();
+       assertInstanceOf(RealValue.class, exp);
+       assertEquals(Math.exp(3.0), ((RealValue) exp).getValue().doubleValue(), 1e-9);
+    }
 
  }

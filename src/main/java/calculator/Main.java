@@ -1,16 +1,28 @@
 package calculator;
 
+import calculator.values.*;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import calculator.values.IntegerValue;
-import calculator.values.RealValue;
-import calculator.values.ComplexValue;
-import calculator.values.RationalValue; // Assurez-vous d'importer la classe pour les rationnels
 
 public class Main {
+	private static void log(String message) {
+		String timestamp = LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		System.out.println(timestamp + " - " + message);
+	}
+
+	private static void logError(String message) {
+		String timestamp = LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		System.err.println(timestamp + " - ERROR: " + message);
+	}
 
 	public static void main(String[] args) {
+		log("Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): " +
+				LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		log("Current User's Login: " + System.getProperty("user.name"));
 
 		Expression e;
 		Calculator c = new Calculator();
@@ -33,22 +45,18 @@ public class Main {
 			c.eval(e);
 
 			// Test avec RealNumber (BigDecimal) et notation scientifique
-			Expression real1 = new MyNumber(new RealValue(1.8E2, 5)); // Exemple avec une grande valeur en notation scientifique
+			Expression real1 = new MyNumber(new RealValue(1.8E2, 5));
 			c.print(real1);
 			c.eval(real1);
 
-
 			c.setUseRadians(true); // Mode degré
-			System.out.println("La valeur du sinus est " + c.sin(30));
-
-		//	c.setUseRadians(true); // Mode radian
-			System.out.println("La valeur du sinus est " + c.sin(Math.PI / 6));
-
+			log("La valeur du sinus est " + c.sin(30));
+			log("La valeur du sinus est " + c.sin(Math.PI / 6));
 
 			// Test avec des nombres rationnels
 			Expression rational1 = new MyNumber(new RationalValue(6, 12)); // 6/12
 			c.print(rational1);
-			c.eval(rational1);  // Devrait simplifier à 1/2
+			c.eval(rational1);
 
 			// Test avec ComplexNumber
 			Expression complex1 = new MyNumber(new ComplexValue(2, 3)); // 2 + 3i
@@ -56,89 +64,266 @@ public class Main {
 			c.eval(complex1);
 
 			// ---- Tests pour les combinaisons de types ----
-
 			// Test 1: Real + Complex
 			List<Expression> mixRealComplex = new ArrayList<>();
-			mixRealComplex.add(new MyNumber(new RealValue(2.5, 3)));     // RealValue avec précision 3
-			mixRealComplex.add(new MyNumber(new ComplexValue(1, 2)));     // ComplexValue: 1 + 2i
+			mixRealComplex.add(new MyNumber(new RealValue(2.5, 3)));
+			mixRealComplex.add(new MyNumber(new ComplexValue(1, 2)));
 			e = new Plus(mixRealComplex, Notation.INFIX);
-			System.out.println("Test: Real + Complex");
+			log("Test: Real + Complex");
 			c.print(e);
 			try {
 				c.eval(e);
 			} catch(Exception ex) {
-				System.out.println("Erreur d'évaluation: " + ex.getMessage());
+				logError("Erreur d'évaluation: " + ex.getMessage());
 			}
 
 			// Test 2: Integer + Complex
 			List<Expression> mixIntComplex = new ArrayList<>();
-			mixIntComplex.add(new MyNumber(new IntegerValue(7)));          // IntegerValue
-			mixIntComplex.add(new MyNumber(new ComplexValue(3, -1)));      // ComplexValue: 3 - 1i
+			mixIntComplex.add(new MyNumber(new IntegerValue(7)));
+			mixIntComplex.add(new MyNumber(new ComplexValue(3, -1)));
 			e = new Plus(mixIntComplex, Notation.INFIX);
-			System.out.println("Test: Integer + Complex");
+			log("Test: Integer + Complex");
 			c.print(e);
 			try {
 				c.eval(e);
 			} catch(Exception ex) {
-				System.out.println("Erreur d'évaluation: " + ex.getMessage());
+				logError("Erreur d'évaluation: " + ex.getMessage());
 			}
 
 			// Test 3: Complex - Real
 			List<Expression> mixComplexReal = new ArrayList<>();
-			mixComplexReal.add(new MyNumber(new ComplexValue(5, 3)));      // ComplexValue: 5 + 3i
-			mixComplexReal.add(new MyNumber(new RealValue(2.0, 3)));       // RealValue avec précision 3
+			mixComplexReal.add(new MyNumber(new ComplexValue(5, 3)));
+			mixComplexReal.add(new MyNumber(new RealValue(2.0, 3)));
 			e = new Minus(mixComplexReal, Notation.INFIX);
-			System.out.println("Test: Complex - Real");
+			log("Test: Complex - Real");
 			c.print(e);
 			try {
 				c.eval(e);
 			} catch(Exception ex) {
-				System.out.println("Erreur d'évaluation: " + ex.getMessage() );
+				logError("Erreur d'évaluation: " + ex.getMessage());
 			}
 
-			// ---- Tests d'erreurs ----
-
-			// Test de la division par zéro pour les entiers
+		/**	// Test de la division par zéro pour les entiers
 			List<Expression> divByZero = new ArrayList<>();
 			divByZero.add(new MyNumber(new IntegerValue(10)));
-			divByZero.add(new MyNumber(new IntegerValue(0)));  // Division par zéro
+			divByZero.add(new MyNumber(new IntegerValue(0)));
 			e = new Divides(divByZero, Notation.INFIX);
-			System.out.println("Test: Division par zéro (Entiers)");
+			log("Test: Division par zéro (Entiers)");
 			try {
 				c.eval(e);
 			} catch(Exception ex) {
-				System.out.println("Erreur d'évaluation: " + ex.getMessage() +"\n" ); // Devrait attraper l'exception ArithmeticException
-			}
+				logError("Erreur d'évaluation: " + ex.getMessage());
+			} **/
 
-			// Test avec la racine carrée d'un nombre négatif pour un nombre réel
-			Expression sqrtNegative = new MyNumber(new RealValue(-1.0, 3));  // Nombre négatif
-			System.out.println("Test: Racine carrée d'un nombre négatif");
+			// Test avec la racine carrée d'un nombre négatif
+			Expression sqrtNegative = new MyNumber(new RealValue(-1.0, 3));
+			log("Test: Racine carrée d'un nombre négatif");
 			try {
-				c.eval(sqrtNegative);  // Devrait échouer ou générer NaN
+				c.eval(sqrtNegative);
 			} catch (Exception ex) {
-				System.out.println("Erreur d'évaluation: " + ex.getMessage() +"\n" );
+				logError("Erreur d'évaluation: " + ex.getMessage());
 			}
 
-			// Test de la simplification d'une fraction rationnelle (12/18)
-			Expression rational2 = new MyNumber(new RationalValue(25, 50)); // 12/18
-			c.print(rational2);  // Devrait simplifier à 2/3
+			// Test de la simplification d'une fraction rationnelle
+			Expression rational2 = new MyNumber(new RationalValue(25, 50));
+			c.print(rational2);
 			c.eval(rational2);
 
 			// Test de la division par zéro avec un nombre réel
-			Expression realDivByZero = new MyNumber(new RealValue(1.0, 3));  // 1/0.0
+			Expression realDivByZero = new MyNumber(new RealValue(1.0, 3));
 			List<Expression> paramsWithZero = new ArrayList<>();
 			paramsWithZero.add(realDivByZero);
-			paramsWithZero.add(new MyNumber(new RealValue(0.0, 3))); // Division par zéro
+			paramsWithZero.add(new MyNumber(new RealValue(0.0, 3)));
 			e = new Divides(paramsWithZero, Notation.INFIX);
-			System.out.println("Test: Division par zéro (Réels)");
+			log("Test: Division par zéro (Réels)");
 			try {
 				c.eval(e);
 			} catch(Exception ex) {
-				System.out.println("Erreur d'évaluation: " + ex.getMessage() +"\n" ); // Devrait générer une exception pour NaN
+				logError("Erreur d'évaluation: " + ex.getMessage());
 			}
 
+			// 1) Integer power: 2^10 = 1024
+			Expression powInt = new Power(
+					List.of(
+							new MyNumber(new IntegerValue(2)),
+							new MyNumber(new IntegerValue(10))
+					),
+					Notation.INFIX
+			);
+			log("Test: Integer Power (2^10)");
+			c.print(powInt);
+			c.eval(powInt);
+
+			// 2) Real power: 9^(0.5) = 3.0
+			Expression powReal = new Power(
+					List.of(
+							new MyNumber(new RealValue(9.0, 5)),
+							new MyNumber(new RealValue(0.5, 5))
+					),
+					Notation.INFIX
+			);
+			log("Test: Real Power (9^0.5)");
+			c.print(powReal);
+			c.eval(powReal);
+
+			// 3) Integer root: ³√27 = 3
+			Expression rootInt = new Root(
+					List.of(
+							new MyNumber(new IntegerValue(3)),
+							new MyNumber(new IntegerValue(27))
+					),
+					Notation.INFIX
+			);
+			log("Test: Integer Root (³√27)");
+			c.print(rootInt);
+			c.eval(rootInt);
+
+			// 4) Real root: ⁴√16.0 = 2.0
+			Expression rootReal = new Root(
+					List.of(
+							new MyNumber(new IntegerValue(4)),
+							new MyNumber(new RealValue(16.0, 5))
+					),
+					Notation.INFIX
+			);
+			log("Test: Real Root (⁴√16.0)");
+			c.print(rootReal);
+			c.eval(rootReal);
+
+			// 5) Logarithm base 2 of 8: log₂(8) = 3
+			Expression logBase = new Log(
+					List.of(
+							new MyNumber(new IntegerValue(2)),
+							new MyNumber(new IntegerValue(8))
+					),
+					Notation.INFIX
+			);
+			log("Test: Logarithm (log₂(8))");
+			c.print(logBase);
+			c.eval(logBase);
+
+			// 6) Natural log: ln(e) ≈ 1
+			Expression lnTest = new Ln(
+					List.of(new MyNumber(new RealValue(Math.E, 5))),
+					Notation.INFIX
+			);
+			log("Test: Natural Log (ln(e))");
+			c.print(lnTest);
+			c.eval(lnTest);
+
+			// 7) Exponential: exp(1) = e
+			Expression expTest = new Exp(
+					List.of(new MyNumber(new IntegerValue(1))),
+					Notation.INFIX
+			);
+			log("Test: Exponential (exp(1))");
+			c.print(expTest);
+			c.eval(expTest);
+
+			// 8) Inverse: inv(4) = 1/4
+			Expression invTest = new Inverse(
+					List.of(new MyNumber(new IntegerValue(4))),
+					Notation.INFIX
+			);
+			log("Test: Inverse (1/4)");
+			c.print(invTest);
+			c.eval(invTest);
+
+			// 9) Percentage: 50% = 0.5
+			Expression pctTest = new Percent(
+					List.of(new MyNumber(new RealValue(50.0, 2))),
+					Notation.INFIX
+			);
+			log("Test: Percentage (50%)");
+			c.print(pctTest);
+			c.eval(pctTest);
+
+			log("\n------ Advanced Complex/Real Tests ------");
+
+			// 10) Complex Power: (2 + 3i) ^ 2
+			Expression complexPow = new Power(
+					List.of(
+							new MyNumber(new ComplexValue(2, 3)),
+							new MyNumber(new IntegerValue(2))
+					),
+					Notation.INFIX
+			);
+			log("Test: Complex Power ( (2 + 3i)^2 )");
+			c.print(complexPow);
+			c.eval(complexPow);
+
+			// 11) Real ^ Complex: 2 ^ (1 + 1i)
+			Expression realToComplexPow = new Power(
+					List.of(
+							new MyNumber(new RealValue(2.0, 5)),
+							new MyNumber(new ComplexValue(1, 1))
+					),
+					Notation.INFIX
+			);
+			log("Test: Real to Complex Power ( 2 ^ (1 + 1i) )");
+			c.print(realToComplexPow);
+			c.eval(realToComplexPow);
+
+			// 12) Complex Root: √2(4 + 0i)
+			Expression complexRoot = new Root(
+					List.of(
+							new MyNumber(new IntegerValue(2)),
+							new MyNumber(new ComplexValue(4, 0))
+					),
+					Notation.INFIX
+			);
+			log("Test: Complex Root ( √2(4 + 0i) )");
+			c.print(complexRoot);
+			c.eval(complexRoot);
+
+			// 13) Root of Complex Number: ³√(8 + 27i)
+			Expression rootOfComplex = new Root(
+					List.of(
+							new MyNumber(new IntegerValue(3)),
+							new MyNumber(new ComplexValue(8, 27))
+					),
+					Notation.INFIX
+			);
+			log("Test: Root of Complex ( ³√(8 + 27i) )");
+			c.print(rootOfComplex);
+			c.eval(rootOfComplex);
+
+			// 14) ln(1 + 1i)
+			Expression lnComplex = new Ln(
+					List.of(
+							new MyNumber(new ComplexValue(1, 1))
+					),
+					Notation.INFIX
+			);
+			log("Test: Natural Log of Complex ( ln(1 + 1i) )");
+			c.print(lnComplex);
+			c.eval(lnComplex);
+
+			// 15) log base Complex: (1 + 1i) log (4)
+			Expression logBaseComplex = new Log(
+					List.of(
+							new MyNumber(new ComplexValue(1, 1)),
+							new MyNumber(new IntegerValue(4))
+					),
+					Notation.INFIX
+			);
+			log("Test: Log base Complex ( (1 + 1i) log 4 )");
+			c.print(logBaseComplex);
+			c.eval(logBaseComplex);
+
+			// 16) exp(1 + πi)
+			Expression expComplex = new Exp(
+					List.of(
+							new MyNumber(new ComplexValue(1, Math.PI))
+					),
+					Notation.INFIX
+			);
+			log("Test: Exponential of Complex ( exp(1 + πi) )");
+			c.print(expComplex);
+			c.eval(expComplex);
+
 		} catch (IllegalConstruction exception) {
-			System.out.println("Impossible de créer des opérations sans paramètres" +"\n" );
+			logError("Impossible de créer des opérations sans paramètres");
 		}
 	}
 }

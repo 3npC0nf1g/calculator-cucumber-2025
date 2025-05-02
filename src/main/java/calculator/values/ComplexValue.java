@@ -108,7 +108,6 @@ public class ComplexValue implements NumericValue {
     public NumericValue divide(NumericValue other) {
         if (this.isNaN) return NaN;
 
-        String dividedZero = "Division by zero";
         // Handle division by complex number
         if (other instanceof ComplexValue c) {
             if (c.isNaN() || c.isZero()) return NaN;
@@ -205,4 +204,118 @@ public class ComplexValue implements NumericValue {
     public int hashCode() {
         return isNaN ? 0 : realPart.hashCode() ^ imaginaryPart.hashCode();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // In ComplexValue.java
+
+    @Override
+    public NumericValue pow(NumericValue exponent) {
+        // 1) Promote exponent to ComplexValue
+        final ComplexValue w = switch (exponent) {
+            case ComplexValue cv -> cv;
+            case RealValue rv -> new ComplexValue(rv.getValue(), BigDecimal.ZERO);
+            case IntegerValue iv -> new ComplexValue(BigDecimal.valueOf(iv.getValue()), BigDecimal.ZERO);
+            default -> throw new IllegalArgumentException(
+                    "Unsupported exponent type: " + exponent.getClass()
+            );
+        };
+
+        // 2) Compute ln(z)
+        BigDecimal re = realPart;
+        BigDecimal       im = imaginaryPart;
+        BigDecimal modulus = re.pow(2)
+                .add(im.pow(2))
+                .sqrt(MathContext.DECIMAL128);
+        double r = modulus.doubleValue();
+        double theta = Math.atan2(im.doubleValue(), re.doubleValue());
+        ComplexValue lnZ = new ComplexValue(
+                BigDecimal.valueOf(Math.log(r)),
+                BigDecimal.valueOf(theta)
+        );
+
+        // 3) w * ln(z)
+        NumericValue wLnZ = w.multiply(lnZ);
+
+        // 4) exp(w * ln(z))
+        return ((ComplexValue) wLnZ).exp();
+    }
+
+
+    @Override
+    public NumericValue root(NumericValue degree) {
+        // nth root: z^(1/n)
+        if (degree instanceof IntegerValue iv) {
+            double n = iv.getValue();
+            // reuse pow implementation with exponent 1/n
+            double invDeg = 1.0 / n;
+            ComplexValue fractionalExp = new ComplexValue(
+                    BigDecimal.valueOf(invDeg),
+                    BigDecimal.ZERO
+            );
+            return this.pow(fractionalExp);
+        }
+        throw new UnsupportedOperationException(
+                "Root for complex with non-integer degree not supported."
+        );
+    }
+
+    @Override
+    public NumericValue log(NumericValue base) {
+        // log_base(z) = ln(z) / ln(base)
+        if (!(base instanceof ComplexValue b)) {
+            throw new IllegalArgumentException("Base must be a ComplexValue");
+        }
+        ComplexValue lnZ = (ComplexValue) this.ln();
+        ComplexValue lnB = (ComplexValue) b.ln();
+        return lnZ.divide(lnB);
+    }
+
+
+    @Override
+    public NumericValue inverse() {
+        // 1/z = conjugate(z) / |z|^2
+        BigDecimal denom = realPart.pow(2).add(imaginaryPart.pow(2));
+        if (denom.compareTo(BigDecimal.ZERO) == 0) return NaN;
+        ComplexValue conj = new ComplexValue(realPart, imaginaryPart.negate());
+        return conj.divide(new ComplexValue(denom.doubleValue(), 0));
+    }
+
+    @Override
+    public NumericValue ln() {
+        // ln(z) = ln|z| + i*arg(z)
+        double r = realPart.pow(2).add(imaginaryPart.pow(2)).sqrt(MathContext.DECIMAL128).doubleValue();
+        double theta = Math.atan2(imaginaryPart.doubleValue(), realPart.doubleValue());
+        return new ComplexValue(BigDecimal.valueOf(Math.log(r)), BigDecimal.valueOf(theta));
+    }
+
+    @Override
+    public NumericValue exp() {
+        // exp(a + ib) = exp(a)*(cos(b) + i*sin(b))
+        double a = realPart.doubleValue();
+        double b = imaginaryPart.doubleValue();
+        double expa = Math.exp(a);
+        return new ComplexValue(BigDecimal.valueOf(expa * Math.cos(b)), BigDecimal.valueOf(expa * Math.sin(b)));
+    }
+
+    public double modulus() {
+        if (isNaN) return Double.NaN;
+        return realPart.pow(2)
+                .add(imaginaryPart.pow(2))
+                .sqrt(MathContext.DECIMAL128)
+                .doubleValue();
+    }
+
 }
