@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @DisplayName("Percent Operation Tests")
@@ -98,7 +97,7 @@ class TestPercent {
                     Notation.POSTFIX
             );
             NumericValue result = percent.op(new RealValue(33.333, 5));
-            assertTrue(result instanceof RealValue);
+            assertInstanceOf(RealValue.class, result);
             assertEquals("0.33333", result.toString());
         }
     }
@@ -115,7 +114,7 @@ class TestPercent {
                     Notation.POSTFIX
             );
             NumericValue result = percent.op(new ComplexValue(2, 2));
-            assertTrue(result instanceof ComplexValue);
+            assertInstanceOf(ComplexValue.class, result);
         }
     }
 
@@ -170,7 +169,7 @@ class TestPercent {
                     Notation.POSTFIX
             );
             NumericValue result = percent.op(new RealValue(0.0001, 4));
-            assertTrue(result instanceof RealValue);
+            assertInstanceOf(RealValue.class, result);
             assertTrue(Double.parseDouble(result.toString()) < 0.000001);
         }
     }

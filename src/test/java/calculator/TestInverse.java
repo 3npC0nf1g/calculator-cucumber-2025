@@ -65,7 +65,7 @@ class TestInverse {
         void shouldCalculateInverseOfRealNumber() throws IllegalConstruction {
             Inverse inv = new Inverse(List.of(new MyNumber(new RealValue(2.0, 5))), Notation.PREFIX);
             NumericValue result = inv.op(new RealValue(2.0, 5));
-            assertTrue(result instanceof RealValue);
+            assertInstanceOf(RealValue.class, result);
             RealValue realResult = (RealValue) result;
             assertEquals(0.5, realResult.getValue().doubleValue(), 0.00001);
         }

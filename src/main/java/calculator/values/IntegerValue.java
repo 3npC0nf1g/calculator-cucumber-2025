@@ -59,7 +59,8 @@ public class IntegerValue implements NumericValue {
     public NumericValue divide(NumericValue other) {
         // First check for zero divisor
         if (isDivisorZero(other)) {
-            throw new ArithmeticException("Division by zero is not allowed");
+            // return NaN instead of throwing
+            return RealValue.NaN;
         }
 
         return switch (other) {
@@ -127,15 +128,22 @@ public class IntegerValue implements NumericValue {
     public NumericValue pow(NumericValue exponent) {
         if (exponent instanceof IntegerValue iv) {
             int exp = iv.getValue();
+            if (exp < 0) {
+                // a^(–n) = 1 / (a^n)
+                int denom = (int) Math.pow(this.value, -exp);
+                return new RationalValue(1, denom);
+            }
+            // non‐negative exponent as before
             int result = (int) Math.pow(this.value, exp);
             return new IntegerValue(result);
         } else {
             double base = this.value;
-            double exp = ((RealValue) exponent).getValue().doubleValue();
-            double res = Math.pow(base, exp);
+            double exp  = ((RealValue) exponent).getValue().doubleValue();
+            double res  = Math.pow(base, exp);
             return new RealValue(res, 10);
         }
     }
+
 
     @Override
     public NumericValue root(NumericValue degree) {

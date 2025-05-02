@@ -214,7 +214,7 @@ public class ComplexValue implements NumericValue {
         NumericValue wLnZ = w.multiply(lnZ);
 
         // 4) exp(w * ln(z))
-        return ((ComplexValue) wLnZ).exp();
+        return wLnZ.exp();
     }
 
 

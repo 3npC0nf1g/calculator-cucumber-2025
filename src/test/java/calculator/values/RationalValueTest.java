@@ -350,7 +350,7 @@ import java.math.BigInteger;
        RationalValue r = new RationalValue(9, 4);
        RationalValue squared = (RationalValue) r.pow(new IntegerValue(2));
        NumericValue back = squared.root(new IntegerValue(2));
-       assertTrue(back instanceof RealValue);
+        assertInstanceOf(RealValue.class, back);
        assertEquals(9.0/4.0, ((RealValue) back).getValue().doubleValue(), 1e-9);
     }
 

@@ -57,7 +57,7 @@ class TestExp {
         void shouldCalculateExpOfOne() throws IllegalConstruction {
             Exp expOp = new Exp(List.of(new MyNumber(new IntegerValue(1))), Notation.PREFIX);
             NumericValue result = expOp.op(new IntegerValue(1));
-            assertTrue(result instanceof RealValue);
+            assertInstanceOf(RealValue.class, result);
             RealValue realResult = (RealValue) result;
             assertEquals(Math.exp(1.0), realResult.getValue().doubleValue(), 1e-10);
         }
@@ -69,7 +69,7 @@ class TestExp {
             int precision = 6;
             Exp expOp = new Exp(List.of(new MyNumber(new RealValue(val, precision))), Notation.PREFIX);
             NumericValue result = expOp.op(new RealValue(val, precision));
-            assertTrue(result instanceof RealValue);
+            assertInstanceOf(RealValue.class, result);
             RealValue realResult = (RealValue) result;
             assertEquals(Math.exp(val), realResult.getValue().doubleValue(), 1e-6);
         }
@@ -80,7 +80,7 @@ class TestExp {
             ComplexValue input = new ComplexValue(0.0, Math.PI);
             Exp expOp = new Exp(List.of(new MyNumber(input)), Notation.PREFIX);
             NumericValue result = expOp.op(input);
-            assertTrue(result instanceof ComplexValue);
+            assertInstanceOf(ComplexValue.class, result);
             ComplexValue complexResult = (ComplexValue) result;
             // exp(i*pi) = -1 + 0i
             assertEquals(-1.0, complexResult.getReal().doubleValue(), 1e-6);
@@ -111,7 +111,7 @@ class TestExp {
         void shouldCalculateExpOfNegative() throws IllegalConstruction {
             Exp expOp = new Exp(List.of(new MyNumber(new IntegerValue(-1))), Notation.PREFIX);
             NumericValue result = expOp.op(new IntegerValue(-1));
-            assertTrue(result instanceof RealValue);
+            assertInstanceOf(RealValue.class, result);
             RealValue realResult = (RealValue) result;
             assertEquals(Math.exp(-1.0), realResult.getValue().doubleValue(), 1e-10);
         }

@@ -84,8 +84,8 @@ class TestPower {
                     new MyNumber(new RealValue(3.0, 5))
             ));
             NumericValue result = power.op(new RealValue(2.0, 5), new RealValue(3.0, 5));
-            assertTrue(result instanceof RealValue);
-            assertEquals("8+" +
+            assertInstanceOf(RealValue.class, result);
+            assertEquals("8" +
                     "", result.toString());
         }
     }
@@ -104,7 +104,7 @@ class TestPower {
                     new ComplexValue(1, 1),
                     new IntegerValue(2)
             );
-            assertTrue(result instanceof ComplexValue);
+            assertInstanceOf(ComplexValue.class, result);
         }
     }
 
