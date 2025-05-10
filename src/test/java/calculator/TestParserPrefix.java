@@ -1,6 +1,5 @@
 package calculator;
 
-import calculator.values.ComplexValue;
 import calculator.values.NumericValue;
 import org.junit.jupiter.api.Test;
 import parser.ExpressionParser;
@@ -153,8 +152,6 @@ public class TestParserPrefix {
         MyPrefixParser myPrefixParser = new MyPrefixParser();
 
         NumericValue res = myPrefixParser.evaluate(expr);
-
-        NumericValue check=new ComplexValue(7,4);
-        assertEquals(res,check,0.00001);
+        assertEquals(res.toString(), "7.0000000000 + 3.0i");
     }
 }
