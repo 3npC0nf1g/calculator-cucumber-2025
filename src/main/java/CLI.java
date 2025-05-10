@@ -138,9 +138,7 @@ public class CLI {
      */
     public static void runCLI() {
         Scanner scanner = new Scanner(System.in);
-        Calculator calculator = new Calculator();
-        ExpressionParser.setMode(ExpressionParser.Mode.DEGREES);
-        //parser.ExpressionParser.setNotation(Notation.INFIX);
+        ExpressionParser exp=new ExpressionParser();
         print_init();
 
         Set<String> commands = new HashSet<>(Arrays.asList(
@@ -222,8 +220,7 @@ public class CLI {
                 continue;
             }
             try {
-                ExpressionParser e=new ExpressionParser();
-                expr = e.parse(input);
+                expr = exp.parse(input);
                 lastInput = input;
                 if(expr!=null)
                 {
