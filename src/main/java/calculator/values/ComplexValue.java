@@ -148,43 +148,7 @@ public class ComplexValue implements NumericValue {
     @Override
     public String toString() {
         if (isNaN) return "NaN";
-
-        // Format the real and imaginary parts
-        String realStr = realPart.stripTrailingZeros().toPlainString();
-        String imagStr = imaginaryPart.stripTrailingZeros().toPlainString();
-
-        // Simplify the display
-        StringBuilder sb = new StringBuilder();
-
-        // Real part (only if non-zero or if pure complex)
-        if (!realStr.equals("0") || imagStr.equals("0")) {
-            sb.append(realStr);
-        }
-
-        // Imaginary part
-        if (!imagStr.equals("0")) {
-            if (sb.length() > 0 && !imagStr.startsWith("-")) {
-                sb.append(" + ");
-            } else if (sb.length() > 0) {
-                sb.append(" - ");
-                imagStr = imagStr.substring(1); // remove - sign
-            }
-
-            if (imagStr.equals("1")) {
-                sb.append("i");
-            } else if (imagStr.equals("-1")) {
-                sb.append("-i");
-            } else {
-                sb.append(imagStr).append("i");
-            }
-        }
-
-        // Special case when everything is zero
-        if (sb.length() == 0) {
-            return "0";
-        }
-
-        return "["+sb.toString()+"]";
+        return realPart + " + " + imaginaryPart + "i";
     }
 
     @Override

@@ -47,12 +47,16 @@ public class TokenizerPrefix {
      * @return a list of tokens in string form
      */
     private List<String> tokenize(String input) {
-        input=input.replaceAll(","," ");
+        input = input.replaceAll(",", " ");
         List<String> result = new ArrayList<>();
         StringBuilder buffer = new StringBuilder();
         boolean insideBracket = false;
 
-        for (char c : input.toCharArray()) {
+        char[] chars = input.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+
+            // Si on est dans un complexe [...]
             if (insideBracket) {
                 buffer.append(c);
                 if (c == ']') {
@@ -63,6 +67,18 @@ public class TokenizerPrefix {
                 continue;
             }
 
+            // Gestion du signe '-' comme début d'un nombre
+            boolean canBeUnaryMinus = buffer.length() == 0
+                    && (result.isEmpty()
+                    || "+-*/(".contains(result.get(result.size() - 1)));
+            if (c == '-' && canBeUnaryMinus
+                    && (i + 1 < chars.length)
+                    && (Character.isDigit(chars[i + 1]) || chars[i + 1] == '.')) {
+                buffer.append(c);
+                continue;
+            }
+
+            // Séparateurs
             if (Character.isWhitespace(c)) {
                 if (buffer.length() > 0) {
                     result.add(buffer.toString());
@@ -71,6 +87,7 @@ public class TokenizerPrefix {
                 continue;
             }
 
+            // Début d'un complexe
             if (c == '[') {
                 if (buffer.length() > 0) {
                     result.add(buffer.toString());
@@ -81,17 +98,20 @@ public class TokenizerPrefix {
                 continue;
             }
 
-            if (c == '(' || c == ')' || c == ',' || c == '+' || c == '-' || c == '*' || c == '/') {
+            // Opérateurs et parenthèses
+            if ("()+-*/".indexOf(c) >= 0) {
                 if (buffer.length() > 0) {
                     result.add(buffer.toString());
                     buffer.setLength(0);
                 }
                 result.add(Character.toString(c));
             } else {
+                // Chiffre, lettre, ou point décimal dans un nombre/rationnel
                 buffer.append(c);
             }
         }
 
+        // Dernier buffer
         if (buffer.length() > 0) {
             result.add(buffer.toString());
         }

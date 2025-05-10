@@ -153,18 +153,7 @@ public class RealValue implements NumericValue {
      */
    @Override
    public String toString() {
-       if (isNaN) {
-           return "NaN";
-       }
-
-       // Convert to string without exponent
-       String plain = value.stripTrailingZeros().toPlainString();
-
-       // Delete unnecessary .0 endings for integers
-       if (plain.contains(".")) {
-           plain = plain.replaceAll("0*$", "").replaceAll("\\.$", "");
-       }
-       return plain;
+       return isNaN ? "NaN" : value.stripTrailingZeros().toPlainString();
    }
 
 

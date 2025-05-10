@@ -68,11 +68,22 @@ public class MyInfixParser {
         expression = expression.replaceAll("\\s+", "");
         int parenthesesBalance = 0;
 
-        //System.out.println("Expression nettoyée : " + expression);
-
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
 
+            // 1) Reconnaître '-' unaire devant un nombre
+            boolean canBeUnaryMinus =
+                    !inBracket
+                            && c == '-'
+                            && (i == 0 || "+-*/(".indexOf(expression.charAt(i - 1)) >= 0)
+                            && (i + 1 < expression.length())
+                            && (Character.isDigit(expression.charAt(i + 1)) || expression.charAt(i + 1) == '.');
+            if (canBeUnaryMinus) {
+                token.append(c);
+                continue;
+            }
+
+            // 2) Complexes [...]
             if (c == '[') {
                 inBracket = true;
                 token.append(c);
@@ -81,86 +92,66 @@ public class MyInfixParser {
                 inBracket = false;
             } else if (inBracket) {
                 token.append(c);
+
+                // 3) Chiffres, points, lettres (variables ou fonctions)
             } else if (Character.isDigit(c) || c == '.' || Character.isLetter(c)) {
                 token.append(c);
+
+                // 4) Fin de token, on le pousse
             } else {
                 if (token.length() > 0) {
                     String tok = token.toString();
-                    //System.out.println("Token capturé : " + tok);
-                    if (isFunctionName(tok)) {
-                        ops.push(tok);
-                    } else {
-                        nodes.push(createNodeFromToken(tok));
-                    }
+                    if (isFunctionName(tok)) ops.push(tok);
+                    else nodes.push(createNodeFromToken(tok));
                     token.setLength(0);
                 }
 
+                // 5) Parenthèses et opérateurs comme avant
                 if (c == '(') {
                     ops.push("(");
                     parenthesesBalance++;
-                    //System.out.println("Parenthèse ouvrante '('");
                 } else if (c == ')') {
                     parenthesesBalance--;
-                    //System.out.println("Parenthèse fermante ')'");
-                    if (parenthesesBalance < 0) {
+                    if (parenthesesBalance < 0)
                         throw new IllegalArgumentException("Parenthèse fermante sans ouvrante !");
-                    }
-                    while (!ops.isEmpty() && !ops.peek().equals("(")) {
-                        String op = ops.pop();
-                        //System.out.println("Construction de sous-arbre avec opérateur : " + op);
-                        buildSubTree(nodes, op);
-                    }
-                    if (ops.isEmpty()) {
-                        throw new IllegalArgumentException("Parenthèse ouvrante non trouvée pour fermer.");
-                    }
-                    ops.pop(); // consume '('
 
-                    // Si une fonction est sur le dessus, construire immédiatement
-                    if (!ops.isEmpty() && isFunctionName(ops.peek())) {
-                        String func = ops.pop();
-                        //System.out.println("Construction d'une fonction : " + func);
-                        buildSubTree(nodes, func);
-                    }
+                    while (!ops.isEmpty() && !ops.peek().equals("("))
+                        buildSubTree(nodes, ops.pop());
+                    if (ops.isEmpty())
+                        throw new IllegalArgumentException("Parenthèse ouvrante non trouvée pour fermer.");
+                    ops.pop();
+
+                    if (!ops.isEmpty() && isFunctionName(ops.peek()))
+                        buildSubTree(nodes, ops.pop());
+
                 } else if (isOperator(String.valueOf(c))) {
-                    //System.out.println("Opérateur rencontré : " + c);
-                    while (!ops.isEmpty() && precedence(ops.peek()) >= precedence(String.valueOf(c))) {
-                        String op = ops.pop();
-                        //System.out.println("Construction de sous-arbre avec opérateur : " + op);
-                        buildSubTree(nodes, op);
-                    }
+                    while (!ops.isEmpty()
+                            && precedence(ops.peek()) >= precedence(String.valueOf(c)))
+                        buildSubTree(nodes, ops.pop());
                     ops.push(String.valueOf(c));
+
                 } else {
                     throw new IllegalArgumentException("Caractère invalide détecté : " + c);
                 }
             }
         }
 
+        // Reste du flush et construction finale…
         if (token.length() > 0) {
             String tok = token.toString();
-            //System.out.println("Token capturé en fin : " + tok);
-            if (isFunctionName(tok)) {
-                ops.push(tok);
-            } else {
-                nodes.push(createNodeFromToken(tok));
-            }
+            if (isFunctionName(tok)) ops.push(tok);
+            else nodes.push(createNodeFromToken(tok));
         }
-
         while (!ops.isEmpty()) {
             String op = ops.pop();
-            if (op.equals("(") || op.equals(")")) {
+            if (op.equals("(") || op.equals(")"))
                 throw new IllegalArgumentException("Parenthèses non fermées !");
-            }
-            //System.out.println("Construction de sous-arbre final avec opérateur : " + op);
             buildSubTree(nodes, op);
         }
-
-        if (nodes.size() != 1) {
+        if (nodes.size() != 1)
             throw new IllegalStateException("Expression invalide : trop ou pas assez de noeuds.");
-        }
-
-        if (parenthesesBalance != 0) {
+        if (parenthesesBalance != 0)
             throw new IllegalArgumentException("Parenthèses non équilibrées !");
-        }
 
         return nodes.pop();
     }
