@@ -12,7 +12,7 @@ import static parser.MyInfixParser.buildTree;
 public class TestParserInfix {
 
     @Test
-    void testAdditionMultiplication() {
+    void testAdditionMultiplication() throws IllegalConstruction {
         String expr = "((4 + 5 + 6) * (7 + (5 / 2 / 7)) * 9)";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
@@ -21,7 +21,7 @@ public class TestParserInfix {
     }
 
     @Test
-    void testSimpleDivision() {
+    void testSimpleDivision() throws IllegalConstruction{
         String expr = "(10 / 2)";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
@@ -30,7 +30,7 @@ public class TestParserInfix {
     }
 
     @Test
-    void testComplexNumberAddition() {
+    void testComplexNumberAddition() throws IllegalConstruction{
         String expr = "([3+2i] + [1+7i])";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
@@ -39,7 +39,7 @@ public class TestParserInfix {
     }
 
     @Test
-    void testComplexNumberMultiplication() {
+    void testComplexNumberMultiplication()throws IllegalConstruction {
         String expr = "([1+2i] * [3+4i])";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
@@ -48,7 +48,7 @@ public class TestParserInfix {
     }
 
     @Test
-    void testSinInDegrees() {
+    void testSinInDegrees() throws IllegalConstruction{
         String expr = "sin(30)";
         ExpressionParser.mycalculator.setUseRadians(false); // important : sin en DEGRÉS
         MyInfixParser.Node root = buildTree(expr);
@@ -57,7 +57,7 @@ public class TestParserInfix {
     }
 
     @Test
-    void testCosInDegrees() {
+    void testCosInDegrees() throws IllegalConstruction{
         String expr = "cos(60)";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
@@ -66,7 +66,7 @@ public class TestParserInfix {
     }
 
     @Test
-    void testTanInDegrees() {
+    void testTanInDegrees() throws IllegalConstruction{
         String expr = "tan(45)";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
@@ -75,7 +75,7 @@ public class TestParserInfix {
     }
 
     @Test
-    void testDivisionByZero() {
+    void testDivisionByZero() throws IllegalConstruction{
         String expr = "(5 / 0)";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
@@ -84,7 +84,7 @@ public class TestParserInfix {
     }
 
     @Test
-    void testComplexDivision() {
+    void testComplexDivision()throws IllegalConstruction {
         String expr = "([4+2i] / [1-1i])";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
@@ -94,7 +94,7 @@ public class TestParserInfix {
     }
 
     @Test
-    void testNestedExpressions() {
+    void testNestedExpressions() throws IllegalConstruction{
         String expr = "(((1 + 2) * (3 + 4)) / (2 + 5))";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
@@ -103,7 +103,7 @@ public class TestParserInfix {
     }
 
     @Test
-    void testZeroTimesComplex() {
+    void testZeroTimesComplex() throws IllegalConstruction{
         String expr = "(0 * [5+8i])";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);

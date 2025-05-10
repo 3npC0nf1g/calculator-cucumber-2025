@@ -249,6 +249,7 @@ public class ExpressionParser {
         } catch (Exception e) {
             System.err.println("Error during Infix evaluation:");
             System.err.println("    Please check your expression and notation");
+            System.err.println("error: "+e.getMessage()+"\n"+e.getStackTrace());
 
             return null;
         }
