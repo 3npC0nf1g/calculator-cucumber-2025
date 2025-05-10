@@ -68,10 +68,7 @@ public class TokenizerPrefix {
             }
 
             // Gestion du signe '-' comme début d'un nombre
-            boolean canBeUnaryMinus = buffer.length() == 0
-                    && (result.isEmpty()
-                    || "+-*/(".contains(result.get(result.size() - 1)));
-            if (c == '-' && canBeUnaryMinus
+            if (c == '-' && buffer.length() == 0
                     && (i + 1 < chars.length)
                     && (Character.isDigit(chars[i + 1]) || chars[i + 1] == '.')) {
                 buffer.append(c);
