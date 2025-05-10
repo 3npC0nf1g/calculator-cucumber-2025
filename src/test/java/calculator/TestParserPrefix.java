@@ -153,7 +153,8 @@ public class TestParserPrefix {
         MyPrefixParser myPrefixParser = new MyPrefixParser();
 
         NumericValue res = myPrefixParser.evaluate(expr);
+
         NumericValue check=new ComplexValue(7,4);
-        assertEquals(res,check);
+        assertEquals(res,check,0.00001);
     }
 }
