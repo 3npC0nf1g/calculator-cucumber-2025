@@ -12,4 +12,11 @@ public interface NumericValue {
 
     int getValueInt();
 
+    NumericValue pow(NumericValue exponent);
+    NumericValue root(NumericValue degree);
+    NumericValue log(NumericValue base);
+    NumericValue inverse();
+    NumericValue ln();
+    NumericValue exp();
+
 }

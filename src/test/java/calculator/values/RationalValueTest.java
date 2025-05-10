@@ -240,4 +240,131 @@ import java.math.BigInteger;
     }
 
 
+    @Test
+    void testPowIntegerExponent() {
+       // (2/3)^3 = 8/27
+       RationalValue r = new RationalValue(2, 3);
+       RationalValue result = (RationalValue) r.pow(new IntegerValue(3));
+       assertEquals(BigInteger.valueOf(8), result.getNumerator());
+       assertEquals(BigInteger.valueOf(27), result.getDenominator());
+    }
+
+    @Test
+    void testPowRealExponent() {
+       // (1/4)^(0.5) = 0.5 as RealValue
+       RationalValue r = new RationalValue(1, 4);
+       NumericValue result = r.pow(new RealValue(0.5, 5));
+       assertInstanceOf(RealValue.class, result);
+       assertEquals(0.5, ((RealValue) result).getValue().doubleValue(), 1e-9);
+    }
+
+    @Test
+    void testRootIntegerDegree() {
+       //  (27/8)^(1/3) = 3/2  as RealValue
+       RationalValue r = new RationalValue(27, 8);
+       NumericValue result = r.root(new IntegerValue(3));
+       assertInstanceOf(RealValue.class, result);
+       assertEquals(1.5, ((RealValue) result).getValue().doubleValue(), 1e-9);
+    }
+
+    @Test
+    void testRootRealDegree() {
+       // (16/81)^(1/4) rounded to 5 decimals = 0.66667
+       RationalValue r = new RationalValue(16, 81);
+       NumericValue result = r.root(new RealValue(4.0, 5));
+       assertInstanceOf(RealValue.class, result);
+       assertEquals(
+               0.66667,
+               ((RealValue) result).getValue().doubleValue(),
+               1e-9,
+               "Expected (16/81)^(1/4) rounded to 5 decimals"
+       );
+    }
+
+
+    @Test
+    void testLogIntegerBase() {
+       // log₂(8/4) = log₂(2) = 1
+       RationalValue r = new RationalValue(8, 4);
+       // Use a real base so that log(...) returns a RealValue without a cast error
+       RealValue base = new RealValue(2.0, 10);
+       NumericValue result = r.log(base);
+       assertInstanceOf(RealValue.class, result);
+       assertEquals(1.0, ((RealValue) result).getValue().doubleValue(), 1e-9);
+    }
+
+
+    @Test
+    void testLogRealBase() {
+       // log_{10.0}(100/1) = 2
+       RationalValue r = new RationalValue(100, 1);
+       NumericValue result = r.log(new RealValue(10.0, 5));
+       assertInstanceOf(RealValue.class, result);
+       assertEquals(2.0, ((RealValue) result).getValue().doubleValue(), 1e-9);
+    }
+
+    @Test
+    void testInverseNonZero() {
+       // inverse of 3/4 = 4/3
+       RationalValue r = new RationalValue(3, 4);
+       RationalValue inv = (RationalValue) r.inverse();
+       assertEquals(BigInteger.valueOf(4), inv.getNumerator());
+       assertEquals(BigInteger.valueOf(3), inv.getDenominator());
+    }
+
+    @Test
+    void testInverseZeroNumerator() {
+       // inverse of 0/5 = NaN
+       RationalValue r = new RationalValue(0, 5);
+       assertEquals("NaN", r.inverse().toString());
+    }
+
+    @Test
+    void testLnOfEUsingRealValue() {
+       RealValue rv = new RealValue(Math.E, 10);
+       NumericValue ln = rv.ln();
+       assertInstanceOf(RealValue.class, ln);
+       assertEquals(1.0, ((RealValue) ln).getValue().doubleValue(), 1e-9);
+    }
+
+
+    @Test
+    void testLnNonPositive() {
+       // ln(-1/2) or ln(0/1) = NaN
+       assertEquals("NaN", new RationalValue(-1, 2).ln().toString());
+       assertEquals("NaN", new RationalValue(0, 1).ln().toString());
+    }
+
+    @Test
+    void testExp() {
+       // exp(1/1) = e
+       RationalValue r = new RationalValue(1, 1);
+       NumericValue exp = r.exp();
+       assertInstanceOf(RealValue.class, exp);
+       assertEquals(Math.E, ((RealValue) exp).getValue().doubleValue(), 1e-9);
+    }
+
+    @Test
+    void testPowRootLogChain() {
+       // chain: root(pow( (9/4), 2 ), 2) = root( (9/4)^2 = 81/16 , 2 ) = 9/4
+       RationalValue r = new RationalValue(9, 4);
+       RationalValue squared = (RationalValue) r.pow(new IntegerValue(2));
+       NumericValue back = squared.root(new IntegerValue(2));
+        assertInstanceOf(RealValue.class, back);
+       assertEquals(9.0/4.0, ((RealValue) back).getValue().doubleValue(), 1e-9);
+    }
+
+
+    @Test
+    void testInteractionWithComplex() {
+       // (3/5) + (2 + i) = 0.6 + 2 + i = 2.6 + 1i
+       RationalValue r = new RationalValue(3, 5);
+       ComplexValue c = new ComplexValue(2.0, 1.0);
+       NumericValue sum = r.add(c);
+       assertInstanceOf(ComplexValue.class, sum);
+       // update expected to the correct result
+       assertEquals("2.6 + 1.0i", sum.toString());
+    }
+
+
  }
