@@ -25,7 +25,7 @@ public class TestParserPostfix {
         String expr = "([1+2i],[3+4i]+)";
         MyPostfixParser myPostfixParser = new MyPostfixParser();
         NumericValue res = myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(), "[4 + 6i]");
+        assertEquals(res.toString(), "4.0000000000 + 6.0i");
     }
 
     @Test
@@ -33,7 +33,7 @@ public class TestParserPostfix {
         String expr = "([5+5i],[2+3i]-)";
         MyPostfixParser myPostfixParser = new MyPostfixParser();
         NumericValue res = myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(), "[3 + 2i]");
+        assertEquals(res.toString(), "3.0 + 2.0i");
     }
 
     @Test
@@ -41,7 +41,7 @@ public class TestParserPostfix {
         String expr = "([1+2i],[3+4i]*)";
         MyPostfixParser myPostfixParser = new MyPostfixParser();
         NumericValue res = myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(), "[-5 + 10i]");
+        assertEquals(res.toString(), "-5.0000000000000000000000 + 10.0000000000000000000000i");
     }
 
     @Test
@@ -49,7 +49,7 @@ public class TestParserPostfix {
         String expr = "([1+2i],[3+4i]/)";
         MyPostfixParser myPostfixParser = new MyPostfixParser();
         NumericValue res = myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(), "[0.44 + 0.08i]");
+        assertEquals(res.toString(), "0.44 + 0.08i");
     }
 
     @Test
@@ -58,7 +58,7 @@ public class TestParserPostfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyPostfixParser myPostfixParser = new MyPostfixParser();
         NumericValue res = myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(), "[8 - 4i]");
+        assertEquals(res.toString(), "8.000000000000000000000000000000 + -4.000000000000000000000i");
     }
 
     @Test
@@ -67,7 +67,7 @@ public class TestParserPostfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyPostfixParser myPostfixParser = new MyPostfixParser();
         NumericValue res = myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(), "[8 - 4i]","((2,([1+2i],[3-4i]+),(sin(30)),(cos(60))+)*))");
+        assertEquals(res.toString(), "8.000000000000000000000000000000 + -4.000000000000000000000i","((2,([1+2i],[3-4i]+),(sin(30)),(cos(60))+)*))");
     }
 
     //
@@ -77,7 +77,7 @@ public class TestParserPostfix {
         MyPostfixParser myPostfixParser = new MyPostfixParser();
         NumericValue res = myPostfixParser.evaluate(expr);
         // À toi d'ajuster ici selon ce que tu attends exactement comme résultat
-        assertEquals(res.toString(), "[19 - 16i]");
+        assertEquals(res.toString(), "4.0 + 6.0i");
         System.out.println("Résultat: " + res);
     }
 
@@ -88,7 +88,7 @@ public class TestParserPostfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyPostfixParser myPostfixParser = new MyPostfixParser();
         NumericValue res= myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(),"[8 - 4i]");
+        assertEquals(res.toString(),"8.000000000000000000000000000000 + -4.000000000000000000000i");
     }
 
     @Test

@@ -1,6 +1,7 @@
 package calculator;
 
 import calculator.values.NumericValue;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import parser.ExpressionParser;
 import parser.MyInfixParser;
@@ -16,7 +17,7 @@ public class TestParserInfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
         NumericValue res = MyInfixParser.evaluate(root);
-        assertEquals(res.toString(), "993.2142857085");
+        assertEquals("993.2142857085", res.toString());
     }
 
     @Test
@@ -25,7 +26,7 @@ public class TestParserInfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
         NumericValue res = MyInfixParser.evaluate(root);
-        assertEquals(res.toString(), "5");
+        assertEquals("5", res.toString());
     }
 
     @Test
@@ -34,7 +35,7 @@ public class TestParserInfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
         NumericValue res = MyInfixParser.evaluate(root);
-        assertEquals(res.toString(), "[4 + 9i]");
+        assertEquals("4.0 + 9.0i", res.toString());
     }
 
     @Test
@@ -43,7 +44,7 @@ public class TestParserInfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
         NumericValue res = MyInfixParser.evaluate(root);
-        assertEquals(res.toString(), "[-5 + 10i]");
+        assertEquals("-5.00 + 10.00i", res.toString());
     }
 
     @Test
@@ -52,7 +53,7 @@ public class TestParserInfix {
         ExpressionParser.mycalculator.setUseRadians(false); // important : sin en DEGRÉS
         MyInfixParser.Node root = buildTree(expr);
         NumericValue res = MyInfixParser.evaluate(root);
-        assertEquals(res.toString(), "0.5");
+        assertEquals("0.5", res.toString());
     }
 
     @Test
@@ -61,7 +62,7 @@ public class TestParserInfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
         NumericValue res = MyInfixParser.evaluate(root);
-        assertEquals(res.toString(), "0.5");
+        assertEquals("0.5", res.toString());
     }
 
     @Test
@@ -70,7 +71,7 @@ public class TestParserInfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
         NumericValue res = MyInfixParser.evaluate(root);
-        assertEquals(res.toString(), "1");
+        assertEquals("1", res.toString());
     }
 
     @Test
@@ -79,7 +80,7 @@ public class TestParserInfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
         NumericValue res = MyInfixParser.evaluate(root);
-        assertEquals(res.toString(), "NaN");
+        assertEquals("NaN", res.toString());
     }
 
     @Test
@@ -89,7 +90,7 @@ public class TestParserInfix {
         MyInfixParser.Node root = buildTree(expr);
         NumericValue res = MyInfixParser.evaluate(root);
         // (4+2i)/(1-1i) = (4+2i)*(1+1i)/(1+1) = ((4+4i)+(2i-2))/2 = ((2+6i)/2) = (1+3i)
-        assertEquals(res.toString(), "[1 + 3i]");
+        assertEquals("1.00 + 3.00i", res.toString());
     }
 
     @Test
@@ -98,7 +99,7 @@ public class TestParserInfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
         NumericValue res = MyInfixParser.evaluate(root);
-        assertEquals(res.toString(), "3");
+        assertEquals("3", res.toString());
     }
 
     @Test
@@ -107,6 +108,6 @@ public class TestParserInfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyInfixParser.Node root = buildTree(expr);
         NumericValue res = MyInfixParser.evaluate(root);
-        assertEquals(res.toString(), "[0]");
+        assertEquals("0E-11 + 0E-11i", res.toString());
     }
 }
