@@ -17,7 +17,7 @@ public class TestParserPostfix {
         MyPostfixParser myPostfixParser = new MyPostfixParser();
 
         NumericValue res= myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(),"[8 - 4i]");
+        assertEquals(res.toString(),"8.000000000000000000000000000000 + -4.000000000000000000000i");
     }
 
     @Test
