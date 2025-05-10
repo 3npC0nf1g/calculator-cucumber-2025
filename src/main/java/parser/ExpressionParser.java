@@ -147,7 +147,6 @@ public class ExpressionParser {
             else
                 last_result = result;
         }
-
         return result;
     }
 
