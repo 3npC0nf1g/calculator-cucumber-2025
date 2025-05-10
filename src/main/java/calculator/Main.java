@@ -128,6 +128,7 @@ public class Main {
 			Expression rational2 = new MyNumber(new RationalValue(25, 50));
 			c.print(rational2);
 			c.eval(rational2);
+			System.out.println();
 
 			// Test de la division par zéro avec un nombre réel
 			Expression realDivByZero = new MyNumber(new RealValue(1.0, 3));

@@ -153,9 +153,9 @@ public class RealValue implements NumericValue {
      * @return plain string version of the number
      */
    @Override
-    public String toString() {
+   public String toString() {
        return isNaN ? "NaN" : value.stripTrailingZeros().toPlainString();
-    }
+   }
 
 
 
