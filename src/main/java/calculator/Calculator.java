@@ -43,6 +43,15 @@ public class Calculator {
     }
 
     /**
+     * Prints solution provided as input parameter.
+     * @param e the arithmetic Expression to be printed
+     * @see #printExpressionDetails(Expression)
+     */
+    public void simple_print(Expression e) {
+        System.out.println(eval(e));
+    }
+
+    /**
      * Prints verbose details of an arithmetic expression provided as input parameter.
      * @param e the arithmetic Expression to be printed
      * @see #print(Expression)
