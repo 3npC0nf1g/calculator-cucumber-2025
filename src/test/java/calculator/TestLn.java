@@ -63,7 +63,7 @@ class TestLn {
         void shouldCalculateLnOfRealNumber() throws IllegalConstruction {
             Ln ln = new Ln(List.of(new MyNumber(new RealValue(2.0, 6))), Notation.PREFIX);
             NumericValue result = ln.op(new RealValue(2.0, 6));
-            assertTrue(result instanceof RealValue);
+            assertInstanceOf(RealValue.class, result);
             RealValue realResult = (RealValue) result;
             assertEquals(0.693147, realResult.getValue().doubleValue(), 0.00001);
         }
@@ -77,7 +77,7 @@ class TestLn {
             for (double value : testValues) {
                 Ln ln = new Ln(List.of(new MyNumber(new RealValue(value, precision))), Notation.PREFIX);
                 NumericValue result = ln.op(new RealValue(value, precision));
-                assertTrue(result instanceof RealValue);
+                assertInstanceOf(RealValue.class, result);
                 RealValue realResult = (RealValue) result;
                 assertEquals(Math.log(value), realResult.getValue().doubleValue(), 0.00001,
                         String.format("Failed for ln(%f)", value));
@@ -137,7 +137,7 @@ class TestLn {
                     new MyNumber(new RealValue(1000.0, 6))
             ), Notation.PREFIX);
             NumericValue result = ln.op(new RealValue(1000.0, 6));
-            assertTrue(result instanceof RealValue);
+            assertInstanceOf(RealValue.class, result);
             RealValue realResult = (RealValue) result;
             assertEquals(6.907755, realResult.getValue().doubleValue(), 0.00001);
         }

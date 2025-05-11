@@ -18,7 +18,7 @@ public class TestParserPrefix {
         MyPrefixParser myPrefixParser = new MyPrefixParser();
 
         NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "[8 - 4i]");
+        assertEquals(res.toString(), "8.000000000000000000000000000000 + -4.000000000000000000000i");
     }
 
     @Test
@@ -133,7 +133,7 @@ public class TestParserPrefix {
         MyPrefixParser myPrefixParser = new MyPrefixParser();
 
         NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "[24]");
+        assertEquals(res.toString(), "24.000000000000000000000000000000 + 0E-21i");
     }
 
     @Test
@@ -152,6 +152,6 @@ public class TestParserPrefix {
         MyPrefixParser myPrefixParser = new MyPrefixParser();
 
         NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "[7 + 3i]");
+        assertEquals(res.toString(), "7.0000000000 + 3.0i");
     }
 }

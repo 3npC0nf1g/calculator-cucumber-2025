@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
 
@@ -146,7 +145,7 @@ public class TestRoot {
 
             NumericValue result = root.op(new IntegerValue(3), new ComplexValue(8, 27));
             assertNotNull(result);
-            assertTrue(result instanceof ComplexValue);
+            assertInstanceOf(ComplexValue.class, result);
         }
     }
 
@@ -195,7 +194,7 @@ public class TestRoot {
             ), Notation.INFIX);
 
             NumericValue result = calculator.eval(rootExpr);
-            assertTrue(result instanceof RealValue);
+            assertInstanceOf(RealValue.class, result);
             assertEquals(new BigDecimal("1.4142"), ((RealValue)result).getValue().setScale(4, BigDecimal.ROUND_HALF_UP));
         }
     }

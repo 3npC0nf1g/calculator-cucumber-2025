@@ -2,7 +2,7 @@
  * Command Line Interface Calculator.
  *
  * This class provides an interactive terminal calculator.
- * It supports arithmetic expressions in Infix, Prefix, Postfix, and Auto notations.
+ * It supports arithmetic expressions in Infix, Prefix, Postfix notations.
  *
  * Features:
  * - Supports decimals, fractions (a/b), and complex numbers [a+bi]
@@ -11,7 +11,7 @@
  * - Accepts constants: pi, res (last result)
  *
  * Available commands:
- * - infix, prefix, postfix, auto : change input notation
+ * - infix, prefix, postfix : change input notation
  * - mode : toggle between radians and degrees
  * - display : toggle between decimal and fraction display modes
  * - last : re-execute the previous expression
@@ -67,7 +67,6 @@ public class CLI {
         System.out.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize("infix") + WHITE + " notation" + CYAN + " :" + WHITE);
         System.out.println("    " + WHITE + "Tap '" + CYAN + "prefix" + WHITE + "' to use Prefix notation");
         System.out.println("    " + WHITE + "Tap '" + CYAN + "postfix" + WHITE + "' to use Postfix notation");
-        System.out.println("    " + WHITE + "Tap '" + CYAN + "auto" + WHITE + "' to use Automatic notation detector");
 
         System.out.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize("degrees") + CYAN + " :" + WHITE);
         System.out.println("    " + WHITE + "Tap '" + CYAN + "mode" + WHITE + "' to toggle between Radians and Degrees");
@@ -91,12 +90,7 @@ public class CLI {
             System.err.println(CYAN + "-" + WHITE + " Enter a Prefix arithmetic expression" + CYAN + " (e.g.:" + WHITE + " + 3 (* 4 2)" + CYAN + ")");
         if (ExpressionParser.getNotation() == ExpressionParser.Notation.POSTFIX)
             System.err.println(CYAN + "-" + WHITE + " Enter a Postfix arithmetic expression" + CYAN + " (e.g.:" + WHITE + " (4 2 *) 3 +" + CYAN + ")");
-        if (ExpressionParser.getNotation() == ExpressionParser.Notation.AUTO) {
-            System.err.println(CYAN + "-" + WHITE + " Enter an arithmetic expression" + CYAN + " :");
-            System.err.println("    " + CYAN + "Infix" + WHITE + " arithmetic expression" + CYAN + " (e.g.:" + WHITE + " 3 + 4 * 2" + CYAN + ")");
-            System.err.println("    " + CYAN + "Prefix" + WHITE + " arithmetic expression" + CYAN + " (e.g.:" + WHITE + " + 3 (* 4 2)" + CYAN + ")");
-            System.err.println("    " + CYAN + "Postfix" + WHITE + " arithmetic expression" + CYAN + " (e.g.:" + WHITE + " (4 2 *) 3 +" + CYAN + ")");
-        }
+
 
         System.err.println(CYAN + "Information :" + WHITE);
         System.err.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize(ExpressionParser.getNotation().toString()) + WHITE + " notation" + CYAN + " :" + WHITE);
@@ -107,8 +101,6 @@ public class CLI {
             System.err.println("    " + WHITE + "Tap '" + CYAN + "prefix" + WHITE + "' to use Prefix notation");
         if (ExpressionParser.getNotation() != ExpressionParser.Notation.POSTFIX)
             System.err.println("    " + WHITE + "Tap '" + CYAN + "postfix" + WHITE + "' to use Postfix notation");
-        if (ExpressionParser.getNotation() != ExpressionParser.Notation.AUTO)
-            System.err.println("    " + WHITE + "Tap '" + CYAN + "auto" + WHITE + "' to use Automatic notation detector");
 
         System.err.println(CYAN + "-" + WHITE + " Supported types" + CYAN + ":" + WHITE + " integers, decimals, fractions (" + CYAN + "a/b" + WHITE + "), complex " + CYAN + "[a+bi]" + WHITE);
         System.err.println(CYAN + "-" + WHITE + " Scientific notation supported" + CYAN + " (e.g.:" + WHITE + " 1.8 * " + CYAN + "E" + WHITE + "(X) = 1.8*10^X" + CYAN + ")");
@@ -146,13 +138,11 @@ public class CLI {
      */
     public static void runCLI() {
         Scanner scanner = new Scanner(System.in);
-        Calculator calculator = new Calculator();
-        ExpressionParser.setMode(ExpressionParser.Mode.DEGREES);
-        //parser.ExpressionParser.setNotation(Notation.INFIX);
+        ExpressionParser exp=new ExpressionParser();
         print_init();
 
         Set<String> commands = new HashSet<>(Arrays.asList(
-                "infix", "prefix", "postfix", "auto", "mode", "display", "help", "exit"
+                "infix", "prefix", "postfix", "mode", "display", "help", "exit"
         ));
 
         while (true) {
@@ -203,12 +193,7 @@ public class CLI {
                 System.err.println("\u001B[97m " + txt + "\u001B[0m");
                 continue;
             }
-            else if (input.equalsIgnoreCase("Auto")) {
-                ExpressionParser.setNotation(ExpressionParser.Notation.AUTO);
-                String txt="Notation set to " + CYAN+capitalize(ExpressionParser.getNotation().toString());
-                System.err.println("\u001B[97m " + txt + "\u001B[0m");
-                continue;
-            }
+
             else if (input.equalsIgnoreCase("display")) {
                 if(ExpressionParser.getDisplay()== ExpressionParser.Display.FRACTION)
                 {
@@ -235,8 +220,7 @@ public class CLI {
                 continue;
             }
             try {
-                ExpressionParser e=new ExpressionParser();
-                expr = e.parse(input);
+                expr = exp.parse(input);
                 lastInput = input;
                 if(expr!=null)
                 {
