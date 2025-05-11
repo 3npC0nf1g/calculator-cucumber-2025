@@ -3,72 +3,54 @@ package visitor;
 import calculator.Expression;
 import calculator.MyNumber;
 import calculator.Operation;
-import calculator.UnaryOperation;
-import calculator.values.NumericValue;
 
 import java.util.ArrayList;
 
-/**
- * Evaluation is a concrete visitor that serves to
+/** Evaluation is a concrete visitor that serves to
  * compute and evaluate the results of arithmetic expressions.
  */
 public class Evaluator extends Visitor {
 
     /**
-     * Default constructor of the class. Does not initialize anything.
+     * Default constructor of the class. Does not initialise anything.
      */
     public Evaluator() {}
 
-    /**
-     * The result of the evaluation will be stored in this private variable.
-     */
-    private NumericValue computedValue;
+    /** The result of the evaluation will be stored in this private variable */
+    private int computedValue;
 
-    /**
-     * Getter method to obtain the result of the evaluation.
+    /** getter method to obtain the result of the evaluation
      *
-     * @return a NumericValue object containing the result of the evaluation.
+     * @return an Integer object containing the result of the evaluation
      */
-    public NumericValue getResult() {
-        return computedValue;
-    }
+    public Integer getResult() { return computedValue; }
 
-    /**
-     * Use the visitor design pattern to visit a number.
+    /** Use the visitor design pattern to visit a number.
      *
-     * @param n The number being visited.
+     * @param n The number being visited
      */
-    @Override
     public void visit(MyNumber n) {
-        // On récupère directement la valeur contenue dans MyNumber (de type NumericValue)
         computedValue = n.getValue();
     }
 
-    /**
-     * Use the visitor design pattern to visit an operation.
+    /** Use the visitor design pattern to visit an operation
      *
-     * @param o The operation being visited.
+     * @param o The operation being visited
      */
-    @Override
     public void visit(Operation o) {
-        ArrayList<NumericValue> evaluatedArgs = new ArrayList<>();
-        // 1) Evaluate each sub‐expression
-        for (Expression a : o.getArgs()) {
+        ArrayList<Integer> evaluatedArgs = new ArrayList<>();
+        //first loop to recursively evaluate each subexpression
+        for(Expression a:o.args) {
             a.accept(this);
             evaluatedArgs.add(computedValue);
         }
-
-        // 2) If it's a unary operation, invoke its single‐arg op(val)
-        if (o instanceof UnaryOperation unaryOp && evaluatedArgs.size() == 1) {
-            computedValue = unaryOp.op(evaluatedArgs.getFirst());
-            return;
+        //second loop to accumulate all the evaluated subresults
+        int temp = evaluatedArgs.get(0);
+        int max = evaluatedArgs.size();
+        for(int counter=1; counter<max; counter++) {
+            temp = o.op(temp,evaluatedArgs.get(counter));
         }
-
-        // 3) Otherwise fold all args through the binary op(l,r)
-        NumericValue temp = evaluatedArgs.getFirst();
-        for (int i = 1; i < evaluatedArgs.size(); i++) {
-            temp = o.op(temp, evaluatedArgs.get(i));
-        }
+        // store the accumulated result
         computedValue = temp;
     }
 

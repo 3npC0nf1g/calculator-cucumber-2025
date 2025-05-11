@@ -1,0 +1,14 @@
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/Calculator.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/Divides.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/Expression.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/IllegalConstruction.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/Main.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/Minus.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/MyNumber.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/Notation.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/Operation.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/Plus.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/calculator/Times.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/visitor/Evaluator.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/visitor/PrintVisitor.java
+/home/christian/Umons/Software_evol/calculator-cucumber-2025/src/main/java/visitor/Visitor.java
