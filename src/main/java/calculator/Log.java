@@ -1,7 +1,6 @@
 package calculator;
 import calculator.values.ComplexValue;
 import calculator.values.NumericValue;
-import calculator.values.IntegerValue;
 
 import java.util.List;
 

@@ -42,11 +42,12 @@ public class ExpressionParser {
      * @param m Mode.DEGREES or Mode.RADIANS
      */
     public static void setMode(Mode m) {
-        mode = m;
         if(mode == Mode.RADIANS)
             mycalculator.setUseRadians(false);
         else
             mycalculator.setUseRadians(true);
+        mode = m;
+
     }
 
     /**
@@ -147,7 +148,6 @@ public class ExpressionParser {
             else
                 last_result = result;
         }
-
         return result;
     }
 
