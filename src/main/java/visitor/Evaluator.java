@@ -3,6 +3,8 @@ package visitor;
 import calculator.Expression;
 import calculator.MyNumber;
 import calculator.Operation;
+import calculator.values.IntegerValue;
+import calculator.values.NumericValue;
 
 import java.util.ArrayList;
 
@@ -30,7 +32,7 @@ public class Evaluator extends Visitor {
      * @param n The number being visited
      */
     public void visit(MyNumber n) {
-        computedValue = n.getValue();
+        computedValue = n.getValue().getValueInt();
     }
 
     /** Use the visitor design pattern to visit an operation
@@ -45,13 +47,13 @@ public class Evaluator extends Visitor {
             evaluatedArgs.add(computedValue);
         }
         //second loop to accumulate all the evaluated subresults
-        int temp = evaluatedArgs.get(0);
+        NumericValue temp = new IntegerValue(evaluatedArgs.get(0));
         int max = evaluatedArgs.size();
         for(int counter=1; counter<max; counter++) {
-            temp = o.op(temp,evaluatedArgs.get(counter));
+            temp = o.op(temp,new IntegerValue(evaluatedArgs.get(counter).intValue()));
         }
         // store the accumulated result
-        computedValue = temp;
+        computedValue = temp.getValueInt();
     }
 
 }

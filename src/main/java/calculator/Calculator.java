@@ -1,6 +1,7 @@
 package calculator;
 
 import calculator.util.AngleConverter;
+import calculator.values.IntegerValue;
 import visitor.Evaluator;
 import calculator.values.NumericValue;
 
@@ -75,7 +76,7 @@ public class Calculator {
         // Ask the expression to accept this visitor to start the evaluation process.
         e.accept(v);
         // Return the result of the evaluation.
-        return v.getResult();
+        return new IntegerValue(v.getResult());
     }
 
     /*
