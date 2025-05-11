@@ -1,7 +1,11 @@
 package calculator;
 
+import calculator.values.IntegerValue;
+import calculator.values.NumericValue;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -9,75 +13,79 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.Arrays;
 import java.util.List;
 
-
 class TestNotation {
 
-    /* This is an auxilary method to avoid code duplication.
-     */
-	void testNotation(String s,Operation o,Notation n) {
-		assertEquals(s, o.toString(n));
-		o.notation = n;
-		assertEquals(s, o.toString());
+	// Méthode auxiliaire pour tester la notation
+	void testNotation(String expected, Operation op, Notation notation) {
+		assertEquals(expected, op.toString(notation));  // Vérifie que la notation donnée génère la chaîne attendue
+		op.notation = notation;  // Met à jour la notation de l'opération
+		assertEquals(expected, op.toString());  // Vérifie que la méthode toString() utilise la notation correcte
 	}
 
-	/* This is an auxilary method to avoid code duplication.
-     */
-	void testNotations(String symbol,int value1,int value2,Operation op) {
-		//prefix notation:
-		testNotation(symbol +" (" + value1 + ", " + value2 + ")", op, Notation.PREFIX);
-		//infix notation:
-		testNotation("( " + value1 + " " + symbol + " " + value2 + " )", op, Notation.INFIX);
-		//postfix notation:
-		testNotation("(" + value1 + ", " + value2 + ") " + symbol, op, Notation.POSTFIX);
+	// Méthode auxiliaire pour tester les trois notations (prefixe, infix, postfix)
+	void testNotations(String symbol, NumericValue v1, NumericValue v2, Operation op) {
+		// Test pour la notation préfixe
+		testNotation(symbol + " (" + v1.toString() + ", " + v2.toString() + ")", op, Notation.PREFIX);
+		// Test pour la notation infixe
+		testNotation("( " + v1.toString() + " " + symbol + " " + v2.toString() + " )", op, Notation.INFIX);
+		// Test pour la notation postfixe
+		testNotation("(" + v1.toString() + ", " + v2.toString() + ") " + symbol, op, Notation.POSTFIX);
 	}
-
 
 	@ParameterizedTest
 	@ValueSource(strings = {"*", "+", "/", "-"})
 	void testOutput(String symbol) {
-		int value1 = 8;
-		int value2 = 6;
+		// Initialisation des valeurs
+		NumericValue value1 = new IntegerValue(8);
+		NumericValue value2 = new IntegerValue(6);
 		Operation op = null;
-		//List<Expression> params = new ArrayList<>(Arrays.asList(new MyNumber(value1),new MyNumber(value2)));
-		List<Expression> params = Arrays.asList(new MyNumber(value1),new MyNumber(value2));
+		List<Expression> params = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
+
 		try {
-			//construct another type of operation depending on the input value
-			//of the parameterised test
+			// Construction de l'opération en fonction du symbole
 			switch (symbol) {
-				case "+"	->	op = new Plus(params);
-				case "-"	->	op = new Minus(params);
-				case "*"	->	op = new Times(params);
-				case "/"	->	op = new Divides(params);
-				default		->	fail();
+				case "+" -> op = new Plus(params);
+				case "-" -> op = new Minus(params);
+				case "*" -> op = new Times(params);
+				case "/" -> op = new Divides(params);
+				default -> fail("Invalid symbol: " + symbol);  // Si un symbole invalide est passé, échouer
 			}
 		} catch (IllegalConstruction e) {
-			fail();
+			fail("Operation construction failed for: " + symbol);  // Si la construction de l'opération échoue, échouer
 		}
+
+		// Test des différentes notations (préfixe, infixe, postfixe)
 		testNotations(symbol, value1, value2, op);
 	}
-
 
 	@ParameterizedTest
 	@EnumSource(Notation.class)
 	void testCompositeExpressionConsistentNotation(Notation notation) {
-		// Create a composite expression: ( (3 + 4) * 5 )
+		// Création de l'expression composite : ((3 + 4) * 5)
 		Expression inner = null;
 		Operation outer = null;
+
 		try {
-			// inner: 3 + 4
-			inner = new Plus(Arrays.asList(new MyNumber(3), new MyNumber(4)));
-			// outer: (inner) * 5
-			outer = new Times(Arrays.asList(inner, new MyNumber(5)));
+			// (3 + 4)
+			inner = new Plus(Arrays.asList(
+					new MyNumber(new IntegerValue(3)),
+					new MyNumber(new IntegerValue(4))
+			));
+
+			// ((3 + 4) * 5)
+			outer = new Times(Arrays.asList(
+					inner,
+					new MyNumber(new IntegerValue(5))
+			));
 		} catch (IllegalConstruction e) {
-			fail("Failed to construct expression: " + e.getMessage());
+			fail("Expression construction failed");  // Si la construction échoue, échouer
 		}
 
-		// Set the top-level notation
-        outer.notation = notation;
+		outer.notation = notation;  // Appliquer la notation à l'expression externe
 
+		String expectedInner, expectedOuter;
 
-		String expectedInner;
-		String expectedOuter;
+		// Déterminer l'expression attendue en fonction de la notation
 		switch (notation) {
 			case PREFIX -> {
 				expectedInner = "+ (3, 4)";
@@ -96,15 +104,9 @@ class TestNotation {
 				expectedOuter = "";
 			}
 		}
-		// This assertion should fail with the current bug if the inner expression is not
-		// printed using the same notation as the outer expression.
+
+		// Vérifier que l'expression composite utilise la notation correcte
 		assertEquals(expectedOuter, outer.toString(),
 				"Composite expression did not use a consistent notation: expected " + expectedOuter);
 	}
-
-
-
-
-
-
 }
