@@ -18,6 +18,7 @@ type OperationContextType = {
     clearOperationHistory: () => void;
     clearAll: () => void;
     result: string;
+    backPress: () => void;
 };
 
 // Create the context. We use undefined as the default value.
@@ -51,11 +52,22 @@ export const OperationProvider: React.FC<OperationProviderProps> = ({ children }
         setOperationHistory([])
     };
 
-
+    const removeOneOperation = () => {
+        setOperation(prev => prev.slice(0, -1));
+    }
+    const removeOneOperationRequest = () => {
+        setOperationRequest(prev => prev.slice(0, -1));
+    }
+    const backPress = () => {
+        if (operation.length > 0) {
+            removeOneOperation();
+            removeOneOperationRequest();
+        }
+    }
     const clearAll = (): void => {
-        clearOperation();
-        clearOperationRequest();
-        clearOperationHistory();
+        setOperation('');
+        setOperationRequest('');
+        setOperationHistory([]);
     };
     const sendOperation = async () => {
         console.log("Sending operation:", operationRequest);
@@ -72,7 +84,9 @@ export const OperationProvider: React.FC<OperationProviderProps> = ({ children }
         setResult(result?.data);
         addOperationToHistory({ operation: operation, result: result?.data, request: operationRequest });
         clearOperation();
+        setOperation(result?.data);
         clearOperationRequest();
+        setOperationRequest(result?.data);
         return result?.data;
 
     }
@@ -90,7 +104,8 @@ export const OperationProvider: React.FC<OperationProviderProps> = ({ children }
         updateOperationRequest,
         appendOperationRequest,
         clearOperationRequest,
-        clearAll
+        clearAll,
+        backPress,
     }), [operation]);
 
     return (

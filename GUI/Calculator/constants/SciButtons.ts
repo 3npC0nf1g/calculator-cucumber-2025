@@ -46,10 +46,10 @@ export const SCI_ROWS: SciButton[][] = [
     ],
     [
         { key: "abs", value: "abs(", text: "|x|", type: "operation" },
+        { key: "comma", value: ".", text: ",", type: "operation" },
         { key: "pi", value: "π", text: "π", type: "number" },
         { key: "e", value: "e", text: "e", type: "number" },
         { key: "0", value: "0", text: "0", type: "number" },
-        { key: "comma", value: ".", text: ",", type: "operation" },
         { key: "equals", value: "=", text: "=", type: "special" },
     ],
 ];

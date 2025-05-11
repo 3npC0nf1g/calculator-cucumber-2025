@@ -1,19 +1,20 @@
-import { Image, StyleSheet, Platform, View, KeyboardAvoidingView, TouchableOpacity, Button } from 'react-native';
+import { Image, StyleSheet, Platform, View, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 import { ThemedView } from '@/components/ThemedView';
 import Calculator from "@/components/Calculator";
 import Display from "@/components/Display";
 import { OperationProvider } from "@/context/OperationContext";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import DisplayScience from "@/components/DsiplayScience.web";
 
-import * as ScreenOrientation from 'expo-screen-orientation';
 import CalculatorScienceMobile from '@/components/CalculatorScience';
 import CalculatorScienceWeb from '@/components/CalculatorScience.web';
 export default function HomeScreen() {
     const isWeb = Platform.OS === 'web';
     const [type, setType] = useState<boolean>(true)
+    const [historyBtn, setHistoryBtn] = useState<boolean>(false)
 
 
 
@@ -31,7 +32,8 @@ export default function HomeScreen() {
                             disabled={type}
                             onPress={() => {
                                 setType(true)
-                                // ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+                                if (!isWeb)
+                                    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
                             }}>
                             <MaterialCommunityIcons name={"calculator-variant-outline"} size={isWeb ? 60 : 30} style={styles.icon} />
                         </TouchableOpacity>
@@ -45,7 +47,9 @@ export default function HomeScreen() {
                             disabled={!type}
                             onPress={() => {
                                 setType(false)
-                                // ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
+                                setHistoryBtn(false)
+                                if (!isWeb)
+                                    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
                             }}
                         >
                             <MaterialCommunityIcons name={"square-root"} size={isWeb ? 60 : 30} style={styles.icon} />
@@ -54,6 +58,26 @@ export default function HomeScreen() {
                             <View style={styles.underline} />
                         }
                     </ThemedView>
+
+                    {!isWeb && !type
+                        &&
+                        <ThemedView>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setHistoryBtn(!historyBtn)
+                                }}
+                            >
+                                {historyBtn ?
+                                    <Ionicons name="calculator-outline" size={35} color="orange" style={styles.icon} />
+                                    :
+                                    <Ionicons name="time-outline" size={35} color="orange" style={styles.icon} />
+                                }
+
+                            </TouchableOpacity>
+                            <View style={styles.underline} />
+
+                        </ThemedView>}
+
 
 
                 </ThemedView>
@@ -73,7 +97,7 @@ export default function HomeScreen() {
 
                             :
                             <>
-                                <DisplayScience />
+                                <DisplayScience showHistory={historyBtn} />
                                 {isWeb ?
                                     <CalculatorScienceWeb />
                                     :

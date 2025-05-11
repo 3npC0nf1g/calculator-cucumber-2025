@@ -1,4 +1,4 @@
-import { Button, Text, ScrollView, StyleSheet, TextInput, TextInputKeyPressEventData, Touchable, TouchableOpacity } from 'react-native';
+import { Button, Text, ScrollView, StyleSheet, TextInput, TextInputKeyPressEventData, Touchable, TouchableOpacity, Platform } from 'react-native';
 
 import { useOperation } from "@/context/OperationContext";
 import { ThemedText } from './ThemedText';
@@ -10,6 +10,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 export default function Display() {
+    const isWeb = Platform.OS === 'web';
+
+
     // Access the operation value from the context.
     const { operation, updateOperation, operationHistory, updateOperationRequest } = useOperation();
 
@@ -22,14 +25,14 @@ export default function Display() {
 
 
     return (
-        <ThemedView style={styles.mainView}>
-            <ThemedView style={styles.historyView}>
+        <ThemedView style={isWeb ? styles.mainView : [styles.mainView]}>
+            <ThemedView style={isWeb ? styles.historyView : [styles.historyView, { borderRadius: 10, padding: 10, height: "40%", backgroundColor: 'white' }]}>
                 <Ionicons name="time-outline" size={35} color="orange" style={styles.icon} />
 
                 {
                     operationHistory.length > 0 &&
 
-                    <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentView}
+                    <ScrollView style={styles.scrollView} contentContainerStyle={isWeb ? styles.contentView : [styles.contentView, { backgroundColor: 'white' }]}
 
                         ref={scrollRef}
                         onContentSizeChange={() => {
@@ -49,7 +52,7 @@ export default function Display() {
                             operationHistory.map((elem, index) => {
                                 return (
                                     <TouchableOpacity
-                                        style={styles.historyBtn}
+                                        style={isWeb ? styles.historyBtn : [styles.historyBtn, { borderWidth: 0, borderBottomWidth: 1, width: "90%", height: "100%" }]}
                                         key={index}
                                         onPress={() => {
                                             updateOperation(elem.operation);
@@ -72,7 +75,7 @@ export default function Display() {
                 }
             </ThemedView>
             <TextInput
-                style={styles.textInput}
+                style={isWeb ? styles.textInput : [styles.textInput, { borderRadius: 30, height: "50%" }]}
                 value={operation}
                 placeholder="0"
                 editable={true}
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
     historyView: {
         width: "100%",
         height: "50%",
-        backgroundColor: "white",
+        backgroundColor: "#ECECEC",
         borderColor: "black",
     },
     scrollView: {
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         alignItems: "flex-start",
         marginTop: 10,
-
+        marginRight: 10,
 
     },
     textInput: {
@@ -133,8 +136,8 @@ const styles = StyleSheet.create({
         borderColor: "grey",
         width: '100%',
         backgroundColor: "white",
-        borderRadius: 10,
-        marginBottom: 5,
+
+        margin: 5,
         padding: 10,
     },
     historyBtnText: {

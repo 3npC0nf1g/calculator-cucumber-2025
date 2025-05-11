@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import { ThemedView } from '@/components/ThemedView';
 import CalculatorTile from "@/components/CalculatorTile";
-import { SCI_ROWS, SCI_ROWS_MOBILE } from '@/constants/SciButtons';
+import { SCI_ROWS_MOBILE } from '@/constants/SciButtons';
 
 
 
@@ -33,7 +33,7 @@ export default function CalculatorScienceMobile() {
 const styles = StyleSheet.create({
 
     mainView: {
-        flex: 1,
+        height: "80%",
 
     },
     row: {

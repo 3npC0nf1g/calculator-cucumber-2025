@@ -1,36 +1,39 @@
 import { StyleSheet } from 'react-native';
 
+import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useState } from "react";
 import CalculatorTile from "@/components/CalculatorTile";
 import { SCI_ROWS } from '@/constants/SciButtons';
 
 
 
+export default function Calculator() {
 
-
-
-export default function CalculatorScienceWeb() {
-
+    const WEB_ROWS = SCI_ROWS.map((item) => item.filter((txt) => txt.text !== "⌫"))
     return (
         <ThemedView style={styles.mainView}>
-            {SCI_ROWS.map((row, rowIdx) => (
+            {WEB_ROWS.map((row, rowIdx) => (
                 <ThemedView style={styles.row} key={rowIdx}>
+
                     {row.map((txt) => (
                         <CalculatorTile
                             key={txt.key}
                             text={txt.text}
                             type={txt.type}
                             value={txt.value}
-                            form='scientific'
+                            form="standard"
                         />
                     ))}
                 </ThemedView>
             ))}
         </ThemedView>
-    );
-}
+    )
+
+};
 
 const styles = StyleSheet.create({
+
 
     mainView: {
         flex: 1

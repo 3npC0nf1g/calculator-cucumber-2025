@@ -14,9 +14,10 @@ type CalculatorTileProps = {
 }
 
 export default function CalculatorTile({ type, text, value, form }: Readonly<CalculatorTileProps>) {
-    const { appendOperation, clearOperation, operation, sendOperation, clearOperationRequest, appendOperationRequest, clearAll } = useOperation();
+    const { appendOperation, clearOperation, operation, sendOperation, clearOperationRequest, appendOperationRequest, clearAll, backPress } = useOperation();
 
     const big: boolean = Platform.OS !== "web" && form === "scientific";
+    const isWeb: boolean = Platform.OS === "web";
 
     const handlePress = () => {
 
@@ -35,6 +36,10 @@ export default function CalculatorTile({ type, text, value, form }: Readonly<Cal
                 } else if (value === "=") {
                     sendOperation();
                 };
+                if (value === "backspace()") {
+                    backPress();
+                    clearOperationRequest();
+                }
                 break;
             case "operation":
                 if (value == "%") {
@@ -70,7 +75,7 @@ export default function CalculatorTile({ type, text, value, form }: Readonly<Cal
                 style={styles.btn}
                 onPress={handlePress}
             >
-                <ThemedText type={!big ? 'title' : 'default'} style={styles.tileText}>
+                <ThemedText type={!big ? 'title' : 'default'} style={isWeb ? styles.tileText : [styles.tileText, { lineHeight: 40 }]}>
                     {text}
                 </ThemedText>
             </TouchableOpacity>
@@ -108,13 +113,19 @@ const styles = StyleSheet.create({
     },
     tileText: {
         color: 'white',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        textAlign: 'center',
+        fontSize: 30,
+        justifyContent: 'center',
     },
     btn: {
         flex: 1,
         width: '100%',
         height: '100%',
-        alignItems: "center", justifyContent: "center"
+        alignItems: "center",
+        justifyContent: "center",
+        alignContent: 'center',
+
     },
 
 })
