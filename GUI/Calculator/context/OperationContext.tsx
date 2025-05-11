@@ -84,9 +84,9 @@ export const OperationProvider: React.FC<OperationProviderProps> = ({ children }
         setResult(result?.data);
         addOperationToHistory({ operation: operation, result: result?.data, request: operationRequest });
         clearOperation();
-        setOperation(result?.data);
+        setOperation(result?.data.toString());
         clearOperationRequest();
-        setOperationRequest(result?.data);
+        setOperationRequest(result?.data.toString());
         return result?.data;
 
     }

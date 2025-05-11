@@ -10,10 +10,9 @@ import { BASE_ROWS } from '@/constants/BaseButtons';
 
 export default function Calculator() {
 
-    const WEB_ROWS = BASE_ROWS.map((item) => item.filter((txt) => txt.text !== "⌫"))
     return (
         <ThemedView style={styles.mainView}>
-            {WEB_ROWS.map((row, rowIdx) => (
+            {BASE_ROWS.map((row, rowIdx) => (
                 <ThemedView style={styles.row} key={rowIdx}>
 
                     {row.map((txt) => (

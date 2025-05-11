@@ -14,13 +14,14 @@ type CalculatorTileProps = {
 }
 
 export default function CalculatorTile({ type, text, value, form }: Readonly<CalculatorTileProps>) {
-    const { appendOperation, clearOperation, operation, sendOperation, clearOperationRequest, appendOperationRequest, clearAll, backPress } = useOperation();
+    const { appendOperation, clearOperation, operation, sendOperation, clearOperationRequest, appendOperationRequest, clearAll, backPress, operationRequest } = useOperation();
 
     const big: boolean = Platform.OS !== "web" && form === "scientific";
     const isWeb: boolean = Platform.OS === "web";
 
     const handlePress = () => {
 
+        console.log("text", operation, "request", operationRequest);
         switch (type) {
             case "number":
                 if (operation === "0" && value !== ".") {
@@ -38,7 +39,6 @@ export default function CalculatorTile({ type, text, value, form }: Readonly<Cal
                 };
                 if (value === "backspace()") {
                     backPress();
-                    clearOperationRequest();
                 }
                 break;
             case "operation":
@@ -51,7 +51,29 @@ export default function CalculatorTile({ type, text, value, form }: Readonly<Cal
                     appendOperation(text)
                     appendOperationRequest(value);
                     break;
+                } if (value === "^2") {
+                    console.log("operation", operation);
+                    // Match the last numeric value or closing parenthesis for power(x,2)
+                    const match = operation.match(/(?:\d+|\))$/);
+
+                    if (match) {
+                        const lastOperand = match[0];
+                        const start = operation.length - lastOperand.length;
+
+                        // Update display (e.g., turn 5 into 5^2)
+                        const newDisplay = operation.slice(0, start) + `${lastOperand}^2`;
+                        clearOperation();
+                        appendOperation(newDisplay);
+
+                        // Update request string (e.g., turn 5 into power(5,2))
+                        const newRequest = operation.slice(0, start) + `power(${lastOperand},2)`;
+                        clearOperationRequest();
+                        appendOperationRequest(newRequest);
+                    }
+
+                    return;
                 }
+
 
                 appendOperation(value);
                 appendOperationRequest(value);
