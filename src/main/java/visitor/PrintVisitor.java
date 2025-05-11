@@ -31,7 +31,7 @@ public class PrintVisitor extends Visitor {
 
     @Override
     public void visit(MyNumber n) {
-        result = Integer.toString(n.getValue());
+        result = Integer.toString(n.getValue().getValueInt());
     }
 
     @Override

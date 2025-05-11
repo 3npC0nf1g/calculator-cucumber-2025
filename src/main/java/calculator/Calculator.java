@@ -2,7 +2,6 @@ package calculator;
 
 import calculator.util.AngleConverter;
 import visitor.Evaluator;
-import calculator.values.NumericValue;
 
 /**
  * This class represents the core logic of a Calculator.
@@ -69,7 +68,7 @@ public class Calculator {
      * @param e the arithmetic Expression to be evaluated
      * @return The result of the evaluation as a NumericValue.
      */
-    public NumericValue  eval(Expression e) {
+    public Integer  eval(Expression e) {
         // Create a new visitor to evaluate expressions.
         Evaluator v = new Evaluator();
         // Ask the expression to accept this visitor to start the evaluation process.
