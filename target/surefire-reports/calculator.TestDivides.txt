@@ -1,0 +1,34 @@
+-------------------------------------------------------------------------------
+Test set: calculator.TestDivides
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 2, Errors: 1, Skipped: 0, Time elapsed: 0.097 s <<< FAILURE! -- in calculator.TestDivides
+calculator.TestDivides.testComplexPrefixDivisionByZero -- Time elapsed: 0.061 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Should not throw exception in prefix complex division by zero
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
+	at calculator.TestDivides.testComplexPrefixDivisionByZero(TestDivides.java:140)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+calculator.TestDivides.testComplexPostfixDivisionByZero -- Time elapsed: 0.002 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Should not throw exception in postfix complex division by zero
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
+	at calculator.TestDivides.testComplexPostfixDivisionByZero(TestDivides.java:124)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+calculator.TestDivides.testDivisionByZeroRational -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.ArithmeticException: Division by zero is not allowed
+	at calculator.values.IntegerValue.divide(IntegerValue.java:62)
+	at calculator.Divides.op(Divides.java:54)
+	at visitor.Evaluator.visit(Evaluator.java:70)
+	at calculator.Operation.accept(Operation.java:106)
+	at calculator.Calculator.eval(Calculator.java:76)
+	at calculator.TestDivides.testDivisionByZeroRational(TestDivides.java:89)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
