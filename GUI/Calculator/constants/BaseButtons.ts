@@ -1,9 +1,9 @@
 type SciButtonType = "special" | "operation" | "number";
 interface SciButton {
-    key: string;             // unique React key / lookup id
-    value: string;             // what goes into your eval engine
-    text: string;             // what the user sees
-    type: SciButtonType;      // category for styling / logic
+    key: string;
+    value: string;
+    text: string;
+    type: SciButtonType;
 }
 
 export const BASE_ROWS: SciButton[][] = [

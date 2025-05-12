@@ -1,14 +1,15 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useState } from "react";
 import CalculatorTile from "@/components/CalculatorTile";
 import { SCI_ROWS } from '@/constants/SciButtons';
+import { useOperation } from '@/context/OperationContext';
 
 
 
 export default function Calculator() {
+    const { toastMessage } = useOperation();
 
     const WEB_ROWS = SCI_ROWS.map((item) => item.filter((txt) => txt.text !== "⌫"))
     return (
@@ -27,6 +28,23 @@ export default function Calculator() {
                     ))}
                 </ThemedView>
             ))}
+
+
+            {toastMessage !== "" &&
+
+                <ThemedText type='title' style={{
+                    position: 'fixed',
+                    top: "10%",
+                    right: '40%',
+                    backgroundColor: 'black',
+                    opacity: 0.6,
+                    zIndex: 9999,
+                    width: 300,
+                    height: 100,
+                }} >
+                    a {toastMessage}
+                </ThemedText>
+            }
         </ThemedView>
     )
 

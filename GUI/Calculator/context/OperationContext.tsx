@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { createContext, useContext, useMemo, useState, ReactNode } from 'react';
 import { Alert } from 'react-native';
+import { Platform } from 'react-native';
+
 
 type HistoryEntry = { operation: string, result: string, request: string };
-// Define the shape of our context
 type OperationContextType = {
     operation: string;
     operationRequest: string;
@@ -19,16 +20,18 @@ type OperationContextType = {
     clearAll: () => void;
     result: string;
     backPress: () => void;
+    toggleFracDec: () => Promise<void>;
+    toggleDegRad: () => Promise<void>;
+    toastMessage: string | null;
+
 };
 
-// Create the context. We use undefined as the default value.
 const OperationContext = createContext<OperationContextType | undefined>(undefined);
 
 type OperationProviderProps = {
     children: ReactNode;
 };
 
-// Create a functional provider component
 export const OperationProvider: React.FC<OperationProviderProps> = ({ children }) => {
     const [operation, setOperation] = useState<string>('');
     const [operationRequest, setOperationRequest] = useState<string>('')
@@ -52,6 +55,14 @@ export const OperationProvider: React.FC<OperationProviderProps> = ({ children }
         setOperationHistory([])
     };
 
+
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+    const showToast = (message: string) => {
+        setToastMessage(message);
+        setTimeout(() => setToastMessage(null), 2000);
+    };
+
     const removeOneOperation = () => {
         setOperation(prev => prev.slice(0, -1));
     }
@@ -70,26 +81,46 @@ export const OperationProvider: React.FC<OperationProviderProps> = ({ children }
         setOperationHistory([]);
     };
     const sendOperation = async () => {
-        console.log("Sending operation:", operationRequest);
         const encoded = encodeURIComponent(operationRequest);
-
-        let result;
         try {
-            result = await axios.get(`http://localhost:8080/api/evaluate?expression=${encoded}`)
+            const result = await axios.get(`http://localhost:8080/api/evaluate?expression=${encoded}`);
+            setResult(result.data);
+            addOperationToHistory({ operation, result: result.data, request: operationRequest });
+
+            setOperation((String(result.data)));
+            setOperationRequest(String(result.data));
+
+            return result.data;
+        } catch (error: any) {
+            console.error("Error in sendOperation:", error);
+            const errorMessage = error.response?.data || "Unexpected error";
+
+            if (Platform.OS === 'web') {
+                window.alert("Calculation failed:\n" + errorMessage);
+            } else {
+                Alert.alert("Calculation failed", errorMessage);
+            }
+            clearOperation();
+            clearOperationRequest();
+            return "Error";
+        }
+    };
+
+    const toggleFracDec = async () => {
+        try {
+            const res = await axios.get("http://localhost:8080/api/toggle-display");
         } catch (error) {
-            Alert.alert("API error:", error instanceof Error ? error.message : String(error));
-        };
+            showToast("Error toggling display mode");
+        }
+    };
 
-        console.log(result?.data);
-        setResult(result?.data);
-        addOperationToHistory({ operation: operation, result: result?.data, request: operationRequest });
-        clearOperation();
-        setOperation(result?.data.toString());
-        clearOperationRequest();
-        setOperationRequest(result?.data.toString());
-        return result?.data;
-
-    }
+    const toggleDegRad = async () => {
+        try {
+            const res = await axios.get("http://localhost:8080/api/toggle-angle-mode");
+        } catch (error) {
+            showToast("Error toggling angle mode");
+        }
+    };
 
     const contextValue = useMemo(() => ({
         operation,
@@ -106,6 +137,9 @@ export const OperationProvider: React.FC<OperationProviderProps> = ({ children }
         clearOperationRequest,
         clearAll,
         backPress,
+        toggleFracDec,
+        toggleDegRad,
+        toastMessage,
     }), [operation]);
 
     return (
@@ -115,7 +149,6 @@ export const OperationProvider: React.FC<OperationProviderProps> = ({ children }
     );
 };
 
-// Custom hook to consume the context
 export const useOperation = (): OperationContextType => {
     const context = useContext(OperationContext);
     if (!context) {

@@ -1,4 +1,4 @@
-import { Button, Text, ScrollView, StyleSheet, TextInput, TextInputKeyPressEventData, Touchable, TouchableOpacity, Platform } from 'react-native';
+import { Button, Text, ScrollView, StyleSheet, TextInput, TextInputKeyPressEventData, Touchable, TouchableOpacity, Platform, NativeSyntheticEvent } from 'react-native';
 
 import { useOperation } from "@/context/OperationContext";
 import { ThemedText } from './ThemedText';
@@ -13,19 +13,31 @@ export default function Display() {
     const isWeb = Platform.OS === 'web';
 
 
-    // Access the operation value from the context.
-    const { operation, updateOperation, operationHistory, updateOperationRequest } = useOperation();
 
+    const { operation, updateOperation, operationHistory, updateOperationRequest, operationRequest, toastMessage } = useOperation();
     const handleChangeText = (text: string) => {
         const filtered = text.replace(/^[0-9+\-*/.()×]/g, '');
         updateOperation(filtered);
     };
+    const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+        const key = e.nativeEvent.key;
+
+        if (key === 'Backspace') {
+            updateOperation(operation.slice(0, -1));
+            updateOperationRequest(operationRequest.slice(0, -1));
+        }
+
+
+    };
+
 
     const scrollRef = useRef<ScrollView | null>(null);
 
 
     return (
         <ThemedView style={isWeb ? styles.mainView : [styles.mainView]}>
+
+
             <ThemedView style={isWeb ? styles.historyView : [styles.historyView, { borderRadius: 10, padding: 10, height: "40%", backgroundColor: 'white' }]}>
                 <Ionicons name="time-outline" size={35} color="orange" style={styles.icon} />
 
@@ -78,8 +90,9 @@ export default function Display() {
                 style={isWeb ? styles.textInput : [styles.textInput, { borderRadius: 30, height: "50%" }]}
                 value={operation}
                 placeholder="0"
-                editable={true}
+                editable={isWeb}
                 multiline={true}
+                onKeyPress={handleKeyPress}
                 onChangeText={handleChangeText} />
         </ThemedView>
 

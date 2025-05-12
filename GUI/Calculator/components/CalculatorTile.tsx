@@ -14,7 +14,7 @@ type CalculatorTileProps = {
 }
 
 export default function CalculatorTile({ type, text, value, form }: Readonly<CalculatorTileProps>) {
-    const { appendOperation, clearOperation, operation, sendOperation, clearOperationRequest, appendOperationRequest, clearAll, backPress, operationRequest } = useOperation();
+    const { appendOperation, clearOperation, operation, sendOperation, clearOperationRequest, toggleDegRad, toggleFracDec, appendOperationRequest, clearAll, backPress, operationRequest } = useOperation();
 
     const big: boolean = Platform.OS !== "web" && form === "scientific";
     const isWeb: boolean = Platform.OS === "web";
@@ -27,6 +27,22 @@ export default function CalculatorTile({ type, text, value, form }: Readonly<Cal
                 if (operation === "0" && value !== ".") {
                     clearOperation();
                     clearOperationRequest();
+                    return;
+                }
+                if (value === "e") {
+                    appendOperation(value);
+                    appendOperationRequest("exp(1)");
+                    return
+                }
+                if (value === "π") {
+                    appendOperation("π");
+                    appendOperationRequest("pi");
+                    return
+                }
+                if (value === "1/x") {
+                    appendOperationRequest("1/(");
+                    appendOperation("1/(");
+                    return
                 }
                 appendOperation(value);
                 appendOperationRequest(value);
@@ -39,6 +55,12 @@ export default function CalculatorTile({ type, text, value, form }: Readonly<Cal
                 };
                 if (value === "backspace()") {
                     backPress();
+                }
+                if (value === "toggledeg") {
+                    toggleDegRad();
+                }
+                if (value === "togglefrac") {
+                    toggleFracDec();
                 }
                 break;
             case "operation":
@@ -53,19 +75,16 @@ export default function CalculatorTile({ type, text, value, form }: Readonly<Cal
                     break;
                 } if (value === "^2") {
                     console.log("operation", operation);
-                    // Match the last numeric value or closing parenthesis for power(x,2)
                     const match = operation.match(/(?:\d+|\))$/);
 
                     if (match) {
                         const lastOperand = match[0];
                         const start = operation.length - lastOperand.length;
 
-                        // Update display (e.g., turn 5 into 5^2)
                         const newDisplay = operation.slice(0, start) + `${lastOperand}^2`;
                         clearOperation();
                         appendOperation(newDisplay);
 
-                        // Update request string (e.g., turn 5 into power(5,2))
                         const newRequest = operation.slice(0, start) + `power(${lastOperand},2)`;
                         clearOperationRequest();
                         appendOperationRequest(newRequest);
@@ -73,8 +92,54 @@ export default function CalculatorTile({ type, text, value, form }: Readonly<Cal
 
                     return;
                 }
+                if (value === "log") {
+                    appendOperation("log(");
 
+                    appendOperationRequest("log(10,");
 
+                    return;
+                }
+                if (value === "ln") {
+                    appendOperation("ln(");
+
+                    appendOperationRequest("ln(");
+
+                    return;
+                }
+                if (value === "exp") {
+                    appendOperation("e^(");
+
+                    appendOperationRequest("exp(");
+
+                    return;
+                }
+                if (value === "^") {
+                    const match = operation.match(/(?:\d+(?:\.\d+)?|\))$/);
+
+                    if (match) {
+                        const base = match[0];
+                        const start = operation.length - base.length;
+
+                        const newDisplay = operation.slice(0, start) + `${base}^(`;
+                        clearOperation();
+                        appendOperation(newDisplay);
+
+                        const newRequest = operationRequest.slice(0, start) + `power(${base},`;
+                        clearOperationRequest();
+                        appendOperationRequest(newRequest);
+                    } else {
+
+                        appendOperation("^(");
+                        appendOperationRequest("power(");
+                    }
+
+                    return;
+                }
+                if (value === "√") {
+                    appendOperation("√(");
+                    appendOperationRequest("sqrt(");
+                    return;
+                }
                 appendOperation(value);
                 appendOperationRequest(value);
                 break;

@@ -1,4 +1,4 @@
-import { Button, Text, ScrollView, StyleSheet, TextInput, TextInputKeyPressEventData, Touchable, TouchableOpacity, Platform } from 'react-native';
+import { Button, Text, ScrollView, StyleSheet, TextInput, TextInputKeyPressEventData, Touchable, TouchableOpacity, Platform, NativeSyntheticEvent } from 'react-native';
 
 import { useOperation } from "@/context/OperationContext";
 import { ThemedText } from './ThemedText';
@@ -10,12 +10,21 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 export default function DisplayScience({ showHistory }: { showHistory: boolean }) {
-    // Access the operation value from the context.
-    const { operation, updateOperation, operationHistory, updateOperationRequest } = useOperation();
+    const { operation, updateOperation, operationHistory, updateOperationRequest, toastMessage, operationRequest } = useOperation();
 
     const handleChangeText = (text: string) => {
         const filtered = text.replace(/^[0-9+\-*/.()×]/g, '');
         updateOperation(filtered);
+    };
+    const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+        const key = e.nativeEvent.key;
+
+        if (key === 'Backspace') {
+            updateOperation(operation.slice(0, -1));
+            updateOperationRequest(operationRequest.slice(0, -1));
+        }
+
+
     };
 
     const isWeb: boolean = Platform.OS === 'web';
@@ -24,6 +33,8 @@ export default function DisplayScience({ showHistory }: { showHistory: boolean }
 
     return (
         <>
+
+
 
             {isWeb ?
                 <>
@@ -142,7 +153,8 @@ export default function DisplayScience({ showHistory }: { showHistory: boolean }
                                 style={styles.textInput}
                                 value={operation}
                                 placeholder="0"
-                                editable={true}
+                                onKeyPress={handleKeyPress}
+                                editable={isWeb}
                                 multiline={true}
                                 onChangeText={handleChangeText} />
                         }
@@ -151,6 +163,7 @@ export default function DisplayScience({ showHistory }: { showHistory: boolean }
                 </>
 
             }
+
 
         </>
 

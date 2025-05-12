@@ -18,8 +18,6 @@ export default function HomeScreen() {
 
 
 
-
-    // choose container component & props
     const Container = isWeb ? View : KeyboardAvoidingView;
     return (
         <ThemedView style={styles.mainView}>
@@ -86,7 +84,7 @@ export default function HomeScreen() {
                     {/* on web: simple View; on mobile: KeyboardAvoidingView */}
                     <Container
                         style={{ flex: 1 }}
-                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}  // ← invalid on View
+                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                     >
 
                         {type ?
