@@ -22,18 +22,33 @@ public class CalculatorService {
 
      * @return the result of the operation as a string or an error message in case of failure.
      */
-    public String getRep(String expression) {
-        try {
-            ExpressionParser e=new ExpressionParser();
-            logger.info(expression.trim());
-            NumericValue expr = e.parse(expression.trim());
-            return expr.toString();
+    public String getRep(String expression) throws Exception {
+        ExpressionParser e = new ExpressionParser();
+        logger.info(expression.trim());
+        NumericValue expr = e.parse(expression.trim());
+        return expr.toString();
+    }
 
-        } catch (Exception e) {
-            logger.error("Calculation failed in getRep", e);
-            return "Error in getRep: " + e.getMessage();
-        }
-        }
+
+    public void toggleAngleMode() {
+        ExpressionParser.Mode current = ExpressionParser.getMode();
+        ExpressionParser.Mode newMode = (current == ExpressionParser.Mode.RADIANS)
+                ? ExpressionParser.Mode.DEGREES
+                : ExpressionParser.Mode.RADIANS;
+
+        ExpressionParser.setMode(newMode);
+        logger.info("Angle mode toggled to: {}", newMode);
+    }
+
+    public void toggleDisplayMode() {
+        ExpressionParser.Display current = ExpressionParser.getDisplay();
+        ExpressionParser.Display newMode = (current == ExpressionParser.Display.FRACTION)
+                ? ExpressionParser.Display.DECIMAL
+                : ExpressionParser.Display.FRACTION;
+
+        ExpressionParser.setDisplay(newMode);
+        logger.info("Display mode toggled to: {}", newMode);
+    }
 
 
 }
