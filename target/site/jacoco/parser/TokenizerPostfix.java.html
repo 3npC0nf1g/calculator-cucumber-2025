@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TokenizerPostfix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Calculator with JUnit5 and Cucumber tests</a> &gt; <a href="index.source.html" class="el_package">parser</a> &gt; <span class="el_source">TokenizerPostfix.java</span></div><h1>TokenizerPostfix.java</h1><pre class="source lang-java linenums">
+package parser;
+
+import calculator.values.NumericValue;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The MyPostfixParser class provides parsing and evaluation of arithmetic expressions
+ * written in a custom Postfix (Reverse Polish) notation.
+ *
+ * Postfix expressions are transformed into Prefix expressions and then evaluated
+ * using MyPrefixParser.
+ *
+ * Supported features:
+ * - Arithmetic operators: +, -, *, /, ^, %
+ * - Functions like sin, cos, etc. via MyPrefixParser
+ * - Complex numbers [a+bi] and nested expressions
+ *
+ * Example:
+ *   ((4,5,6)+,(7,(5,2,7)/)+,9) will be transformed and evaluated properly.
+ *
+ * Author: Hugue
+ */
+
+public class TokenizerPostfix {
+
+    /** List of parsed tokens extracted from the input expression */
+    private final List&lt;String&gt; tokens;
+
+    /** Current read position in the token list */
+    private int position;
+
+
+    /**
+     * Constructs a TokenizerPostfix instance and tokenizes the given expression.
+     *
+     * @param expression the postfix arithmetic expression to tokenize
+     */
+<span class="nc" id="L41">    public TokenizerPostfix(String expression) {</span>
+<span class="nc" id="L42">        this.tokens = tokenize(expression);</span>
+<span class="nc" id="L43">        this.position = 0;</span>
+        //System.out.println(&quot;[Tokenizer] Tokens: &quot; + tokens); // pour debug
+<span class="nc" id="L45">    }</span>
+
+    /**
+     * Retrieves the list of all tokens parsed from the expression.
+     *
+     * @return the list of tokens
+     */
+    public List&lt;String&gt; getTokens() {
+<span class="nc" id="L53">        return tokens;</span>
+    }
+
+    /**
+     * Tokenizes a given arithmetic expression string into individual tokens.
+     * This method supports numbers, complex numbers, operators, and functions.
+     *
+     * @param expression the input expression to tokenize
+     * @return a list of string tokens
+     * @throws RuntimeException if an unknown character is encountered
+     */
+    private List&lt;String&gt; tokenize(String expression) {
+<span class="nc" id="L65">        List&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L66">        int i = 0;</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        while (i &lt; expression.length()) {</span>
+<span class="nc" id="L68">            char c = expression.charAt(i);</span>
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">            if (Character.isWhitespace(c)) {</span>
+<span class="nc" id="L71">                i++;</span>
+<span class="nc" id="L72">                continue;</span>
+            }
+
+<span class="nc bnc" id="L75" title="All 14 branches missed.">            if (c == '(' || c == ')' || c == ',' || c == '+' || c == '-' || c == '*' || c == '/') {</span>
+<span class="nc" id="L76">                result.add(String.valueOf(c));</span>
+<span class="nc" id="L77">                i++;</span>
+            }
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            else if (c == '[') { // nombre complexe</span>
+<span class="nc" id="L80">                StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L81">                sb.append(c);</span>
+<span class="nc" id="L82">                i++;</span>
+<span class="nc bnc" id="L83" title="All 4 branches missed.">                while (i &lt; expression.length() &amp;&amp; expression.charAt(i) != ']') {</span>
+<span class="nc" id="L84">                    sb.append(expression.charAt(i));</span>
+<span class="nc" id="L85">                    i++;</span>
+                }
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                if (i &lt; expression.length()) {</span>
+<span class="nc" id="L88">                    sb.append(']');</span>
+<span class="nc" id="L89">                    i++;</span>
+                }
+<span class="nc" id="L91">                result.add(sb.toString());</span>
+<span class="nc" id="L92">            }</span>
+<span class="nc bnc" id="L93" title="All 4 branches missed.">            else if (Character.isDigit(c) || c == '.') { // nombre réel</span>
+<span class="nc" id="L94">                StringBuilder sb = new StringBuilder();</span>
+<span class="nc bnc" id="L95" title="All 6 branches missed.">                while (i &lt; expression.length() &amp;&amp; (Character.isDigit(expression.charAt(i)) || expression.charAt(i) == '.')) {</span>
+<span class="nc" id="L96">                    sb.append(expression.charAt(i));</span>
+<span class="nc" id="L97">                    i++;</span>
+                }
+<span class="nc" id="L99">                result.add(sb.toString());</span>
+<span class="nc" id="L100">            }</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">            else if (Character.isLetter(c)) { // fonction type sin, cos, tan</span>
+<span class="nc" id="L102">                StringBuilder sb = new StringBuilder();</span>
+<span class="nc bnc" id="L103" title="All 4 branches missed.">                while (i &lt; expression.length() &amp;&amp; Character.isLetter(expression.charAt(i))) {</span>
+<span class="nc" id="L104">                    sb.append(expression.charAt(i));</span>
+<span class="nc" id="L105">                    i++;</span>
+                }
+                // Maintenant on attend une parenthèse immédiatement après
+<span class="nc bnc" id="L108" title="All 4 branches missed.">                if (i &lt; expression.length() &amp;&amp; expression.charAt(i) == '(') {</span>
+<span class="nc" id="L109">                    sb.append('(');</span>
+<span class="nc" id="L110">                    i++;</span>
+<span class="nc" id="L111">                    int parenCount = 1;</span>
+<span class="nc bnc" id="L112" title="All 4 branches missed.">                    while (i &lt; expression.length() &amp;&amp; parenCount &gt; 0) {</span>
+<span class="nc" id="L113">                        char current = expression.charAt(i);</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                        if (current == '(') parenCount++;</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">                        else if (current == ')') parenCount--;</span>
+<span class="nc" id="L116">                        sb.append(current);</span>
+<span class="nc" id="L117">                        i++;</span>
+<span class="nc" id="L118">                    }</span>
+                }
+<span class="nc" id="L120">                result.add(sb.toString());</span>
+<span class="nc" id="L121">            }</span>
+            else {
+<span class="nc" id="L123">                throw new RuntimeException(&quot;Unknown character: &quot; + c);</span>
+            }
+<span class="nc" id="L125">        }</span>
+<span class="nc" id="L126">        return result;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
