@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RationalValue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Calculator with JUnit5 and Cucumber tests</a> &gt; <a href="index.source.html" class="el_package">calculator.values</a> &gt; <span class="el_source">RationalValue.java</span></div><h1>RationalValue.java</h1><pre class="source lang-java linenums">package calculator.values;
+
+import java.math.BigInteger;
+import java.math.BigDecimal;
+import java.math.MathContext;
+
+public class RationalValue implements NumericValue {
+    private final BigInteger numerator;
+    private final BigInteger denominator;
+<span class="fc" id="L10">    private boolean isNaN = false;</span>
+
+<span class="fc" id="L12">    public static final RationalValue NaN = new RationalValue();</span>
+
+<span class="fc" id="L14">    public RationalValue(BigInteger numerator, BigInteger denominator) {</span>
+<span class="fc bfc" id="L15" title="All 2 branches covered.">        if (denominator.equals(BigInteger.ZERO)) {</span>
+<span class="fc" id="L16">            isNaN = true;</span>
+        }
+        // Normalize sign
+<span class="fc bfc" id="L19" title="All 2 branches covered.">        if (denominator.signum() &lt; 0) {</span>
+<span class="fc" id="L20">            numerator = numerator.negate();</span>
+<span class="fc" id="L21">            denominator = denominator.negate();</span>
+        }
+        // Simplify
+<span class="fc" id="L24">        BigInteger gcd = numerator.gcd(denominator);</span>
+<span class="fc" id="L25">        this.numerator = numerator.divide(gcd);</span>
+<span class="fc" id="L26">        this.denominator = denominator.divide(gcd);</span>
+<span class="fc" id="L27">    }</span>
+
+    public RationalValue(int num, int den) {
+<span class="fc" id="L30">        this(BigInteger.valueOf(num), BigInteger.valueOf(den));</span>
+<span class="fc" id="L31">    }</span>
+
+<span class="fc" id="L33">    private RationalValue() {</span>
+<span class="fc" id="L34">        this.numerator = BigInteger.ZERO;</span>
+<span class="fc" id="L35">        this.denominator = BigInteger.ONE;</span>
+<span class="fc" id="L36">        this.isNaN = true;</span>
+<span class="fc" id="L37">    }</span>
+
+    public boolean isNaN() {
+<span class="fc" id="L40">        return isNaN;</span>
+    }
+
+<span class="fc" id="L43">    public BigInteger getNumerator() { return numerator; }</span>
+<span class="fc" id="L44">    public BigInteger getDenominator() { return denominator; }</span>
+
+    @Override
+    public NumericValue add(NumericValue other) {
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (this.isNaN) return NaN;</span>
+
+<span class="pc bpc" id="L50" title="1 of 4 branches missed.">        if (other instanceof RationalValue rv &amp;&amp; rv.isNaN()) return NaN;</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (other instanceof RationalValue rationalValue) {</span>
+<span class="fc" id="L52">            BigInteger num = numerator.multiply(rationalValue.denominator).add(rationalValue.numerator.multiply(denominator));</span>
+<span class="fc" id="L53">            BigInteger den = denominator.multiply(rationalValue.denominator);</span>
+<span class="fc" id="L54">            return new RationalValue(num, den);</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        } else if (other instanceof IntegerValue integerValue) {</span>
+            // Convert IntegerValue to RationalValue (denom = 1)
+<span class="nc" id="L57">            return this.add(new RationalValue(integerValue.getValue(), 1));</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        }  else if (other instanceof RealValue) {</span>
+        // Promote this RationalValue to a RealValue and delegate the addition.
+<span class="fc" id="L60">        BigDecimal thisReal = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);</span>
+<span class="fc" id="L61">        int scale = Math.max(thisReal.scale(), ((RealValue) other).getPrecision()); // combine précision des deux</span>
+<span class="fc" id="L62">        RealValue thisAsReal = new RealValue(thisReal.doubleValue(), scale);</span>
+<span class="fc" id="L63">        return thisAsReal.add(other);</span>
+    }
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        else if (other instanceof ComplexValue) {</span>
+            // Promote this RationalValue to a ComplexValue (imaginary part = 0)
+<span class="fc" id="L67">            BigDecimal thisReal = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);</span>
+<span class="fc" id="L68">            ComplexValue thisAsComplex = new ComplexValue(thisReal, BigDecimal.ZERO);</span>
+<span class="fc" id="L69">            return thisAsComplex.add(other);</span>
+        }
+<span class="nc" id="L71">        throw new UnsupportedOperationException(&quot;Cannot add different numeric types.&quot;);</span>
+    }
+
+    @Override
+    public NumericValue subtract(NumericValue other) {
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if (this.isNaN) return NaN;</span>
+
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (other instanceof RationalValue rationalValue) {</span>
+<span class="fc" id="L79">            BigInteger num = numerator.multiply(rationalValue.denominator).subtract(rationalValue.numerator.multiply(denominator));</span>
+<span class="fc" id="L80">            BigInteger den = denominator.multiply(rationalValue.denominator);</span>
+<span class="fc" id="L81">            return new RationalValue(num, den);</span>
+        } else {
+            // Similar promotion que pour add()
+<span class="fc" id="L84">            return this.add(other.multiply(new IntegerValue(-1)));</span>
+        }
+    }
+
+    @Override
+    public NumericValue multiply(NumericValue other) {
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (this.isNaN) return NaN;</span>
+<span class="pc bpc" id="L91" title="1 of 4 branches missed.">        if (other instanceof RationalValue rv &amp;&amp; rv.isNaN()) return NaN;</span>
+
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (other instanceof RationalValue rationalValue) {</span>
+<span class="fc" id="L94">            return new RationalValue(numerator.multiply(rationalValue.numerator), denominator.multiply(rationalValue.denominator));</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        } else if (other instanceof IntegerValue integerValue) {</span>
+<span class="fc" id="L96">            return this.multiply(new RationalValue(integerValue.getValue(), 1));</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        } else if (other instanceof RealValue) {</span>
+<span class="fc" id="L98">            BigDecimal thisReal = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);</span>
+<span class="fc" id="L99">            RealValue thisAsReal = new RealValue(thisReal.doubleValue(), thisReal.precision());</span>
+<span class="fc" id="L100">            return thisAsReal.multiply(other);</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        } else if (other instanceof ComplexValue) {</span>
+<span class="fc" id="L102">            BigDecimal thisReal = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);</span>
+<span class="fc" id="L103">            ComplexValue thisAsComplex = new ComplexValue(thisReal, BigDecimal.ZERO);</span>
+<span class="fc" id="L104">            return thisAsComplex.multiply(other);</span>
+        }
+<span class="nc" id="L106">        throw new UnsupportedOperationException(&quot;Cannot multiply different numeric types.&quot;);</span>
+    }
+
+    @Override
+    public NumericValue divide(NumericValue other) {
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        if (this.isNaN) return NaN;</span>
+
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (other instanceof RationalValue rationalValue) {</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">            if (rationalValue.getNumerator().equals(BigInteger.ZERO)) {</span>
+<span class="fc" id="L115">                return NaN;</span>
+            }
+<span class="fc" id="L117">            return new RationalValue(numerator.multiply(rationalValue.denominator), denominator.multiply(rationalValue.numerator));</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        } else if (other instanceof IntegerValue integerValue) {</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">            if (integerValue.getValue() == 0) return NaN;</span>
+<span class="fc" id="L120">            return this.divide(new RationalValue(integerValue.getValue(), 1));</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        } else if (other instanceof RealValue realValue) {</span>
+<span class="pc bpc" id="L122" title="2 of 4 branches missed.">            if (realValue.isNaN() || realValue.getValue().compareTo(BigDecimal.ZERO) == 0) {</span>
+<span class="nc" id="L123">                return RationalValue.NaN;</span>
+            }
+<span class="fc" id="L125">            BigDecimal thisReal = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);</span>
+<span class="fc" id="L126">            RealValue thisAsReal = new RealValue(thisReal, realValue.getPrecision());</span>
+<span class="fc" id="L127">            return thisAsReal.divide(realValue);</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">        }else if (other instanceof ComplexValue complexValue) {</span>
+<span class="fc" id="L129">            BigDecimal thisReal = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);</span>
+<span class="fc" id="L130">            ComplexValue thisAsComplex = new ComplexValue(thisReal, BigDecimal.ZERO);</span>
+<span class="fc" id="L131">            NumericValue result = thisAsComplex.divide(complexValue);</span>
+
+            // ✅ Retourne bien un ComplexValue si attendu
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">            if (result instanceof ComplexValue) {</span>
+<span class="fc" id="L135">                return result;</span>
+            }
+
+            // Fallback en cas d'erreur de division (NaN, etc.)
+<span class="nc" id="L139">            return RationalValue.NaN;</span>
+        }
+
+<span class="nc" id="L142">        throw new UnsupportedOperationException(&quot;Cannot divide different numeric types.&quot;);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (isNaN) return &quot;NaN&quot;;</span>
+
+        // Convertir en BigDecimal pour l'affichage
+<span class="fc" id="L150">        BigDecimal decimalValue = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);</span>
+<span class="fc" id="L151">        BigDecimal absVal = decimalValue.abs();</span>
+
+        // Si la valeur est très grande ou très petite → notation scientifique
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        if ((absVal.compareTo(BigDecimal.ONE.movePointRight(6)) &gt; 0) ||</span>
+<span class="fc bfc" id="L155" title="All 4 branches covered.">                (absVal.compareTo(BigDecimal.ONE.movePointLeft(6)) &lt; 0 &amp;&amp; absVal.compareTo(BigDecimal.ZERO) != 0)) {</span>
+<span class="fc" id="L156">            return decimalValue.stripTrailingZeros().toEngineeringString();</span>
+        }
+
+        // Si la fraction est entière (dénominateur == 1)
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (denominator.equals(BigInteger.ONE)) {</span>
+<span class="fc" id="L161">            return numerator.toString();</span>
+        }
+
+        // Sinon, afficher sous forme de fraction canonique
+<span class="fc" id="L165">        return numerator + &quot;/&quot; + denominator;</span>
+    }
+
+
+
+    @Override
+    public int getValueInt() {
+<span class="fc" id="L172">        return 0;</span>
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (!(o instanceof RationalValue other)) return false;</span>
+<span class="pc bpc" id="L179" title="3 of 4 branches missed.">        if (this.isNaN &amp;&amp; other.isNaN) return true;</span>
+<span class="pc bpc" id="L180" title="2 of 4 branches missed.">        return !this.isNaN &amp;&amp; !other.isNaN &amp;&amp;</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">                numerator.equals(other.numerator) &amp;&amp;</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">                denominator.equals(other.denominator);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">        return isNaN ? 0 : numerator.hashCode() ^ denominator.hashCode();</span>
+    }
+
+
+
+
+
+
+    @Override
+    public NumericValue pow(NumericValue exponent) {
+        // (a/b)^n = a^n / b^n for integer n, else promote to real
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        if (exponent instanceof IntegerValue iv) {</span>
+<span class="fc" id="L199">            int exp = iv.getValue();</span>
+<span class="fc" id="L200">            BigInteger numPow = numerator.pow(exp);</span>
+<span class="fc" id="L201">            BigInteger denPow = denominator.pow(exp);</span>
+<span class="fc" id="L202">            return new RationalValue(numPow, denPow);</span>
+        } else {
+            // promote to real for non-integer exponent
+<span class="fc" id="L205">            BigDecimal realVal = new BigDecimal(numerator)</span>
+<span class="fc" id="L206">                    .divide(new BigDecimal(denominator), MathContext.DECIMAL128);</span>
+<span class="fc" id="L207">            double base = realVal.doubleValue();</span>
+<span class="fc" id="L208">            double exp = ((RealValue) exponent).getValue().doubleValue();</span>
+<span class="fc" id="L209">            double result = Math.pow(base, exp);</span>
+<span class="fc" id="L210">            return new RealValue(result, ((RealValue) exponent).getPrecision());</span>
+        }
+    }
+
+    @Override
+    public NumericValue root(NumericValue degree) {
+        // nth root: (a/b)^(1/n) = a^(1/n) / b^(1/n) for integer n, else promote to real
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        if (degree instanceof IntegerValue iv) {</span>
+<span class="fc" id="L218">            int n = iv.getValue();</span>
+<span class="fc" id="L219">            double numRoot = Math.pow(numerator.doubleValue(), 1.0 / n);</span>
+<span class="fc" id="L220">            double denRoot = Math.pow(denominator.doubleValue(), 1.0 / n);</span>
+<span class="fc" id="L221">            return new RealValue(numRoot / denRoot, 10);</span>
+        }
+        // non-integer degree -&gt; promote to real
+<span class="fc" id="L224">        BigDecimal realVal = new BigDecimal(numerator)</span>
+<span class="fc" id="L225">                .divide(new BigDecimal(denominator), MathContext.DECIMAL128);</span>
+<span class="fc" id="L226">        double val = realVal.doubleValue();</span>
+<span class="fc" id="L227">        double deg = ((RealValue) degree).getValue().doubleValue();</span>
+<span class="fc" id="L228">        double result = Math.pow(val, 1.0 / deg);</span>
+<span class="fc" id="L229">        return new RealValue(result, ((RealValue) degree).getPrecision());</span>
+    }
+
+    @Override
+    public NumericValue log(NumericValue base) {
+        // log_base(a/b) = ln(a/b) / ln(base)
+<span class="fc" id="L235">        BigDecimal realVal = new BigDecimal(numerator)</span>
+<span class="fc" id="L236">                .divide(new BigDecimal(denominator), MathContext.DECIMAL128);</span>
+<span class="fc" id="L237">        double z = realVal.doubleValue();</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        double b = (base instanceof IntegerValue iv)</span>
+<span class="nc" id="L239">                ? iv.getValue()</span>
+<span class="fc" id="L240">                : ((RealValue) base).getValue().doubleValue();</span>
+<span class="fc" id="L241">        double result = Math.log(z) / Math.log(b);</span>
+<span class="fc" id="L242">        return new RealValue(result, ((RealValue) base).getPrecision());</span>
+    }
+
+    @Override
+    public NumericValue inverse() {
+        // 1/(a/b) = b/a
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (numerator.equals(BigInteger.ZERO)) {</span>
+<span class="fc" id="L249">            return NaN;</span>
+        }
+<span class="fc" id="L251">        return new RationalValue(denominator, numerator);</span>
+    }
+
+    @Override
+    public NumericValue ln() {
+        // ln(a/b) = ln(a) - ln(b)
+<span class="pc bpc" id="L257" title="2 of 4 branches missed.">        if (isNaN || numerator.signum() &lt;= 0) {</span>
+<span class="fc" id="L258">            return RealValue.NaN;</span>
+        }
+<span class="nc" id="L260">        double a = numerator.doubleValue();</span>
+<span class="nc" id="L261">        double b = denominator.doubleValue();</span>
+<span class="nc" id="L262">        double result = Math.log(a) - Math.log(b);</span>
+<span class="nc" id="L263">        return new RealValue(result, 10);</span>
+    }
+
+    @Override
+    public NumericValue exp() {
+        // exp(a/b) = exp(a/b) as real
+<span class="fc" id="L269">        BigDecimal realVal = new BigDecimal(numerator)</span>
+<span class="fc" id="L270">                .divide(new BigDecimal(denominator), MathContext.DECIMAL128);</span>
+<span class="fc" id="L271">        double v = realVal.doubleValue();</span>
+<span class="fc" id="L272">        double result = Math.exp(v);</span>
+<span class="fc" id="L273">        return new RealValue(result, 10);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

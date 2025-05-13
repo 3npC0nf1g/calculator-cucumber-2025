@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TokenizerPrefix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Calculator with JUnit5 and Cucumber tests</a> &gt; <a href="index.source.html" class="el_package">parser</a> &gt; <span class="el_source">TokenizerPrefix.java</span></div><h1>TokenizerPrefix.java</h1><pre class="source lang-java linenums">package parser;
+
+import calculator.values.NumericValue;
+import calculator.values.RationalValue;
+import calculator.values.RealValue;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The TokenizerPrefix class is responsible for parsing and tokenizing
+ * a prefix arithmetic expression into a list of individual tokens.
+ *
+ * This tokenizer supports:
+ * - Numeric values: integers, decimals
+ * - Complex numbers written in brackets, for example: [3+4i]
+ * - Operators: +, -, *, /
+ * - Function and expression grouping using parentheses
+ *
+ * Tokens are extracted as strings and can be navigated sequentially.
+ *
+ * Author: Hugue
+ */
+
+public class TokenizerPrefix {
+    /** List of parsed tokens extracted from the input expression */
+    private final List&lt;String&gt; tokens;
+
+    /** Current reading position in the token list */
+<span class="nc" id="L31">    private int pos = 0;</span>
+
+
+    /**
+     * Constructs a TokenizerPrefix instance and tokenizes the given input expression.
+     *
+     * @param input the prefix expression to tokenize
+     */
+<span class="nc" id="L39">    public TokenizerPrefix(String input) {</span>
+<span class="nc" id="L40">        tokens = tokenize(input);</span>
+<span class="nc" id="L41">    }</span>
+
+    /**
+     * Tokenizes the input string into a list of tokens including operators, numbers, and expressions.
+     *
+     * @param input the raw input expression
+     * @return a list of tokens in string form
+     */
+    private List&lt;String&gt; tokenize(String input) {
+<span class="nc" id="L50">        input = input.replaceAll(&quot;,&quot;, &quot; &quot;);</span>
+<span class="nc" id="L51">        List&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L52">        StringBuilder buffer = new StringBuilder();</span>
+<span class="nc" id="L53">        boolean insideBracket = false;</span>
+
+<span class="nc" id="L55">        char[] chars = input.toCharArray();</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        for (int i = 0; i &lt; chars.length; i++) {</span>
+<span class="nc" id="L57">            char c = chars[i];</span>
+
+            // Si on est dans un complexe [...]
+<span class="nc bnc" id="L60" title="All 2 branches missed.">            if (insideBracket) {</span>
+<span class="nc" id="L61">                buffer.append(c);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">                if (c == ']') {</span>
+<span class="nc" id="L63">                    result.add(buffer.toString());</span>
+<span class="nc" id="L64">                    buffer.setLength(0);</span>
+<span class="nc" id="L65">                    insideBracket = false;</span>
+                }
+                continue;
+            }
+
+            // Gestion du signe '-' comme début d'un nombre
+<span class="nc bnc" id="L71" title="All 6 branches missed.">            if (c == '-' &amp;&amp; buffer.length() == 0</span>
+                    &amp;&amp; (i + 1 &lt; chars.length)
+<span class="nc bnc" id="L73" title="All 4 branches missed.">                    &amp;&amp; (Character.isDigit(chars[i + 1]) || chars[i + 1] == '.')) {</span>
+<span class="nc" id="L74">                buffer.append(c);</span>
+<span class="nc" id="L75">                continue;</span>
+            }
+
+            // Séparateurs
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (Character.isWhitespace(c)) {</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                if (buffer.length() &gt; 0) {</span>
+<span class="nc" id="L81">                    result.add(buffer.toString());</span>
+<span class="nc" id="L82">                    buffer.setLength(0);</span>
+                }
+                continue;
+            }
+
+            // Début d'un complexe
+<span class="nc bnc" id="L88" title="All 2 branches missed.">            if (c == '[') {</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">                if (buffer.length() &gt; 0) {</span>
+<span class="nc" id="L90">                    result.add(buffer.toString());</span>
+<span class="nc" id="L91">                    buffer.setLength(0);</span>
+                }
+<span class="nc" id="L93">                buffer.append(c);</span>
+<span class="nc" id="L94">                insideBracket = true;</span>
+<span class="nc" id="L95">                continue;</span>
+            }
+
+            // Opérateurs et parenthèses
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            if (&quot;()+-*/&quot;.indexOf(c) &gt;= 0) {</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                if (buffer.length() &gt; 0) {</span>
+<span class="nc" id="L101">                    result.add(buffer.toString());</span>
+<span class="nc" id="L102">                    buffer.setLength(0);</span>
+                }
+<span class="nc" id="L104">                result.add(Character.toString(c));</span>
+            } else {
+                // Chiffre, lettre, ou point décimal dans un nombre/rationnel
+<span class="nc" id="L107">                buffer.append(c);</span>
+            }
+        }
+
+        // Dernier buffer
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (buffer.length() &gt; 0) {</span>
+<span class="nc" id="L113">            result.add(buffer.toString());</span>
+        }
+<span class="nc" id="L115">        return result;</span>
+    }
+
+    /**
+     * Returns the full list of tokens parsed from the expression.
+     *
+     * @return list of tokens
+     */
+    public List&lt;String&gt; getTokens() {
+<span class="nc" id="L124">        return tokens;</span>
+    }
+
+    /**
+     * Checks if there are more tokens to read.
+     *
+     * @return true if more tokens are available, false otherwise
+     */
+    public boolean hasNext() {
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        return pos &lt; tokens.size();</span>
+    }
+
+    /**
+     * Returns the next token and moves the position forward.
+     *
+     * @return the next token as a string
+     */
+    public String next() {
+<span class="nc" id="L142">        return tokens.get(pos++);</span>
+    }
+
+    /**
+     * Returns the current token without advancing the position.
+     *
+     * @return the next token as a string
+     */
+    public String peek() {
+<span class="nc" id="L151">        return tokens.get(pos);</span>
+    }
+
+    /**
+     * Applies the given operator to the list of numeric arguments.
+     *
+     * @param operator the operator to apply (+, -, *, /)
+     * @param args the list of numeric arguments
+     * @return the result of applying the operator
+     * @throws RuntimeException if the operator is unknown or arguments are invalid
+     */
+    public static NumericValue applyOperator(String operator, List&lt;NumericValue&gt; args) {
+<span class="nc bnc" id="L163" title="All 5 branches missed.">        switch (operator) {</span>
+            case &quot;+&quot;:
+<span class="nc" id="L165">                NumericValue sum = new RealValue(0,10);</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">                for (NumericValue v : args) {</span>
+<span class="nc" id="L167">                    sum = sum.add(v);</span>
+<span class="nc" id="L168">                }</span>
+<span class="nc" id="L169">                return sum;</span>
+            case &quot;-&quot;:
+<span class="nc bnc" id="L171" title="All 2 branches missed.">                if (args.isEmpty()) throw new RuntimeException(&quot;No arguments for subtraction&quot;);</span>
+<span class="nc" id="L172">                NumericValue result = args.get(0);</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">                for (int i = 1; i &lt; args.size(); i++) {</span>
+<span class="nc" id="L174">                    result = result.subtract(args.get(i));</span>
+                }
+<span class="nc" id="L176">                return result;</span>
+            case &quot;*&quot;:
+<span class="nc" id="L178">                NumericValue mult = new RealValue(1,10);</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">                for (NumericValue arg : args) {</span>
+                    //System.out.println(&quot;arg : &quot;+arg);
+<span class="nc" id="L181">                    mult = mult.multiply(arg);</span>
+<span class="nc" id="L182">                }</span>
+<span class="nc" id="L183">                return mult;</span>
+            case &quot;/&quot;:
+<span class="nc bnc" id="L185" title="All 2 branches missed.">                if (args.isEmpty()) throw new RuntimeException(&quot;No arguments for division&quot;);</span>
+
+<span class="nc" id="L187">                result = args.get(0);</span>
+
+<span class="nc bnc" id="L189" title="All 2 branches missed.">                if(ExpressionParser.getDisplay()== ExpressionParser.Display.FRACTION)</span>
+                {
+<span class="nc bnc" id="L191" title="All 2 branches missed.">                    for (int i = 1; i &lt; args.size(); i++) {</span>
+<span class="nc" id="L192">                        result = new RationalValue(new BigInteger(result.toString()),new BigInteger(args.get(i).toString()));</span>
+                    }
+                }
+                else {
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                    for (int i = 1; i &lt; args.size(); i++) {</span>
+<span class="nc" id="L197">                        result = result.divide(args.get(i));</span>
+                    }                }
+
+<span class="nc" id="L200">                return result;</span>
+            default:
+<span class="nc" id="L202">                throw new RuntimeException(&quot;Unknown operator: &quot; + operator);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

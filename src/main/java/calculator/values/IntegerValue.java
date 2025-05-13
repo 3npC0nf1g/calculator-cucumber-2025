@@ -72,7 +72,7 @@ public class IntegerValue implements NumericValue {
             }
             case RealValue rv ->
                     new RealValue(this.value / rv.getValue().doubleValue(), rv.getPrecision());
-            case ComplexValue _ ->
+            case ComplexValue cv ->
                     new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).divide(other);
             default -> throw new UnsupportedOperationException(
                     "Unsupported division between IntegerValue and " + other.getClass()

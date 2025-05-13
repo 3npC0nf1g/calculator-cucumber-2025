@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CLI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Calculator with JUnit5 and Cucumber tests</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">CLI.java</span></div><h1>CLI.java</h1><pre class="source lang-java linenums">/**
+ * Command Line Interface Calculator.
+ *
+ * This class provides an interactive terminal calculator.
+ * It supports arithmetic expressions in Infix, Prefix, Postfix notations.
+ *
+ * Features:
+ * - Supports decimals, fractions (a/b), and complex numbers [a+bi]
+ * - Accepts scientific notation using E(x), e.g., 1.8 * E(2) = 180
+ * - Supports trigonometric functions: sin(x), cos(x), tan(x)
+ * - Accepts constants: pi, res (last result)
+ *
+ * Available commands:
+ * - infix, prefix, postfix : change input notation
+ * - mode : toggle between radians and degrees
+ * - display : toggle between decimal and fraction display modes
+ * - last : re-execute the previous expression
+ * - help : show usage instructions
+ * - quit / exit : exit the program
+ *
+ * Author: Hugue
+ */
+
+import calculator.*;
+import calculator.values.NumericValue;
+import parser.ExpressionParser;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
+<span class="nc" id="L33">public class CLI {</span>
+
+    /** ANSI escape code for cyan text */
+    private static final String CYAN = &quot;\u001B[36m&quot;;
+    /** ANSI escape code to reset color */
+    private static final String RESET = &quot;\u001B[0m&quot;;
+    /** ANSI escape code for white text */
+    private static final String WHITE = &quot;\u001B[97m&quot;;
+
+    /** Whether it's the first use of the CLI, used to delay the prompt. */
+<span class="nc" id="L43">    static boolean first_use = true;</span>
+
+    /** Last evaluated numeric result. */
+<span class="nc" id="L46">    static NumericValue expr = null;</span>
+
+    /** Last successfully entered input (expression) */
+<span class="nc" id="L49">    static String lastInput = null;</span>
+
+    /**
+     * Entry point of the CLI calculator.
+     *
+     * @param args Unused command-line arguments
+     */
+
+    public static void main(String[] args) {
+<span class="nc" id="L58">        runCLI();</span>
+<span class="nc" id="L59">    }</span>
+
+    /**
+     * Prints the welcome message and current settings.
+     */
+    public static void print_init() {
+<span class="nc" id="L65">        System.out.println(CYAN + &quot;Welcome to the CLI Calculator!&quot; + RESET);</span>
+
+<span class="nc" id="L67">        System.out.println(CYAN + &quot;-&quot; + WHITE + &quot; It's currently using &quot; + CYAN + capitalize(&quot;infix&quot;) + WHITE + &quot; notation&quot; + CYAN + &quot; :&quot; + WHITE);</span>
+<span class="nc" id="L68">        System.out.println(&quot;    &quot; + WHITE + &quot;Tap '&quot; + CYAN + &quot;prefix&quot; + WHITE + &quot;' to use Prefix notation&quot;);</span>
+<span class="nc" id="L69">        System.out.println(&quot;    &quot; + WHITE + &quot;Tap '&quot; + CYAN + &quot;postfix&quot; + WHITE + &quot;' to use Postfix notation&quot;);</span>
+
+<span class="nc" id="L71">        System.out.println(CYAN + &quot;-&quot; + WHITE + &quot; It's currently using &quot; + CYAN + capitalize(&quot;degrees&quot;) + CYAN + &quot; :&quot; + WHITE);</span>
+<span class="nc" id="L72">        System.out.println(&quot;    &quot; + WHITE + &quot;Tap '&quot; + CYAN + &quot;mode&quot; + WHITE + &quot;' to toggle between Radians and Degrees&quot;);</span>
+
+<span class="nc" id="L74">        System.out.println(CYAN + &quot;-&quot; + WHITE + &quot; It's currently using &quot; + CYAN + capitalize(&quot;Decimal&quot;) + WHITE + &quot; mode&quot; + CYAN + &quot; :&quot; + WHITE);</span>
+<span class="nc" id="L75">        System.out.println(&quot;    &quot; + WHITE + &quot;Tap '&quot; + CYAN + &quot;display&quot; + WHITE + &quot;' to toggle between Fraction and Decimal mode&quot;);</span>
+
+<span class="nc" id="L77">        System.out.println(CYAN + &quot;-&quot; + WHITE + &quot; Tap '&quot; + CYAN + &quot;help&quot; + WHITE + &quot;' for instructions&quot;);</span>
+<span class="nc" id="L78">        System.out.println(CYAN + &quot;-&quot; + WHITE + &quot; Tap '&quot; + CYAN + &quot;quit&quot; + WHITE + &quot;' to close the program&quot; + RESET);</span>
+<span class="nc" id="L79">    }</span>
+
+
+    /**
+     * Displays the list of supported commands and instructions.
+     */
+    public static void print_menu() {
+<span class="nc" id="L86">        System.err.println(CYAN + &quot;Instructions :&quot; + WHITE);</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (ExpressionParser.getNotation() == ExpressionParser.Notation.INFIX)</span>
+<span class="nc" id="L88">            System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; Enter an Infix arithmetic expression&quot; + CYAN + &quot; (e.g.:&quot; + WHITE + &quot; 3 + 4 * 2&quot; + CYAN + &quot;)&quot;);</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (ExpressionParser.getNotation() == ExpressionParser.Notation.PREFIX)</span>
+<span class="nc" id="L90">            System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; Enter a Prefix arithmetic expression&quot; + CYAN + &quot; (e.g.:&quot; + WHITE + &quot; + 3 (* 4 2)&quot; + CYAN + &quot;)&quot;);</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (ExpressionParser.getNotation() == ExpressionParser.Notation.POSTFIX)</span>
+<span class="nc" id="L92">            System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; Enter a Postfix arithmetic expression&quot; + CYAN + &quot; (e.g.:&quot; + WHITE + &quot; (4 2 *) 3 +&quot; + CYAN + &quot;)&quot;);</span>
+
+
+<span class="nc" id="L95">        System.err.println(CYAN + &quot;Information :&quot; + WHITE);</span>
+<span class="nc" id="L96">        System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; It's currently using &quot; + CYAN + capitalize(ExpressionParser.getNotation().toString()) + WHITE + &quot; notation&quot; + CYAN + &quot; :&quot; + WHITE);</span>
+
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (ExpressionParser.getNotation() != ExpressionParser.Notation.INFIX)</span>
+<span class="nc" id="L99">            System.err.println(&quot;    &quot; + WHITE + &quot;Tap '&quot; + CYAN + &quot;infix&quot; + WHITE + &quot;' to use Infix notation&quot;);</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        if (ExpressionParser.getNotation() != ExpressionParser.Notation.PREFIX)</span>
+<span class="nc" id="L101">            System.err.println(&quot;    &quot; + WHITE + &quot;Tap '&quot; + CYAN + &quot;prefix&quot; + WHITE + &quot;' to use Prefix notation&quot;);</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (ExpressionParser.getNotation() != ExpressionParser.Notation.POSTFIX)</span>
+<span class="nc" id="L103">            System.err.println(&quot;    &quot; + WHITE + &quot;Tap '&quot; + CYAN + &quot;postfix&quot; + WHITE + &quot;' to use Postfix notation&quot;);</span>
+
+<span class="nc" id="L105">        System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; Supported types&quot; + CYAN + &quot;:&quot; + WHITE + &quot; integers, decimals, fractions (&quot; + CYAN + &quot;a/b&quot; + WHITE + &quot;), complex &quot; + CYAN + &quot;[a+bi]&quot; + WHITE);</span>
+<span class="nc" id="L106">        System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; Scientific notation supported&quot; + CYAN + &quot; (e.g.:&quot; + WHITE + &quot; 1.8 * &quot; + CYAN + &quot;E&quot; + WHITE + &quot;(X) = 1.8*10^X&quot; + CYAN + &quot;)&quot;);</span>
+
+<span class="nc" id="L108">        System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; You can write '&quot; + CYAN + &quot;res&quot; + WHITE + &quot;' to use your last result&quot;);</span>
+<span class="nc" id="L109">        System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; You can write '&quot; + CYAN + &quot;pi&quot; + WHITE + &quot;' to use π&quot;);</span>
+<span class="nc" id="L110">        System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; You can write '&quot; + CYAN + &quot;last&quot; + WHITE + &quot;' to run again the last operation&quot;);</span>
+<span class="nc" id="L111">        System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; Supported functions&quot; + CYAN + &quot;: sin&quot;+WHITE+&quot;(x),&quot;+CYAN+&quot; cos&quot;+WHITE+&quot;(x), &quot;+CYAN+&quot;tan&quot;+WHITE+&quot;(x)&quot;);</span>
+
+<span class="nc" id="L113">        System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; It's currently using &quot; + CYAN + capitalize(ExpressionParser.getDisplay().toString()) + WHITE + &quot; mode&quot; + CYAN + &quot; :&quot; + WHITE);</span>
+<span class="nc" id="L114">        System.err.println(&quot;    &quot; + WHITE + &quot;Tap '&quot; + CYAN + &quot;display&quot; + WHITE + &quot;' to toggle between Fraction and Decimal mode&quot;);</span>
+
+<span class="nc" id="L116">        System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; It's currently using &quot; + CYAN + capitalize(ExpressionParser.getMode().toString()) + WHITE + &quot; mode&quot; + CYAN + &quot; :&quot; + WHITE);</span>
+<span class="nc" id="L117">        System.err.println(&quot;    &quot; + WHITE + &quot;Tap '&quot; + CYAN + &quot;mode&quot; + WHITE + &quot;' to toggle between radians and degrees&quot;);</span>
+<span class="nc" id="L118">        System.err.println(CYAN + &quot;-&quot; + WHITE + &quot; Tap '&quot; + CYAN + &quot;quit&quot; + WHITE + &quot;' to close the program&quot; + RESET);</span>
+<span class="nc" id="L119">    }</span>
+
+
+    /**
+     * Capitalizes the first character of the given string.
+     *
+     * @param text The string to capitalize
+     * @return The capitalized string
+     */
+    public static String capitalize(String text) {
+<span class="nc bnc" id="L129" title="All 4 branches missed.">        if (text == null || text.isEmpty()) {</span>
+<span class="nc" id="L130">            return text;</span>
+        }
+<span class="nc" id="L132">        return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();</span>
+    }
+
+    /**
+     * Starts the interactive CLI calculator loop.
+     * Handles user input, commands, and expression evaluation.
+     */
+    public static void runCLI() {
+<span class="nc" id="L140">        Scanner scanner = new Scanner(System.in);</span>
+<span class="nc" id="L141">        ExpressionParser exp=new ExpressionParser();</span>
+<span class="nc" id="L142">        print_init();</span>
+
+<span class="nc" id="L144">        Set&lt;String&gt; commands = new HashSet&lt;&gt;(Arrays.asList(</span>
+                &quot;infix&quot;, &quot;prefix&quot;, &quot;postfix&quot;, &quot;mode&quot;, &quot;display&quot;, &quot;help&quot;, &quot;exit&quot;
+        ));
+
+        while (true) {
+<span class="nc bnc" id="L149" title="All 2 branches missed.">            if(!first_use) {</span>
+                try {
+<span class="nc" id="L151">                    Thread.sleep(500); // 1000 millisecondes = 1 seconde</span>
+<span class="nc" id="L152">                    first_use=false;</span>
+<span class="nc" id="L153">                } catch (InterruptedException e) {</span>
+<span class="nc" id="L154">                    throw new RuntimeException(e);</span>
+<span class="nc" id="L155">                }</span>
+            }
+<span class="nc" id="L157">            System.err.print(WHITE+&quot;&gt;&gt;&gt; &quot;+RESET);</span>
+<span class="nc" id="L158">            String input = scanner.nextLine().trim();</span>
+
+<span class="nc bnc" id="L160" title="All 2 branches missed.">            if (input.equalsIgnoreCase(&quot;exit&quot;)) {</span>
+<span class="nc" id="L161">                System.out.println(&quot;Goodbye!&quot;);</span>
+<span class="nc" id="L162">                break;</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">            } else if (input.equalsIgnoreCase(&quot;help&quot;)) {</span>
+<span class="nc" id="L164">                print_menu();</span>
+<span class="nc" id="L165">                continue;</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">            } else if (input.equalsIgnoreCase(&quot;mode&quot;)) {</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                if(ExpressionParser.getMode()== ExpressionParser.Mode.DEGREES) {</span>
+<span class="nc" id="L168">                    ExpressionParser.setMode(ExpressionParser.Mode.RADIANS);</span>
+<span class="nc" id="L169">                    String txt=&quot;Mode set to Radians&quot;;</span>
+<span class="nc" id="L170">                    System.err.println(&quot;\u001B[97m &quot; + txt + &quot;\u001B[0m&quot;);</span>
+<span class="nc" id="L171">                }</span>
+                else
+                {
+<span class="nc" id="L174">                    ExpressionParser.setMode(ExpressionParser.Mode.DEGREES);</span>
+<span class="nc" id="L175">                    String txt=&quot;Mode set to Degrees&quot;;</span>
+<span class="nc" id="L176">                    System.err.println(&quot;\u001B[97m &quot; + txt + &quot;\u001B[0m&quot;);</span>
+                }
+<span class="nc" id="L178">                continue;</span>
+            }
+<span class="nc bnc" id="L180" title="All 2 branches missed.">            else if (input.equalsIgnoreCase(&quot;Infix&quot;)) {</span>
+<span class="nc" id="L181">                ExpressionParser.setNotation(ExpressionParser.Notation.INFIX);</span>
+<span class="nc" id="L182">                String txt=&quot;Notation set to &quot; + CYAN+capitalize(ExpressionParser.getNotation().toString().toLowerCase());</span>
+<span class="nc" id="L183">                System.err.println(&quot;\u001B[97m &quot; + txt + &quot;\u001B[0m&quot;);</span>
+<span class="nc" id="L184">            }</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">            else if (input.equalsIgnoreCase(&quot;Prefix&quot;)) {</span>
+<span class="nc" id="L186">                ExpressionParser.setNotation(ExpressionParser.Notation.PREFIX);</span>
+<span class="nc" id="L187">                String txt=&quot;Notation set to &quot; + CYAN+capitalize(ExpressionParser.getNotation().toString().toLowerCase());</span>
+<span class="nc" id="L188">                System.err.println(&quot;\u001B[97m &quot; + txt + &quot;\u001B[0m&quot;);</span>
+<span class="nc" id="L189">            }</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">            else if (input.equalsIgnoreCase(&quot;Postfix&quot;)) {</span>
+<span class="nc" id="L191">                ExpressionParser.setNotation(ExpressionParser.Notation.POSTFIX);</span>
+<span class="nc" id="L192">                String txt=&quot;Notation set to &quot; + CYAN+capitalize(ExpressionParser.getNotation().toString().toLowerCase());</span>
+<span class="nc" id="L193">                System.err.println(&quot;\u001B[97m &quot; + txt + &quot;\u001B[0m&quot;);</span>
+<span class="nc" id="L194">                continue;</span>
+            }
+
+<span class="nc bnc" id="L197" title="All 2 branches missed.">            else if (input.equalsIgnoreCase(&quot;display&quot;)) {</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">                if(ExpressionParser.getDisplay()== ExpressionParser.Display.FRACTION)</span>
+                {
+<span class="nc" id="L200">                    ExpressionParser.setDisplay(ExpressionParser.Display.DECIMAL);</span>
+                }
+                else
+                {
+<span class="nc" id="L204">                    ExpressionParser.setDisplay(ExpressionParser.Display.FRACTION);</span>
+                }
+<span class="nc" id="L206">                String txt=&quot;Display mode set to &quot; + CYAN+capitalize(ExpressionParser.getDisplay().toString())+WHITE;</span>
+<span class="nc" id="L207">                System.err.println(&quot;\u001B[97m &quot; + txt + &quot;\u001B[0m&quot;);</span>
+<span class="nc" id="L208">                continue;</span>
+            }
+<span class="nc bnc" id="L210" title="All 2 branches missed.">            if (input.equalsIgnoreCase(&quot;last&quot;)) {</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">                if (lastInput == null) {</span>
+<span class="nc" id="L212">                    System.err.println(WHITE + &quot;No previous expression to repeat.&quot; + RESET);</span>
+<span class="nc" id="L213">                    continue;</span>
+                }
+<span class="nc" id="L215">                input = lastInput;</span>
+<span class="nc" id="L216">                System.err.println(WHITE +&quot;&gt;&gt;&gt; &quot;+ input + RESET);</span>
+            }
+
+<span class="nc bnc" id="L219" title="All 2 branches missed.">            if (commands.contains(input.toLowerCase())) {</span>
+<span class="nc" id="L220">                continue;</span>
+            }
+            try {
+<span class="nc" id="L223">                expr = exp.parse(input);</span>
+<span class="nc" id="L224">                lastInput = input;</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">                if(expr!=null)</span>
+                {
+<span class="nc" id="L227">                    System.err.println(WHITE + expr + &quot;\u001B[0m&quot;);</span>
+                    //System.err.println(&quot;= &quot;+expr);
+                }
+<span class="nc" id="L230">            } catch (Exception e) {</span>
+<span class="nc" id="L231">                System.out.println(&quot;Error: &quot; + e.getMessage());</span>
+<span class="nc" id="L232">            }</span>
+<span class="nc" id="L233">        }</span>
+
+<span class="nc" id="L235">        scanner.close();</span>
+<span class="nc" id="L236">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
