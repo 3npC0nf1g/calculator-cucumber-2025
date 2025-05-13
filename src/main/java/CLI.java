@@ -24,8 +24,12 @@
 import calculator.*;
 import calculator.conversion.UnitConverter;
 import calculator.conversion.Units;
+import calculator.values.BooleanValue;
 import calculator.values.NumericValue;
+import parser.BooleanExpressionEvaluator.*;
+import parser.BooleanExpressionParser;
 import parser.ExpressionParser;
+import parser.MyInfixParser;
 
 import java.util.*;
 
@@ -248,6 +252,18 @@ public class CLI {
                 }
                 continue;
             }
+            else if (input.toLowerCase().startsWith("testbool ")) {
+                String boolExpr = input.substring(9); // skip "testbool "
+                try {
+                    BooleanValue result = BooleanExpressionParser.parse(boolExpr);
+                    System.out.println("= " + result);
+                } catch (Exception e) {
+                    System.out.println("Error: " + e.getMessage());
+                }
+                continue;
+            }
+
+
 
             if (input.toLowerCase().startsWith("convert ")) {
                 try {
