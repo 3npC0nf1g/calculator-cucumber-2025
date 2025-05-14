@@ -1,7 +1,6 @@
 package calculator;
 
 import calculator.util.AngleConverter;
-import calculator.values.IntegerValue;
 import visitor.Evaluator;
 import calculator.values.NumericValue;
 
@@ -41,15 +40,6 @@ public class Calculator {
         System.out.println("The result of evaluating expression " + e);
         System.out.println("is: " + eval(e) + ".");
         System.out.println();
-    }
-
-    /**
-     * Prints solution provided as input parameter.
-     * @param e the arithmetic Expression to be printed
-     * @see #printExpressionDetails(Expression)
-     */
-    public void simple_print(Expression e) {
-        System.out.println(eval(e));
     }
 
     /**

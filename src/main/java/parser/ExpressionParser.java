@@ -139,9 +139,6 @@ public class ExpressionParser {
         {
             result=PostfixEvaluator(input);
         }
-        else {
-            result=AutoEvaluator(input);
-        }
         if(result!=null) {
             if (result.toString().equals("NaN"))
                 last_result = new IntegerValue(0);
@@ -151,87 +148,6 @@ public class ExpressionParser {
         return result;
     }
 
-    /**
-     * Detects whether the expression is in prefix notation.
-     */
-    public Boolean isPrefix(String input) {
-        boolean res=false;
-        for(int i=0; i<input.length(); i++) {
-            if(Character.isDigit(input.charAt(i)))
-                break;
-            else if(isOperator(""+input.charAt(i))) {
-                res=true;
-                break;
-            }
-            else {
-            }
-        }
-        return res;
-    }
-
-    /**
-     * Detects whether the expression is in infix notation.
-     */
-    public Boolean isInfix(String input) {
-        boolean res=false;
-        //System.out.println("infix ? "+input);
-        for(int i=0; i<input.length(); i++) {
-            if(Character.isDigit(input.charAt(i))) {
-                // i is a digit
-                for (int j = i + 1; j < input.length(); j++) {
-                    // j must be a digit or an space
-                    if (Character.isDigit(input.charAt(j)) || ("" + input.charAt(j)).equals(" ") ) {}
-                    else if (("" + input.charAt(j)).equals("[") || ("" + input.charAt(j)).equals("c") || ("" + input.charAt(j)).equals("s") || ("" + input.charAt(j)).equals("t"))
-                        return false;
-                    else if (isOperator("" + input.charAt(j))) {
-                        return true;
-                    } else {
-                    }
-                }
-            }
-            //operator
-            else if(isOperator(""+input.charAt(i))) {
-                res=false;
-                break;
-            }
-            // complex or function first
-            else if((""+input.charAt(i)).equals("[") ||(""+input.charAt(i)).equals("c") ||(""+input.charAt(i)).equals("s") ||(""+input.charAt(i)).equals("t") ) {
-                int j=i+1;
-                if((""+input.charAt(i)).equals("["))
-                {
-                    for(j=i+1; j<input.length(); j++) {
-                    if((""+input.charAt(j)).equals("]")) {
-                        i = j;
-                        break;
-                    }
-                    }
-                }
-                else
-                {
-                    for(j=i+1; j<input.length(); j++) {
-                        if((""+input.charAt(j)).equals(")")) {
-                            i = j;
-                            break;
-                        }
-                    }
-                }
-                // Complex value before of function
-                for(j=i+1; j<input.length(); j++) {
-                    // j must space or an operator
-                    if(Character.isDigit(input.charAt(j)) || (""+input.charAt(j)).equals("[")  ||(""+input.charAt(j)).equals("c") ||(""+input.charAt(j)).equals("s") ||(""+input.charAt(j)).equals("t"))
-                        return false;
-                    else if(isOperator(""+input.charAt(j))) {
-                        return true;
-                    }
-                    else {}
-                }
-            }
-
-            else {
-            }
-        }
-        return res;
-    }
 
     /**
      * Internal helper: checks if a string is an arithmetic operator.
@@ -286,21 +202,4 @@ public class ExpressionParser {
         return result;
     }
 
-    /** Automatically detects and evaluates the expression's notation. */
-    private NumericValue AutoEvaluator(String input) {
-        NumericValue result=null;
-        if (isPrefix(input)) {
-            System.out.print("Prefix : ");
-            result =PrefixEvaluator(input);
-        } else if (isInfix(input) || ("" + input.charAt(0)).equals("s") || ("" + input.charAt(0)).equals("c") || ("" + input.charAt(0)).equals("s") || ("" + input.charAt(0)).equals("t") || ("" + input.charAt(0)).equals("[")) {
-            {
-                System.out.print("Infix : ");
-                result = InfixEvaluator(input);
-            }
-        } else {
-            System.out.print("Postfix : ");
-            result = PostfixEvaluator(input);
-        }
-        return result;
-    }
 }

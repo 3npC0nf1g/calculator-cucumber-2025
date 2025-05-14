@@ -312,10 +312,10 @@ public class MyInfixParser {
             // sinon fonctions unaires restantes
             switch (root.value) {
                 // Fonctions trigonométriques & E déjà en place...
-                case "sin":   return new RealValue(c.sin  (toDouble(root.left.value)), 10);
-                case "cos":   return new RealValue(c.cos  (toDouble(root.left.value)), 10);
-                case "tan":   return new RealValue(c.tan  (toDouble(root.left.value)), 10);
-                case "E":     return new RealValue(Math.pow(10, toDouble(root.left.value)), 10);
+                case "sin":   return new RealValue(c.sin  (toDouble(evaluate(root.left).toString())), 10);
+                case "cos":   return new RealValue(c.cos  (toDouble(evaluate(root.left).toString())), 10);
+                case "tan":   return new RealValue(c.tan  (toDouble(evaluate(root.left).toString())), 10);
+                case "E":     return new RealValue(Math.pow(10, toDouble(evaluate(root.left).toString())), 10);
 
                 case "exp":
                     Exp exp = new Exp(List.of(new MyNumber(evaluate(root.left))), Notation.PREFIX);
