@@ -25,6 +25,7 @@ import calculator.*;
 import calculator.conversion.UnitConverter;
 import calculator.conversion.Units;
 import calculator.values.BooleanValue;
+import calculator.values.MatrixCalculator;
 import calculator.values.NumericValue;
 import parser.BooleanExpressionEvaluator.*;
 import parser.BooleanExpressionParser;
@@ -262,6 +263,11 @@ public class CLI {
                 }
                 continue;
             }
+            else if (input.equalsIgnoreCase("matrix")) {
+                new MatrixCalculator().launchMatrixCalculator();
+                continue;
+            }
+
 
 
 
