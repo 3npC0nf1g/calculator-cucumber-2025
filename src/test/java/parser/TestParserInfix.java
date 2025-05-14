@@ -75,7 +75,8 @@ public class TestParserInfix {
         // default calculator mode is radians
         NumericValue sinVal = evaluate(buildTree("sin(3.1415926535/2)"));
         double sv = Double.parseDouble(sinVal.toString());
-        assertTrue(sv > 0.999 && sv < 1.001);
+        System.out.println(sv);
+        assertEquals(sv,1.0);
 
         NumericValue cosVal = evaluate(buildTree("cos(0)"));
         assertEquals("1", cosVal.toString());
