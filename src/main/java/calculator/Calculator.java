@@ -76,7 +76,7 @@ public class Calculator {
         // Ask the expression to accept this visitor to start the evaluation process.
         e.accept(v);
         // Return the result of the evaluation.
-        return new IntegerValue(v.getResult());
+        return v.getResult();
     }
 
     /*

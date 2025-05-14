@@ -19,20 +19,20 @@ public class Evaluator extends Visitor {
     public Evaluator() {}
 
     /** The result of the evaluation will be stored in this private variable */
-    private int computedValue;
+    private NumericValue computedValue;
 
     /** getter method to obtain the result of the evaluation
      *
      * @return an Integer object containing the result of the evaluation
      */
-    public Integer getResult() { return computedValue; }
+    public NumericValue getResult() { return computedValue; }
 
     /** Use the visitor design pattern to visit a number.
      *
      * @param n The number being visited
      */
     public void visit(MyNumber n) {
-        computedValue = n.getValue().getValueInt();
+        computedValue = n.getValue();
     }
 
     /** Use the visitor design pattern to visit an operation
@@ -40,20 +40,20 @@ public class Evaluator extends Visitor {
      * @param o The operation being visited
      */
     public void visit(Operation o) {
-        ArrayList<Integer> evaluatedArgs = new ArrayList<>();
+        ArrayList<NumericValue> evaluatedArgs = new ArrayList<>();
         //first loop to recursively evaluate each subexpression
         for(Expression a:o.args) {
             a.accept(this);
             evaluatedArgs.add(computedValue);
         }
         //second loop to accumulate all the evaluated subresults
-        NumericValue temp = new IntegerValue(evaluatedArgs.get(0));
+        NumericValue temp = evaluatedArgs.get(0);
         int max = evaluatedArgs.size();
-        for(int counter=1; counter<max; counter++) {
-            temp = o.op(temp,new IntegerValue(evaluatedArgs.get(counter).intValue()));
+        for (int i = 1; i < evaluatedArgs.size(); i++) {
+            temp = o.op(temp, evaluatedArgs.get(i));
         }
         // store the accumulated result
-        computedValue = temp.getValueInt();
+        computedValue = temp;
     }
 
 }
