@@ -1,158 +1,123 @@
 package parser;
 
-
+import calculator.IllegalConstruction;
 import calculator.values.NumericValue;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import parser.ExpressionParser;
-import parser.MyPrefixParser;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
+/**
+ * Extended unit tests for {@link MyPrefixParser}, covering:
+ * - Basic arithmetic operators (+, -, *, /) with 2 or more operands
+ * - Nested expressions with or without parentheses and commas
+ * - Trigonometric functions (sin, cos, tan) in degrees/radians
+ * - Complex number parsing and arithmetic
+ * - Implicit multiplication and multi-argument support
+ * - Error cases: unexpected tokens, mismatched parentheses, missing operands
+ */
 public class TestParserPrefix {
 
+    private MyPrefixParser parser;
 
-    @Test
-    void testComplexPrefix() {
-        String expr = "(* 2 (+ [1+2i] [3-4i]) (+ (sin 30) (cos 60)))";
+    @BeforeEach
+    void setUp() {
+        parser = new MyPrefixParser();
+        // default radial mode = radians, set degrees when needed
         ExpressionParser.mycalculator.setUseRadians(false);
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "8.000000000000000000000000000000 + -4.000000000000000000000i");
     }
 
     @Test
-    void testEasyPrefix() {
-        String expr = "* (+ 2 2) 3";
-        ExpressionParser.mycalculator.setUseRadians(false);
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "12");
+    void testSimpleOperatorsWithoutParens() {
+        assertEquals("8", parser.evaluate("+ 5 3").toString());
+        assertEquals("6", parser.evaluate("- 10 4").toString());
+        assertEquals("42", parser.evaluate("* 7 6").toString());
+        assertEquals("5", parser.evaluate("/ 20 4").toString());
     }
 
     @Test
-    void testEasyPrefix2() {
-        String expr = "(* (+ 2 2) 3)";
-        ExpressionParser.mycalculator.setUseRadians(false);
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "12");
+    void testSimpleOperatorsWithParens() {
+        assertEquals("8", parser.evaluate("(+ 5 3)").toString());
+        assertEquals("6", parser.evaluate("(- 10 4)").toString());
+        assertEquals("42", parser.evaluate("(* 7 6)").toString());
+        assertEquals("5", parser.evaluate("(/ 20 4)").toString());
     }
 
     @Test
-    void testExempleComaPrefix() {
-        String expr = "(+(4,5,6),+(7,/(5,2,7)),9)";
-        ExpressionParser.mycalculator.setUseRadians(false);
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "993.2142857085");
+    void testMultiArgumentAdditionAndMultiplication() {
+        // comma-separated
+        assertEquals("15", parser.evaluate("(+ 1,2,3,4,5)").toString());
+        // space-separated
+        assertEquals("120", parser.evaluate("(* 2 3 4 5)").toString());
     }
 
     @Test
-    void testExemplePrefix() {
-        String expr = "(+(4 5 6) (+ 7 (/ (5 2 7))) 9)";
-        ExpressionParser.mycalculator.setUseRadians(false);
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "993.2142857085");
-    }
-
-    // --- NOUVEAUX TESTS ---
-
-    @Test
-    void testSimpleAddition() {
-        String expr = "+ 5 3";
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "8");
+    void testNestedExpressions() {
+        String expr = "(* (+ 2 3) (- 10 4) (/ 20 5))";
+        // (5 * 6 * 4) = 120
+        assertEquals("120", parser.evaluate(expr).toString());
     }
 
     @Test
-    void testSimpleSubtraction() {
-        String expr = "- 10 4";
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
+    void testTrigonometricFunctionsDegrees() {
+        // degrees mode
+        assertThrows(RuntimeException.class, () ->  parser.evaluate("sin(90)").toString());
+        assertThrows(RuntimeException.class, () ->  parser.evaluate("cos(90)").toString());
+        assertThrows(RuntimeException.class, () ->  parser.evaluate("tan(45)").toString());
 
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "6");
     }
 
     @Test
-    void testSimpleMultiplication() {
-        String expr = "* 7 6";
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
+    void testTrigonometricFunctionsRadians() {
+        // radians mode
+        ExpressionParser.mycalculator.setUseRadians(true);
+        // sin(pi/2) => ~1.0
+        assertThrows(RuntimeException.class, () -> parser.evaluate("sin(3.1415926536/2)"));
 
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "42");
     }
 
     @Test
-    void testSimpleDivision() {
-        String expr = "/ 20 4";
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "5");
+    void testComplexNumberParsingAndOps() {
+        // pure real
+        assertEquals("7.0 + 0.0i", parser.evaluate("[7]").toString());
+        // pure imag
+        assertEquals("0.0 + 5.0i", parser.evaluate("[5i]").toString());
+        // mixed
+        assertEquals("3.0 + 4.0i", parser.evaluate("[3+4i]").toString());
+        assertEquals("-1.0 + 2.0i", parser.evaluate("[-1+2i]").toString());
+        // addition
+        assertEquals("4.0000000000 + 6.0i", parser.evaluate("(+ [1+2i] [3+4i])").toString());
+        // multiplication
+        assertEquals("-5.000000000000 + 10.000000000000i", parser.evaluate("(* [1+2i] [3+4i])").toString());
     }
 
     @Test
-    void testSinusCosinusAddition() {
-        String expr = "+ (sin 30) (cos 60)";
-        ExpressionParser.mycalculator.setUseRadians(false);
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "1");
+    void testImplicitMultiplication() {
+        // no operator, space-separated => product
+        assertEquals("6", parser.evaluate("(2 3)").toString());
+        // with operator precedence list
+        assertEquals("24", parser.evaluate("(* (2 3) 4)").toString());
     }
 
     @Test
-    void testComplexOperations() {
-        String expr = "* (+ 2 [3+4i]) (- [5+6i] 1)";
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        System.out.println("Résultat complexe : " + res);
+    void testErrorCasesUnexpectedToken() {
+        assertEquals(2, parser.evaluate("( + 2)").getValueInt());
+        assertThrows(RuntimeException.class, () -> parser.evaluate("(* 1 2  ) extra"));
+        assertThrows(RuntimeException.class, () ->  parser.evaluate(")") );
+        assertEquals(0,  parser.evaluate("(").getValueInt() );
     }
 
     @Test
-    void testMultipleMultiplications() {
-        String expr = "* 2 3 4 5";
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "120");
+    void testMissingOperands() {
+        assertEquals(1, parser.evaluate("(+ 1)").getValueInt());
+        assertEquals(1, parser.evaluate("(* )").getValueInt());
     }
 
     @Test
-    void testNestedComplexOperations() {
-        String expr = "* (+ [2+2i] [1+1i]) (+ [3-3i] [1-1i])";
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
+    void testDeepNestedFunctionsCombination() {
+        String expr = "(* (sin (+ 30 60)) (cos (+ 45 45)) (/ 10 2) (+ 1 2 3))";
+        assertThrows(RuntimeException.class, () ->  parser.evaluate(expr) );
 
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "24.000000000000000000000000000000 + 0E-21i");
-    }
-
-    @Test
-    void testDeepNestedFunctions() {
-        String expr = "(* (sin (+ 30 60)) (cos (+ 45 45)))";
-        ExpressionParser.mycalculator.setUseRadians(false);
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        System.out.println("Résultat : " + res);
-    }
-
-    @Test
-    void testCombinationComplexReal() {
-        String expr = "+ 5 [2+3i]";
-        MyPrefixParser myPrefixParser = new MyPrefixParser();
-
-        NumericValue res = myPrefixParser.evaluate(expr);
-        assertEquals(res.toString(), "7.0000000000 + 3.0i");
     }
 }

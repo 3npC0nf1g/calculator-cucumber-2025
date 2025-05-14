@@ -71,7 +71,7 @@ public class MyPrefixParser {
      * Entry point to test several example prefix expressions.
      */
     public static void main(String[] args) {
-        String exprPrefixWithCommas = "(+(4,5,6),+(7,/(5,2,7)),9)";;
+        String exprPrefixWithCommas = "+ ( 2)";;
         String exprPrefixWithoutCommas = "(+ (* (+ [2+3i] [1-1i]) (+ [4+0i] [2+2i])) (- [5+0i] [0+2i]))";
         ExpressionParser.mycalculator.setUseRadians(false);
 
@@ -126,12 +126,7 @@ public class MyPrefixParser {
                 //System.out.println("[DEBUG] result of operator " + token + " on " + args + " = " + product);
                 return product;
             } else if (isFunction(token)) {
-                token = tokenizerPrefix.next(); // consume function
-                //System.out.println("[DEBUG] function in group = " + token);
-                NumericValue arg = parseExpression(tokenizerPrefix);
-                if (!tokenizerPrefix.peek().equals(")")) throw new RuntimeException("Expected ')' after function argument");
-                tokenizerPrefix.next(); // consume ')'
-                return applyFunction(token, arg);
+                throw new RuntimeException("non fonction in this notation: " + token);
             } else {
                 // Multiplication implicite
                 List<NumericValue> values = new ArrayList<>();
@@ -196,10 +191,7 @@ public class MyPrefixParser {
         }
 
         else if (isFunction(token)) {
-            token = tokenizerPrefix.next();
-            //System.out.println("[DEBUG] function standalone = " + token);
-            NumericValue arg = parseExpression(tokenizerPrefix);
-            return applyFunction(token, arg);
+            throw new RuntimeException("non fonction in this notation: " + token);
         }
 
         else {
@@ -265,15 +257,4 @@ public class MyPrefixParser {
         return Arrays.asList("sin", "cos", "tan").contains(token);
     }
 
-    /** Applies a function to the given argument */
-    private NumericValue applyFunction(String func, NumericValue arg) {
-        double value = Double.parseDouble(arg.toString());
-        Calculator c = ExpressionParser.mycalculator;
-        switch (func) {
-            case "sin": return new RealValue(c.sin(value), 10);
-            case "cos": return new RealValue(c.cos(value), 10);
-            case "tan": return new RealValue(c.tan(value), 10);
-            default: throw new RuntimeException("Unknown function: " + func);
-        }
-    }
 }

@@ -1,6 +1,7 @@
 package calculator.values;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class IntegerValue implements NumericValue {
     private final int value;
@@ -28,7 +29,7 @@ public class IntegerValue implements NumericValue {
             // Promotion : convertit l'entier en complexe (avec partie imaginaire nulle)
             return new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).add(other);
         }
-        throw new UnsupportedOperationException("Unsupported addition between IntegerValue and " + other.getClass());
+        else return other.add(this);
     }
 
     @Override
@@ -74,9 +75,8 @@ public class IntegerValue implements NumericValue {
                     new RealValue(this.value / rv.getValue().doubleValue(), rv.getPrecision());
             case ComplexValue cv ->
                     new ComplexValue(BigDecimal.valueOf(this.value), BigDecimal.ZERO).divide(other);
-            default -> throw new UnsupportedOperationException(
-                    "Unsupported division between IntegerValue and " + other.getClass()
-            );
+            case RationalValue rv ->  this.multiply(new RealValue(rv.getDenominator().doubleValue(),10)).divide(new RealValue(rv.getNumerator().doubleValue(),10));
+            default -> new RationalValue(new BigInteger(this.toString()), new BigInteger(other.toString()));
         };
     }
 

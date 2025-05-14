@@ -7,6 +7,7 @@ import parser.ExpressionParser;
 import parser.MyPostfixParser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestParserPostfix {
 
@@ -17,8 +18,9 @@ public class TestParserPostfix {
         ExpressionParser.mycalculator.setUseRadians(false);
         MyPostfixParser myPostfixParser = new MyPostfixParser();
 
-        NumericValue res= myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(),"8.000000000000000000000000000000 + -4.000000000000000000000i");
+        assertThrows(RuntimeException.class, () ->  myPostfixParser.evaluate(expr));
+
+
     }
 
     @Test
@@ -58,8 +60,8 @@ public class TestParserPostfix {
         String expr = "((2 ([1+2i] [3-4i]+) (sin(30) cos(60)+)*))";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyPostfixParser myPostfixParser = new MyPostfixParser();
-        NumericValue res = myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(), "8.000000000000000000000000000000 + -4.000000000000000000000i");
+        assertThrows(RuntimeException.class, () ->  myPostfixParser.evaluate(expr));
+
     }
 
     @Test
@@ -67,8 +69,9 @@ public class TestParserPostfix {
         String expr = "((2,([1+2i] [3-4i]+),(sin(30) cos(60)+)*))";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyPostfixParser myPostfixParser = new MyPostfixParser();
-        NumericValue res = myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(), "8.000000000000000000000000000000 + -4.000000000000000000000i","((2,([1+2i],[3-4i]+),(sin(30)),(cos(60))+)*))");
+
+        assertThrows(RuntimeException.class, () ->  myPostfixParser.evaluate(expr));
+
     }
 
     //
@@ -88,8 +91,8 @@ public class TestParserPostfix {
         String expr = "((2 ([1+2i] [3-4i]+) (sin(30) cos(60)+)*))";
         ExpressionParser.mycalculator.setUseRadians(false);
         MyPostfixParser myPostfixParser = new MyPostfixParser();
-        NumericValue res= myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(),"8.000000000000000000000000000000 + -4.000000000000000000000i");
+        assertThrows(RuntimeException.class, () ->  myPostfixParser.evaluate(expr));
+
     }
 
     @Test

@@ -371,33 +371,47 @@ public class MyInfixParser {
 
     /** Parses a complex number literal of the form [a+bi] */
     private static NumericValue parseComplex(String value) {
-        String inside = value.substring(1, value.length() - 1);
-        inside = inside.replace("i", "");
-        String realPart = "0", imagPart = "0";
-        if (inside.contains("+")) {
-            String[] parts = inside.split("\\+");
-            realPart = parts[0];
-            imagPart = parts[1];
-        } else if (inside.contains("-")) {
-            int idx = inside.lastIndexOf('-');
-            if (idx == 0) {
-                inside = inside.substring(1);
-                idx = inside.indexOf('-');
-                if (idx == -1) {
-                    realPart = "-" + inside;
-                    imagPart = "0";
-                } else {
-                    realPart = "-" + inside.substring(0, idx);
-                    imagPart = inside.substring(idx);
+        // on extrait l’intérieur des crochets
+        String inner = value.substring(1, value.length() - 1);
+        // détection de la présence d'un 'i'
+        boolean hasImag = inner.contains("i");
+        // on supprime tous les 'i' pour conserver les nombres
+        String stripped = inner.replace("i", "");
+        String realPart;
+        String imagPart;
+
+        if (!hasImag) {
+            // pas de 'i' → nombre réel pur
+            realPart = stripped;
+            imagPart = "0";
+        } else {
+            // on cherche, à partir du second caractère, le signe qui sépare réel et imaginaire
+            int splitIdx = -1;
+            for (int i = 1; i < stripped.length(); i++) {
+                char c = stripped.charAt(i);
+                if (c == '+' || c == '-') {
+                    splitIdx = i;
+                    break;
+                }
+            }
+            if (splitIdx > 0) {
+                // on découpe autour de ce signe
+                realPart = stripped.substring(0, splitIdx);
+                imagPart = stripped.substring(splitIdx);
+                // on retire un '+' initial éventuel pour l’imaginaire
+                if (imagPart.startsWith("+")) {
+                    imagPart = imagPart.substring(1);
                 }
             } else {
-                realPart = inside.substring(0, idx);
-                imagPart = inside.substring(idx);
+                // pas de séparation → imaginaire pur
+                realPart = "0";
+                imagPart = stripped;
             }
-        } else {
-            imagPart = inside;
         }
-        return new ComplexValue(Double.parseDouble(realPart), Double.parseDouble(imagPart));
+
+        double r = Double.parseDouble(realPart);
+        double i = Double.parseDouble(imagPart);
+        return new ComplexValue(r, i);
     }
 
     /**
