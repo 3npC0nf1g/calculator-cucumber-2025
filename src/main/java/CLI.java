@@ -65,14 +65,14 @@ public class CLI {
         System.out.println(CYAN + "Welcome to the CLI Calculator!" + RESET);
 
         System.out.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize("infix") + WHITE + " notation" + CYAN + " :" + WHITE);
-        System.out.println("    " + WHITE + "Tap '" + CYAN + "prefix" + WHITE + "' to use Prefix notation");
-        System.out.println("    " + WHITE + "Tap '" + CYAN + "postfix" + WHITE + "' to use Postfix notation");
+        System.out.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "prefix" + WHITE + "' to use Prefix notation");
+        System.out.println(" ".repeat(5)+ WHITE + "Tap '" + CYAN + "postfix" + WHITE + "' to use Postfix notation");
 
         System.out.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize("degrees") + CYAN + " :" + WHITE);
-        System.out.println("    " + WHITE + "Tap '" + CYAN + "mode" + WHITE + "' to toggle between Radians and Degrees");
+        System.out.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "mode" + WHITE + "' to toggle between Radians and Degrees");
 
         System.out.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize("Decimal") + WHITE + " mode" + CYAN + " :" + WHITE);
-        System.out.println("    " + WHITE + "Tap '" + CYAN + "display" + WHITE + "' to toggle between Fraction and Decimal mode");
+        System.out.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "display" + WHITE + "' to toggle between Fraction and Decimal mode");
 
         System.out.println(CYAN + "-" + WHITE + " Tap '" + CYAN + "help" + WHITE + "' for instructions");
         System.out.println(CYAN + "-" + WHITE + " Tap '" + CYAN + "quit" + WHITE + "' to close the program" + RESET);
@@ -96,11 +96,11 @@ public class CLI {
         System.err.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize(ExpressionParser.getNotation().toString()) + WHITE + " notation" + CYAN + " :" + WHITE);
 
         if (ExpressionParser.getNotation() != ExpressionParser.Notation.INFIX)
-            System.err.println("    " + WHITE + "Tap '" + CYAN + "infix" + WHITE + "' to use Infix notation");
+            System.err.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "infix" + WHITE + "' to use Infix notation");
         if (ExpressionParser.getNotation() != ExpressionParser.Notation.PREFIX)
-            System.err.println("    " + WHITE + "Tap '" + CYAN + "prefix" + WHITE + "' to use Prefix notation");
+            System.err.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "prefix" + WHITE + "' to use Prefix notation");
         if (ExpressionParser.getNotation() != ExpressionParser.Notation.POSTFIX)
-            System.err.println("    " + WHITE + "Tap '" + CYAN + "postfix" + WHITE + "' to use Postfix notation");
+            System.err.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "postfix" + WHITE + "' to use Postfix notation");
 
         System.err.println(CYAN + "-" + WHITE + " Supported types" + CYAN + ":" + WHITE + " integers, decimals, fractions (" + CYAN + "a/b" + WHITE + "), complex " + CYAN + "[a+bi]" + WHITE);
         System.err.println(CYAN + "-" + WHITE + " Scientific notation supported" + CYAN + " (e.g.:" + WHITE + " 1.8 * " + CYAN + "E" + WHITE + "(X) = 1.8*10^X" + CYAN + ")");
@@ -108,13 +108,17 @@ public class CLI {
         System.err.println(CYAN + "-" + WHITE + " You can write '" + CYAN + "res" + WHITE + "' to use your last result");
         System.err.println(CYAN + "-" + WHITE + " You can write '" + CYAN + "pi" + WHITE + "' to use π");
         System.err.println(CYAN + "-" + WHITE + " You can write '" + CYAN + "last" + WHITE + "' to run again the last operation");
-        System.err.println(CYAN + "-" + WHITE + " Supported functions" + CYAN + ": sin"+WHITE+"(x),"+CYAN+" cos"+WHITE+"(x), "+CYAN+"tan"+WHITE+"(x)");
+        System.err.println(CYAN + "-" + WHITE + " Supported functions in "+ CYAN + capitalize("infix") + WHITE + CYAN + ":\n"
+                +CYAN +" ".repeat(5)+" sin"+WHITE+"(x),"+CYAN+" cos"+WHITE+"(x), "+CYAN+"tan"+WHITE+"(x)"+CYAN +", ln"+WHITE+"(x)\n"
+                +CYAN +" ".repeat(5)+" power"+WHITE+"(X,Y) ≡ X^Y ,"+CYAN+" root"+WHITE+"(X,Y) ≡ Y^(1/X)\n"
+                +CYAN +" ".repeat(5)+" log"+WHITE+"(X,Y) ≡ logX(Y), "+CYAN+" sqrt"+WHITE+"(x)," +CYAN +" inv"+WHITE+"(x)"
+        );
 
         System.err.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize(ExpressionParser.getDisplay().toString()) + WHITE + " mode" + CYAN + " :" + WHITE);
-        System.err.println("    " + WHITE + "Tap '" + CYAN + "display" + WHITE + "' to toggle between Fraction and Decimal mode");
+        System.err.println(" ".repeat(5)+ WHITE + " Tap '" + CYAN + "display" + WHITE + "' to toggle between Fraction and Decimal mode");
 
         System.err.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize(ExpressionParser.getMode().toString()) + WHITE + " mode" + CYAN + " :" + WHITE);
-        System.err.println("    " + WHITE + "Tap '" + CYAN + "mode" + WHITE + "' to toggle between radians and degrees");
+        System.err.println(" ".repeat(5)+ WHITE + " Tap '" + CYAN + "mode" + WHITE + "' to toggle between radians and degrees");
         System.err.println(CYAN + "-" + WHITE + " Tap '" + CYAN + "quit" + WHITE + "' to close the program" + RESET);
     }
 
