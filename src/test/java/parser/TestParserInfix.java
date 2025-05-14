@@ -73,9 +73,8 @@ public class TestParserInfix {
     @Test
     void testTrigonometricFunctions() throws IllegalConstruction {
         // default calculator mode is radians
-        NumericValue sinVal = evaluate(buildTree("sin(3.1415926535/2)"));
+        NumericValue sinVal = evaluate(buildTree("sin("+Math.PI+"/2)"));
         double sv = Double.parseDouble(sinVal.toString());
-        System.out.println(sv);
         assertEquals(sv,1.0);
 
         NumericValue cosVal = evaluate(buildTree("cos(0)"));
