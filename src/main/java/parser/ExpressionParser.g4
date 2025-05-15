@@ -9,40 +9,56 @@ expression : infixExpr
            | postfixExpr
            ;
 
+// Enhanced number definitions
+NUMBER : INT | FLOAT | SCI_NOTATION;
+fragment INT : [0-9]+;
+fragment FLOAT : [0-9]+ '.' [0-9]* | '.' [0-9]+;
+fragment SCI_NOTATION : (INT | FLOAT) [e|E] [+|-]? INT;
 
-// Infix expressions
+// Complex number support
+COMPLEX : NUMBER? (PLUS|MINUS)? NUMBER ('i'|'j');
 
+
+// Angle support
+ANGLE : NUMBER ('deg'|'rad');
+
+// Enhanced infix expressions
 infixExpr
-    : infixExpr op=(MULT | DIV) infixExpr     # InfixMulDiv
+    : infixExpr op=(MUL | DIV) infixExpr     # InfixMulDiv
     | infixExpr op=(PLUS | MINUS) infixExpr     # InfixAddSub
-    | MINUS? NUM                             # InfixInteger
+    | MINUS? (NUMBER | COMPLEX | ANGLE)      # InfixNumber
     | '(' infixExpr ')'                      # InfixGrouped
+    | functionCall                          # InfixFunction
     ;
 
-// Prefix expressions
-
+// Enhanced prefix expressions with functions
 prefixExpr
-    : op=(MULT | DIV) '(' prefixExpr ((',' prefixExpr)+)? ')'   # PrefixMulDiv
+    : op=(MUL | DIV) '(' prefixExpr ((',' prefixExpr)+)? ')'   # PrefixMulDiv
     | op=(PLUS | MINUS) '(' prefixExpr ((',' prefixExpr)+)? ')'   # PrefixAddSub
-    | MINUS? NUM                                               # PrefixInteger
+    | MINUS? (NUMBER | COMPLEX | ANGLE)                        # PrefixNumber
     | '(' prefixExpr ')'                                       # PrefixGrouped
+    | functionCall                                            # PrefixFunction
     ;
-
-
 
 // Postfix expressions
 
 postfixExpr
-    : '(' postfixExpr ((',' postfixExpr)+)? ')' op=(MULT | DIV)   # PostfixMulDiv
+    : '(' postfixExpr ((',' postfixExpr)+)? ')' op=(MUL | DIV)   # PostfixMulDiv
     | '(' postfixExpr ((',' postfixExpr)+)? ')' op=(PLUS | MINUS)   # PostfixAddSub
-    | MINUS? NUM                                                 # PostfixInteger
+    | MINUS? (NUMBER | COMPLEX | ANGLE)                          # PostfixNumber
     | '(' postfixExpr ')'                                        # PostfixGrouped
+    | functionCall                                              # PostfixFunction
+    ;
+
+// Function calls
+functionCall
+    : ID '(' (expression (',' expression)*)? ')'
     ;
 
 // Tokens
-MULT     : '*' ;
+MUL     : '*' ;
 DIV     : '/' ;
 PLUS    : '+' ;
 MINUS   : '-' ;
-NUM     : [0-9]+ ;
+ID      : [a-zA-Z]+ ;  // For function names
 SPACE   : [ \t\r\n]+ -> skip ;

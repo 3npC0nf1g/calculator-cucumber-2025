@@ -1,4 +1,6 @@
-package calculator;
+package calculator.util;
+import calculator.*;
+
 
 import calculator.values.IntegerValue;
 import calculator.values.NumericValue;

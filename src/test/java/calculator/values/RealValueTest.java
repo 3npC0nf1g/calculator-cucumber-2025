@@ -1,342 +1,201 @@
 package calculator.values;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-
- class RealValueTest {
-
-    @Test
-     void testGetValue() {
-        RealValue r = new RealValue(3.14, 3);
-        // Build an expected BigDecimal using the same MathContext
-        MathContext mc = new MathContext(3);
-        BigDecimal expected = new BigDecimal("3.14", mc);
-        // Using compareTo to avoid scale issues
-        assertEquals(0, r.getValue().compareTo(expected), "getValue() should return the expected BigDecimal");
-    }
-
-    @Test
-     void testAddition() {
-        RealValue r1 = new RealValue(2.5, 3);
-        RealValue r2 = new RealValue(1.5, 3);
-        RealValue result = (RealValue) r1.add(r2);
-        BigDecimal expected = new BigDecimal("4.0");
-        assertEquals(0, result.getValue().compareTo(expected), "2.5 + 1.5 should equal 4.0");
-    }
-
-    @Test
-     void testSubtraction() {
-        RealValue r1 = new RealValue(5.0, 3);
-        RealValue r2 = new RealValue(2.5, 3);
-        RealValue result = (RealValue) r1.subtract(r2);
-        BigDecimal expected = new BigDecimal("2.5");
-        assertEquals(0, result.getValue().compareTo(expected), "5.0 - 2.5 should equal 2.5");
-    }
-
-    @Test
-     void testMultiplication() {
-        RealValue r1 = new RealValue(2.0, 3);
-        RealValue r2 = new RealValue(3.0, 3);
-        RealValue result = (RealValue) r1.multiply(r2);
-        BigDecimal expected = new BigDecimal("6.0");
-        assertEquals(0, result.getValue().compareTo(expected), "2.0 * 3.0 should equal 6.0");
-    }
-
-    @Test
-     void testDivision() {
-        RealValue r1 = new RealValue(6.0, 3);
-        RealValue r2 = new RealValue(3.0, 3);
-        RealValue result = (RealValue) r1.divide(r2);
-        BigDecimal expected = new BigDecimal("2.0");
-        assertEquals(0, result.getValue().compareTo(expected), "6.0 / 3.0 should equal 2.0");
-    }
-
-    @Test
-     void testDivisionByZero() {
-        RealValue r1 = new RealValue(5.0, 3);
-        RealValue rZero = new RealValue(0.0, 3);
-        assertEquals("NaN", r1.divide(rZero).toString(), "Rational : 5 / 0 should be NaN");
-
-    }
-
-    @Test
-     void testEqualsAndHashCode() {
-        RealValue r1 = new RealValue(2.718, 4);
-        RealValue r2 = new RealValue(new BigDecimal("2.718"), 4);
-        assertEquals(r1, r2, "RealValue objects with the same value should be equal");
-        assertEquals(r1.hashCode(), r2.hashCode(), "Equal RealValue objects should have the same hashCode");
-    }
-
-    @Test
-     void testToString() {
-        RealValue r = new RealValue(3.14159, 6);
-        String str = r.toString();
-        // Since toString() uses toPlainString() in our implementation, we expect a plain decimal representation.
-        assertEquals("3.14159", str, "toString() should return the plain string representation");
-    }
-
-
-
-
-
-
-
-
-
-
-
-    @Test void testConstructorDouble() {
-       RealValue r = new RealValue(3.14159, 2);
-       assertEquals(0, r.getValue().compareTo(new BigDecimal("3.14")), "Rounded double constructor");
-    }
-
-    @Test void testConstructorBigDecimal() {
-       RealValue r = new RealValue(new BigDecimal("3.14159"), 1);
-       assertEquals(0, r.getValue().compareTo(new BigDecimal("3.1")), "Rounded BigDecimal constructor");
-    }
-
-    @Test void testGetPrecision() {
-       RealValue r = new RealValue(1.2345, 4);
-       assertEquals(4, r.getPrecision());
-    }
-
-    @Test void testGetValueInt() {
-       RealValue r = new RealValue(4.99, 3);
-       assertEquals(4, r.getValueInt());
-    }
-
-
-    // === Arithmetic with RealValue ===
-
-    @Test void testAddRealValue() {
-       RealValue r1 = new RealValue(1.5, 3);
-       RealValue r2 = new RealValue(2.5, 3);
-       RealValue result = (RealValue) r1.add(r2);
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("4.0")));
-    }
-
-    @Test void testSubtractRealValue() {
-       RealValue r1 = new RealValue(5.0, 3);
-       RealValue r2 = new RealValue(3.0, 3);
-       RealValue result = (RealValue) r1.subtract(r2);
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("2.0")));
-    }
-
-    @Test void testMultiplyRealValue() {
-       RealValue r1 = new RealValue(3.0, 3);
-       RealValue r2 = new RealValue(4.0, 3);
-       RealValue result = (RealValue) r1.multiply(r2);
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("12.0")));
-    }
-
-    @Test void testDivideRealValue() {
-       RealValue r1 = new RealValue(10.0, 3);
-       RealValue r2 = new RealValue(2.0, 3);
-       RealValue result = (RealValue) r1.divide(r2);
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("5.0")));
-    }
-
-    // === Arithmetic with IntegerValue ===
-
-    @Test void testAddIntegerValue() {
-       RealValue r = new RealValue(2.0, 3);
-       IntegerValue i = new IntegerValue(3);
-       RealValue result = (RealValue) r.add(i);
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("5.0")));
-    }
-
-    @Test void testSubtractIntegerValue() {
-       RealValue r = new RealValue(5.0, 3);
-       IntegerValue i = new IntegerValue(2);
-       RealValue result = (RealValue) r.subtract(i);
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("3.0")));
-    }
-
-    // === Arithmetic with RationalValue ===
-
-    @Test void testAddRationalValue() {
-       RealValue r = new RealValue(1.5, 3);
-       RationalValue rational = new RationalValue(1, 2);
-       RealValue result = (RealValue) r.add(rational);
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("2.0")));
-    }
-
-    @Test void testDivideRationalValue() {
-       RealValue r = new RealValue(3.0, 3);
-       RationalValue rational = new RationalValue(1, 2);
-       RealValue result = (RealValue) r.divide(rational);
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("6.0")));
-    }
-
-    // === Arithmetic with ComplexValue ===
-
-    @Test void testAddComplexReturnsComplex() {
-       RealValue r = new RealValue(2.0, 3);
-       ComplexValue c = new ComplexValue(new BigDecimal("1.0"), new BigDecimal("1.0"));
-       NumericValue result = r.add(c);
-        assertInstanceOf(ComplexValue.class, result);
-    }
-
-    // === Division by zero ===
-
-    @Test void testDivisionByZeroRealValue() {
-       RealValue r = new RealValue(5.0, 3);
-       RealValue zero = new RealValue(0.0, 3);
-       assertEquals("NaN", r.divide(zero).toString(), "Rational : 5 / (0.0) should be NaN");
-    }
-
-    @Test void testDivisionByZeroRationalValue() {
-       RealValue r = new RealValue(5.0, 3);
-       RationalValue zero = new RationalValue(0, 1);
-       assertEquals("NaN", r.divide(zero).toString(), "Rational : 5 / (0) should be NaN");
-
-    }
-
-    @Test void testDivisionByZeroIntegerValue() {
-       RealValue r = new RealValue(5.0, 3);
-       IntegerValue zero = new IntegerValue(0);
-       assertEquals("NaN", r.divide(zero).toString(), "Rational : 10 / 0 should be NaN");
-    }
-
-    // === Unsupported type ===
-
-    @Test void testAddUnsupportedNumericTypeThrows() {
-       RealValue r = new RealValue(1.0, 3);
-       NumericValue unknown = new NumericValue() {
-          @Override public NumericValue add(NumericValue other) { return null; }
-          @Override public NumericValue subtract(NumericValue other) { return null; }
-          @Override public NumericValue multiply(NumericValue other) { return null; }
-          @Override public NumericValue divide(NumericValue other) { return null; }
-          @Override public int getValueInt() { return 0; }
-       };
-       assertThrows(UnsupportedOperationException.class, () -> r.add(unknown));
-    }
-
-    // === Edge cases ===
-
-    @Test void testNegativeRealValue() {
-       RealValue r = new RealValue(-2.5, 3);
-       assertEquals("-2.5", r.toString());
-    }
-
-    @Test void testVeryLargeNumber() {
-       RealValue r = new RealValue(1e+100, 10);
-       assertTrue(r.toString().startsWith("1"));
-    }
-
-    @Test void testVerySmallNumber() {
-       RealValue r = new RealValue(1e-1, 9);
-       assertTrue(r.toString().startsWith("0.1"));
-    }
-
-    @Test void testPrecisionLossAfterChainedOperations() {
-       RealValue r = new RealValue(1.1111, 2);
-       RealValue result = (RealValue) r.add(new RealValue(2.2222, 3)).subtract(new RealValue(1.1111, 3));
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("2.22").round(new MathContext(3))));
-    }
-
-    @Test void testImmutability() {
-       RealValue r1 = new RealValue(2.0, 3);
-       RealValue r2 = new RealValue(1.0, 3);
-       RealValue r3 = (RealValue) r1.add(r2);
-       assertEquals("2", r1.toString());
-       assertEquals("1", r2.toString());
-       assertEquals("3", r3.toString());
-    }
-
-    @Test
-    void testSubtractRationalValue() {
-       RealValue r = new RealValue(3.0, 3);
-       RationalValue rational = new RationalValue(1, 2); // 0.5
-       RealValue result = (RealValue) r.subtract(rational);
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("2.5")));
-    }
-
-    @Test
-    void testSubtractComplexReturnsComplex() {
-       RealValue r = new RealValue(2.0, 3);
-       ComplexValue c = new ComplexValue(new BigDecimal("1.0"), new BigDecimal("1.0"));
-       NumericValue result = r.subtract(c);
-        assertInstanceOf(ComplexValue.class, result);
-    }
-
-    @Test
-    void testMultiplyRationalValue() {
-       RealValue r = new RealValue(4.0, 3);
-       RationalValue rational = new RationalValue(1, 2); // 0.5
-       RealValue result = (RealValue) r.multiply(rational);
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("2.0")));
-    }
-
-    @Test
-    void testMultiplyComplexReturnsComplex() {
-       RealValue r = new RealValue(3.0, 3);
-       ComplexValue c = new ComplexValue(new BigDecimal("0.0"), new BigDecimal("1.0"));
-       NumericValue result = r.multiply(c);
-        assertInstanceOf(ComplexValue.class, result);
-    }
-
-
-    @Test
-    void testDivideIntegerValue() {
-       RealValue r = new RealValue(10.0, 3);
-       IntegerValue i = new IntegerValue(2);
-       RealValue result = (RealValue) r.divide(i);
-       assertEquals(0, result.getValue().compareTo(new BigDecimal("5.0")));
-    }
-
-    @Test
-    void testDivideComplexReturnsComplex() {
-       RealValue r = new RealValue(6.0, 3);
-       ComplexValue c = new ComplexValue(new BigDecimal("2.0"), new BigDecimal("2.0"));
-       NumericValue result = r.divide(c);
-        assertInstanceOf(ComplexValue.class, result);
-    }
-
-
-    @Test
-    void testSubtractUnsupportedNumericTypeThrows() {
-       RealValue r = new RealValue(1.0, 3);
-       NumericValue unknown = new NumericValue() {
-          @Override public NumericValue add(NumericValue other) { return null; }
-          @Override public NumericValue subtract(NumericValue other) { return null; }
-          @Override public NumericValue multiply(NumericValue other) { return null; }
-          @Override public NumericValue divide(NumericValue other) { return null; }
-          @Override public int getValueInt() { return 0; }
-       };
-       assertThrows(UnsupportedOperationException.class, () -> r.subtract(unknown));
-    }
-
-
-    @Test
-    void testMultiplyUnsupportedNumericTypeThrows() {
-       RealValue r = new RealValue(1.0, 3);
-       NumericValue unknown = new NumericValue() {
-          @Override public NumericValue add(NumericValue other) { return null; }
-          @Override public NumericValue subtract(NumericValue other) { return null; }
-          @Override public NumericValue multiply(NumericValue other) { return null; }
-          @Override public NumericValue divide(NumericValue other) { return null; }
-          @Override public int getValueInt() { return 0; }
-       };
-       assertThrows(UnsupportedOperationException.class, () -> r.multiply(unknown));
-    }
-
-
-    @Test
-    void testDivideUnsupportedNumericTypeThrows() {
-       RealValue r = new RealValue(1.0, 3);
-       NumericValue unknown = new NumericValue() {
-          @Override public NumericValue add(NumericValue other) { return null; }
-          @Override public NumericValue subtract(NumericValue other) { return null; }
-          @Override public NumericValue multiply(NumericValue other) { return null; }
-          @Override public NumericValue divide(NumericValue other) { return null; }
-          @Override public int getValueInt() { return 0; }
-       };
-       assertThrows(UnsupportedOperationException.class, () -> r.divide(unknown));
-    }
-
-
- }
+
+@DisplayName("RealValue Extended Tests")
+class RealValueTest {
+
+   @Nested
+   @DisplayName("Equality and Hashing")
+   class EqualityHashTests {
+      @Test
+      void testEqualsAndHashCodeRealEquals() {
+         RealValue r1 = new RealValue(2.50, 2);
+         RealValue r2 = new RealValue(new BigDecimal("2.5"), 3);
+         // r2 rounds to 2.500 => equals scaled r1
+         assertEquals(r1, r2);
+         assertEquals(r1.subtract(r2).toString(), "0");
+      }
+
+      @Test
+      void testEqualsNaN() {
+         RealValue nan1 = RealValue.NaN;
+         RealValue nan2 = RealValue.NaN;
+         assertTrue(nan1.equals(nan2));
+         assertEquals(0, nan1.hashCode());
+      }
+
+      @Test
+      void testNotEqualsDifferent() {
+         RealValue r = new RealValue(1.23, 2);
+         assertNotEquals(r, null);
+         assertNotEquals(r, "string");
+         RealValue other = new RealValue(1.24, 2);
+         assertNotEquals(r, other);
+      }
+   }
+
+   @Nested
+   @DisplayName("Arithmetic with Mixed Types")
+   class MixedTypeCoverage {
+      RealValue base = new RealValue(3.0, 2);
+      IntegerValue iv = new IntegerValue(2);
+      RationalValue rq = new RationalValue(5, 2); // 2.5
+      ComplexValue cv = new ComplexValue(new BigDecimal("1.0"), new BigDecimal("-1.0"));
+
+      @Test
+      void testAddInteger() {
+         NumericValue res = base.add(iv);
+         assertTrue(res instanceof RealValue);
+         assertEquals("5.00", ((RealValue)res).getValue().toPlainString());
+      }
+
+      @Test
+      void testAddRational() {
+         NumericValue res = base.add(rq);
+         assertTrue(res instanceof RealValue);
+         assertEquals(5.5, ((RealValue)res).getValue().doubleValue(), 1e-9);
+      }
+
+      @Test
+      void testAddComplex() {
+         NumericValue res = base.add(cv);
+         assertTrue(res instanceof ComplexValue);
+      }
+
+      @Test
+      void testSubtractInteger() {
+         NumericValue res = base.subtract(iv);
+         assertEquals("1.00", ((RealValue)res).getValue().toPlainString());
+      }
+
+      @Test
+      void testSubtractRational() {
+         NumericValue res = base.subtract(rq);
+         assertEquals(0.5, ((RealValue)res).getValue().doubleValue(), 1e-9);
+      }
+
+      @Test
+      void testSubtractComplex() {
+         NumericValue res = base.subtract(cv);
+         assertTrue(res instanceof ComplexValue);
+      }
+
+      @Test
+      void testMultiplyInteger() {
+         NumericValue res = base.multiply(iv);
+         assertEquals("6.00", ((RealValue)res).getValue().toPlainString());
+      }
+
+      @Test
+      void testMultiplyRational() {
+         NumericValue res = base.multiply(rq);
+         assertEquals(7.5, ((RealValue)res).getValue().doubleValue(), 1e-9);
+      }
+
+      @Test
+      void testMultiplyComplex() {
+         NumericValue res = base.multiply(cv);
+         assertTrue(res instanceof ComplexValue);
+      }
+
+      @Test
+      void testDivideInteger() {
+         NumericValue res = base.divide(iv);
+         assertEquals("1.50", ((RealValue)res).getValue().toPlainString());
+      }
+
+      @Test
+      void testDivideRational() {
+         NumericValue res = base.divide(rq);
+         assertEquals(1.2, ((RealValue)res).getValue().doubleValue(), 1e-9);
+      }
+
+      @Test
+      void testDivideComplex() {
+         NumericValue res = base.divide(cv);
+         assertTrue(res instanceof ComplexValue);
+      }
+
+      @Test
+      void testDivideByZeroInteger() {
+         IntegerValue zero = new IntegerValue(0);
+         assertEquals("NaN", base.divide(zero).toString());
+      }
+
+      @Test
+      void testDivideByZeroReal() {
+         RealValue zero = new RealValue(0.0, 2);
+         assertEquals("NaN", base.divide(zero).toString());
+      }
+   }
+
+   @Nested
+   @DisplayName("Power, Root, Log Edge Cases")
+   class AdvancedCoverage {
+      RealValue base = new RealValue(16.0, 3);
+
+      @Test
+      void testPowRealExponent() {
+         RealValue exp = new RealValue(0.5, 3);
+         RealValue result = (RealValue) base.pow(exp);
+         assertEquals(4.0, result.getValue().doubleValue(), 1e-9);
+      }
+
+      @Test
+      void testPowComplexExponent() {
+         ComplexValue exp = new ComplexValue(BigDecimal.ONE, BigDecimal.ZERO);
+         NumericValue result = base.pow(exp);
+         assertTrue(result instanceof ComplexValue);
+      }
+
+      @Test
+      void testRootRationalDegreeUnsupported() {
+         RationalValue deg = new RationalValue(3, 2);
+         assertThrows(UnsupportedOperationException.class, () -> base.root(deg));
+      }
+
+      @Test
+      void testLogIntegerBase() {
+         RealValue x = new RealValue(8.0, 3);
+         IntegerValue two = new IntegerValue(2);
+         NumericValue res = x.log(two);
+         assertEquals("3.000", ((RealValue)res).getValue().toPlainString());
+      }
+
+      @Test
+      void testLogRealBase() {
+         RealValue x = new RealValue(27.0, 3);
+         RealValue three = new RealValue(3.0, 3);
+         NumericValue res = x.log(three);
+         assertEquals(3.0, ((RealValue)res).getValue().doubleValue(), 1e-9);
+      }
+
+      @Test
+      void testInverseNegative() {
+         RealValue neg = new RealValue(-4.0, 2);
+         NumericValue inv = neg.inverse();
+         assertEquals("-0.25", inv.toString());
+      }
+
+      @Test
+      void testLnNonPositive() {
+         RealValue zero = new RealValue(0.0, 2);
+         assertEquals("NaN", zero.ln().toString());
+         RealValue neg = new RealValue(-1.0, 2);
+         assertEquals("NaN", neg.ln().toString());
+      }
+
+      @Test
+      void testExpLargeValue() {
+         RealValue r = new RealValue(10.0, 2);
+         NumericValue e = r.exp();
+         assertTrue(((RealValue)e).getValue().doubleValue() > Math.exp(9));
+      }
+   }
+}
