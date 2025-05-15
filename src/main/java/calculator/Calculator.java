@@ -15,6 +15,7 @@ import calculator.values.NumericValue;
 public class Calculator {
 
     private boolean useRadians = true;
+    private boolean useSecondFunction = false;
 
     /**
      * Default constructor of the class.
@@ -84,7 +85,20 @@ public class Calculator {
         return useRadians;
     }
 
+    public void setUseSecondFunction(boolean useSecondFunction) {
+        this.useSecondFunction = useSecondFunction;
+    }
+
+    public boolean isUseSecondFunction() {
+        return useSecondFunction;
+    }
+
     public double sin(double angle) {
+        if (useSecondFunction) {
+            return asin(angle);
+        }
+
+
         if (!useRadians) {
             angle = AngleConverter.degreesToRadians(angle);
         }
@@ -92,6 +106,10 @@ public class Calculator {
     }
 
     public double cos(double angle) {
+
+        if (useSecondFunction) {
+            return acos(angle);
+        }
         if (!useRadians) {
             angle = AngleConverter.degreesToRadians(angle);
         }
@@ -99,10 +117,159 @@ public class Calculator {
     }
 
     public double tan(double angle) {
+
+        if (useSecondFunction) {
+            return atan(angle);
+        }
+
         if (!useRadians) {
             angle = AngleConverter.degreesToRadians(angle);
         }
         return Math.tan(angle);
     }
+
+
+    public double asin(double value) {
+        return useRadians ? Math.asin(value) : AngleConverter.radiansToDegrees(Math.asin(value));
+    }
+
+    public double acos(double value) {
+        return useRadians ? Math.acos(value) : AngleConverter.radiansToDegrees(Math.acos(value));
+    }
+
+    public double atan(double value) {
+        return useRadians ? Math.atan(value) : AngleConverter.radiansToDegrees(Math.atan(value));
+    }
+
+
+
+
+
+    public double sinh(double angle) {
+
+        if (useSecondFunction) {
+            return asinh(angle);
+        }
+
+        if (!useRadians) {
+            angle = AngleConverter.degreesToRadians(angle);
+        }
+        return Math.sinh(angle);
+    }
+
+    public double cosh(double angle) {
+
+        if (useSecondFunction) {
+            return acosh(angle);
+        }
+
+        if (!useRadians) {
+            angle = AngleConverter.degreesToRadians(angle);
+        }
+        return Math.cosh(angle);
+    }
+
+    public double tanh(double angle) {
+
+        if (useSecondFunction) {
+            return atanh(angle);
+        }
+
+        if (!useRadians) {
+            angle = AngleConverter.degreesToRadians(angle);
+        }
+        return Math.tanh(angle);
+    }
+
+    public double cot(double angle) {
+
+        if (useSecondFunction) {
+            return acot(angle);
+        }
+
+        if (!useRadians) {
+            angle = AngleConverter.degreesToRadians(angle);
+        }
+        return 1.0 / Math.tan(angle);
+    }
+
+    public double sec(double angle) {
+
+        if (useSecondFunction) {
+            return asec(angle);
+        }
+
+        if (!useRadians) {
+            angle = AngleConverter.degreesToRadians(angle);
+        }
+        return 1.0 / Math.cos(angle);
+    }
+
+    public double csc(double angle) {
+
+        if (useSecondFunction) {
+            return acsc(angle);
+        }
+
+        if (!useRadians) {
+            angle = AngleConverter.degreesToRadians(angle);
+        }
+        return 1.0 / Math.sin(angle);
+    }
+
+
+    public double asinh(double value) {
+        // asinh est l'inverse de sinh
+        double result = Math.log(value + Math.sqrt(value * value + 1));
+        return useRadians ? result : AngleConverter.radiansToDegrees(result);
+    }
+
+    public double acosh(double value) {
+        // acosh est défini seulement pour value >= 1
+        if (value < 1) {
+            throw new IllegalArgumentException("acosh is undefined for values < 1");
+        }
+        double result = Math.log(value + Math.sqrt(value * value - 1));
+        return useRadians ? result : AngleConverter.radiansToDegrees(result);
+    }
+
+    public double atanh(double value) {
+        // atanh est défini pour -1 < value < 1
+        if (value <= -1 || value >= 1) {
+            throw new IllegalArgumentException("atanh is undefined for |value| >= 1");
+        }
+        double result = 0.5 * Math.log((1 + value) / (1 - value));
+        return useRadians ? result : AngleConverter.radiansToDegrees(result);
+    }
+
+// Fonctions inverses des réciproques trigonométriques
+
+    public double acot(double value) {
+        // acot(x) = arctan(1/x) pour x != 0
+        if (value == 0) {
+            throw new IllegalArgumentException("acot is undefined for value = 0");
+        }
+        double result = Math.atan(1.0 / value);
+        return useRadians ? result : AngleConverter.radiansToDegrees(result);
+    }
+
+    public double asec(double value) {
+        // asec(x) = arccos(1/x) pour |x| >= 1
+        if (Math.abs(value) < 1) {
+            throw new IllegalArgumentException("asec is undefined for |value| < 1");
+        }
+        double result = Math.acos(1.0 / value);
+        return useRadians ? result : AngleConverter.radiansToDegrees(result);
+    }
+
+    public double acsc(double value) {
+        // acsc(x) = arcsin(1/x) pour |x| >= 1
+        if (Math.abs(value) < 1) {
+            throw new IllegalArgumentException("acsc is undefined for |value| < 1");
+        }
+        double result = Math.asin(1.0 / value);
+        return useRadians ? result : AngleConverter.radiansToDegrees(result);
+    }
+
 
 }
