@@ -22,13 +22,15 @@
  */
 
 import calculator.*;
+import calculator.conversion.UnitConverter;
+import calculator.conversion.Units;
+import calculator.values.BooleanValue;
+import calculator.values.MatrixCalculator;
 import calculator.values.NumericValue;
+import parser.BooleanExpressionParser;
 import parser.ExpressionParser;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class CLI {
 
@@ -223,6 +225,43 @@ public class CLI {
             if (commands.contains(input.toLowerCase())) {
                 continue;
             }
+            if (input.toLowerCase().startsWith("units")) {
+                UnitConverter.printAllUnitsByCategory();
+                continue;
+            }
+            if (input.toLowerCase().startsWith("convert ")) {
+                try {
+                    String[] parts = input.split("\\s+");
+                    if (parts.length != 5) {
+                        System.out.println("Usage: convert <value> <fromUnit> <toUnit> <category>");
+                        continue;
+                    }
+                    double value = Double.parseDouble(parts[1]);
+                    String from = parts[2];
+                    String to = parts[3];
+                    String category = parts[4];
+
+                    double result = UnitConverter.convert(value, from, to, category);
+                    System.out.println("Result: " + result + " " + to);
+                } catch (Exception e) {
+                    System.out.println("Conversion error: " + e.getMessage());
+                }
+                continue;
+            }
+            else if (input.toLowerCase().startsWith("testbool ")) {
+                String boolExpr = input.substring(9); // skip "testbool "
+                try {
+                    BooleanValue result = BooleanExpressionParser.parse(boolExpr);
+                    System.out.println("= " + result);
+                } catch (Exception e) {
+                    System.out.println("Error: " + e.getMessage());
+                }
+                continue;
+            }
+            else if (input.equalsIgnoreCase("matrix")) {
+                new MatrixCalculator().launchMatrixCalculator();
+                continue;
+            }
             try {
                 expr = exp.parse(input);
                 lastInput = input;
@@ -234,6 +273,7 @@ public class CLI {
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
+
         }
 
         scanner.close();
