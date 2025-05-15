@@ -1,5 +1,6 @@
 package calculator.values;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Matrix {
     private final double[][] data;
@@ -34,6 +35,19 @@ public class Matrix {
         }
         return new Matrix(matrix);
     }
+
+    public boolean equalsApprox(Matrix other, double epsilon) {
+        if (this.getRowCount() != other.getRowCount() || this.getColCount() != other.getColCount()) return false;
+        for (int i = 0; i < getRowCount(); i++) {
+            for (int j = 0; j < getColCount(); j++) {
+                if (Math.abs(this.data[i][j] - other.data[i][j]) > epsilon) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     @Override
     public String toString() {
@@ -124,4 +138,32 @@ public class Matrix {
             System.arraycopy(temp[i], n, result[i], 0, n);
         return new Matrix(result);
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Matrix other = (Matrix) obj;
+
+        if (this.getRowCount() != other.getRowCount() || this.getColCount() != other.getColCount()) return false;
+
+        for (int i = 0; i < getRowCount(); i++) {
+            for (int j = 0; j < getColCount(); j++) {
+                if (Double.compare(this.data[i][j], other.data[i][j]) != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getRowCount(), getColCount());
+        for (int i = 0; i < getRowCount(); i++) {
+            result = 31 * result + Arrays.hashCode(data[i]);
+        }
+        return result;
+    }
+
 }

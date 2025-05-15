@@ -2,6 +2,7 @@ package calculator.values;
 
 import java.util.Scanner;
 
+
 public class MatrixCalculator {
 
     public void launchMatrixCalculator() {

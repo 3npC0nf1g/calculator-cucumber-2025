@@ -76,6 +76,11 @@ public class CLI {
         System.out.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize("Decimal") + WHITE + " mode" + CYAN + " :" + WHITE);
         System.out.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "display" + WHITE + "' to toggle between Fraction and Decimal mode");
 
+        System.out.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "units" + WHITE + "' to see all types of units category supported and its units");
+        System.out.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "convert <value> <fromUnit> <toUnit> <category>" + WHITE + "' to convert unit value. e.g: convert 20 cm km length" + WHITE + "'");
+        System.out.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "Matrix" + WHITE + "' to start using matrix computation");
+        System.out.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "testbool" + WHITE + "to compute boolean expressions. e.g: testbool true and false or not true and 1 >5" + WHITE + "'");
+
         System.out.println(CYAN + "-" + WHITE + " Tap '" + CYAN + "help" + WHITE + "' for instructions");
         System.out.println(CYAN + "-" + WHITE + " Tap '" + CYAN + "quit" + WHITE + "' to close the program" + RESET);
     }
