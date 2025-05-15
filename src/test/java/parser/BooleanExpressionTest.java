@@ -1,79 +1,63 @@
 package parser;
 import calculator.values.BooleanValue;
-import parser.BooleanExpressionParser;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
 
 public class BooleanExpressionTest {
 
-    public static void main(String[] args) {
-        testSimpleComparison();
-        testLogicalAnd();
-        testLogicalOr();
-        testLogicalNot();
-        testComplexExpression();
+    // Test comparaisons simples
+    @Test
+    public void testSimpleComparisons() {
+        assertTrue(get("1 == 1"));
+        assertTrue(get("2 != 3"));
+        assertTrue(get("4 > 2"));
+        assertFalse(get("3 < 1"));
+        assertTrue(get("3 >= 3"));
+        assertFalse(get("2 <= 1"));
     }
 
-    // 1. Test des comparaisons simples (==, !=, >, <, >=, <=)
-    public static void testSimpleComparison() {
-        try {
-            System.out.println("== Test: Comparaisons simples ==");
-            System.out.println("1 == 1 → " + BooleanExpressionParser.parse("1 == 1").getValue()); // true
-            System.out.println("2 != 3 → " + BooleanExpressionParser.parse("2 != 3").getValue()); // true
-            System.out.println("4 > 2 → " + BooleanExpressionParser.parse("4 > 2").getValue());   // true
-            System.out.println("3 < 1 → " + BooleanExpressionParser.parse("3 < 1").getValue());   // false
-            System.out.println("3 >= 3 → " + BooleanExpressionParser.parse("3 >= 3").getValue()); // true
-            System.out.println("2 <= 1 → " + BooleanExpressionParser.parse("2 <= 1").getValue()); // false
-        } catch (Exception e) {
-            System.out.println("Erreur (testSimpleComparison): " + e.getMessage());
-        }
+    // Test AND logique
+    @Test
+    public void testLogicalAnd() {
+        assertTrue(get("true AND true"));
+        assertFalse(get("true AND false"));
+        assertTrue(get("1 == 1 AND 2 > 1"));
+        assertFalse(get("1 == 2 AND 2 > 1"));
     }
 
-    // 2. Test du ET logique (AND)
-    public static void testLogicalAnd() {
-        try {
-            System.out.println("\n== Test: AND logique ==");
-            System.out.println("true AND true → " + BooleanExpressionParser.parse("true AND true").getValue()); // true
-            System.out.println("true AND false → " + BooleanExpressionParser.parse("true AND false").getValue()); // false
-            System.out.println("1 == 1 AND 2 > 1 → " + BooleanExpressionParser.parse("1 == 1 AND 2 > 1").getValue()); // true
-        } catch (Exception e) {
-            System.out.println("Erreur (testLogicalAnd): " + e.getMessage());
-        }
+    // Test OR logique
+    @Test
+    public void testLogicalOr() {
+        assertTrue(get("true OR false"));
+        assertFalse(get("false OR false"));
+        assertTrue(get("1 < 0 OR 5 == 5"));
+        assertFalse(get("1 < 0 OR 2 != 2"));
     }
 
-    // 3. Test du OU logique (OR)
-    public static void testLogicalOr() {
-        try {
-            System.out.println("\n== Test: OR logique ==");
-            System.out.println("false OR true → " + BooleanExpressionParser.parse("false OR true").getValue()); // true
-            System.out.println("false OR false → " + BooleanExpressionParser.parse("false OR false").getValue()); // false
-            System.out.println("1 < 0 OR 5 == 5 → " + BooleanExpressionParser.parse("1 < 0 OR 5 == 5").getValue()); // true
-        } catch (Exception e) {
-            System.out.println("Erreur (testLogicalOr): " + e.getMessage());
-        }
+    // Test NOT logique
+    @Test
+    public void testLogicalNot() {
+        assertFalse(get("NOT true"));
+        assertTrue(get("NOT false"));
+        assertFalse(get("NOT (3 < 5)"));
+        assertTrue(get("NOT (3 > 5)"));
     }
 
-    // 4. Test du NON logique (NOT)
-    public static void testLogicalNot() {
-        try {
-            System.out.println("\n== Test: NOT logique ==");
-            System.out.println("NOT true → " + BooleanExpressionParser.parse("NOT true").getValue()); // false
-            System.out.println("NOT false → " + BooleanExpressionParser.parse("NOT false").getValue()); // true
-            System.out.println("NOT (3 < 5) → " + BooleanExpressionParser.parse("NOT (3 < 5)").getValue()); // false
-        } catch (Exception e) {
-            System.out.println("Erreur (testLogicalNot): " + e.getMessage());
-        }
+    // Test expressions complexes
+    @Test
+    public void testComplexExpressions() {
+        assertTrue(get("(1 == 1 AND 2 > 1) OR false"));
+        assertTrue(get("NOT (2 != 2) AND (5 >= 3)"));
+        assertFalse(get("NOT (1 == 1 AND 2 > 1) OR false"));
     }
 
-    // 5. Test des expressions complexes
-    public static void testComplexExpression() {
+    // Helper pour parser et obtenir la valeur booléenne
+    private boolean get(String expr) {
         try {
-            System.out.println("\n== Test: Expression complexe ==");
-            System.out.println("(1 == 1 AND 2 > 1) OR false → " +
-                    BooleanExpressionParser.parse("(1 == 1 AND 2 > 1) OR false").getValue()); // true
-
-            System.out.println("NOT (2 != 2) AND (5 >= 3) → " +
-                    BooleanExpressionParser.parse("NOT (2 != 2) AND (5 >= 3)").getValue()); // true
+            return ((BooleanValue) BooleanExpressionParser.parse(expr)).getValue();
         } catch (Exception e) {
-            System.out.println("Erreur (testComplexExpression): " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }

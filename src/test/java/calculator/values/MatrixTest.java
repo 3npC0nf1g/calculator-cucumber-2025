@@ -71,4 +71,59 @@ public class MatrixTest {
         assertThrows(ArithmeticException.class, singular::inverse);
     }
 
+    @Test
+    public void test4x4Transpose() {
+        Matrix A = Matrix.parse("[[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]");
+        Matrix expected = Matrix.parse("[[1,5,9,13],[2,6,10,14],[3,7,11,15],[4,8,12,16]]");
+        assertEquals(expected, A.transpose());
+    }
+    @Test
+    public void test5x5Addition() {
+        String row = "[1,1,1,1,1]";
+        Matrix A = Matrix.parse("[" + row + "," + row + "," + row + "," + row + "," + row + "]");
+        Matrix B = Matrix.parse("[" + row + "," + row + "," + row + "," + row + "," + row + "]");
+        Matrix expected = Matrix.parse("[" +
+                "[2,2,2,2,2]," +
+                "[2,2,2,2,2]," +
+                "[2,2,2,2,2]," +
+                "[2,2,2,2,2]," +
+                "[2,2,2,2,2]" +
+                "]");
+        assertEquals(expected, A.add(B));
+    }
+
+    @Test
+    public void testZeroMatrixMultiplication() {
+        Matrix A = Matrix.parse("[[1,2],[3,4]]");
+        Matrix zero = Matrix.parse("[[0,0],[0,0]]");
+        Matrix expected = zero;
+        assertEquals(expected, A.multiply(zero));
+    }
+
+    @Test
+    public void testIdentityMatrixMultiplication() {
+        Matrix A = Matrix.parse("[[1,2],[3,4]]");
+        Matrix identity = Matrix.parse("[[1,0],[0,1]]");
+        assertEquals(A, A.multiply(identity));
+    }
+
+    @Test
+    public void testLargeMatrixEquality() {
+        StringBuilder builder = new StringBuilder("[");
+        for (int i = 0; i < 10; i++) {
+            builder.append("[");
+            for (int j = 0; j < 10; j++) {
+                builder.append("1");
+                if (j < 9) builder.append(",");
+            }
+            builder.append("]");
+            if (i < 9) builder.append(",");
+        }
+        builder.append("]");
+        Matrix A = Matrix.parse(builder.toString());
+        Matrix B = Matrix.parse(builder.toString());
+        assertEquals(A, B);
+    }
+
+
 }
