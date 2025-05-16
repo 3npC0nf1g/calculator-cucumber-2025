@@ -329,7 +329,7 @@ public class Calculator {
      *
      * @param value the input value; must be ≥ 1
      * @return the acosh of the value, in degrees if useRadians is false
-     * @throws IllegalArgumentException if value < 1
+     * @throws IllegalArgumentException if value &lt; 1
      */
     public double acosh(double value) {
         // acosh est défini seulement pour value >= 1
