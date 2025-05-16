@@ -121,6 +121,6 @@ public class TestApi {
     }
 
     @Test public void testRootOfPi() throws Exception {
-        assertEquals("1.7724538509", calculatorService.getRep("root(2,pi)").substring(0,12));
+        assertEquals("1.2468689889", calculatorService.getRep("root(pi,2)").substring(0,12));
     }
 }
