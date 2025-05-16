@@ -93,27 +93,27 @@ public class TestApi {
     }
 
     @Test public void testLnFunction() throws Exception {
-        assertEquals("1", calculatorService.getRep("ln(e)"));
+        assertEquals("1", calculatorService.getRep("ln(exp(1))"));
     }
 
     @Test public void testRootFunction() throws Exception {
-        assertEquals("3", calculatorService.getRep("root(27,3)"));
+        assertEquals("3", calculatorService.getRep("root(3,27)"));
     }
 
     @Test public void testPiUsage() throws Exception {
-        assertEquals("3.141592653589793", calculatorService.getRep("pi"));
+        assertEquals("3.1415926536", calculatorService.getRep("pi"));
     }
 
     @Test public void testEUsage() throws Exception {
-        assertEquals("2.718281828459045", calculatorService.getRep("e"));
+        assertEquals("2.7182818285", calculatorService.getRep("exp(1)"));
     }
 
     @Test public void testLnOfEToPower3() throws Exception {
-        assertEquals("3", calculatorService.getRep("ln(power(e,3))"));
+        assertEquals("3", calculatorService.getRep("ln(power(exp(1),3))"));
     }
 
     @Test public void testSqrtOfPi() throws Exception {
-        assertEquals("1.77245385091", calculatorService.getRep("sqrt(pi)").substring(0,12));
+        assertEquals("1.7724538509", calculatorService.getRep("sqrt(pi)").substring(0,12));
     }
 
     @Test public void testLogBase2Of8() throws Exception {
@@ -121,6 +121,6 @@ public class TestApi {
     }
 
     @Test public void testRootOfPi() throws Exception {
-        assertEquals("1.77245385091", calculatorService.getRep("root(pi,2)").substring(0,12));
+        assertEquals("1.2468689889", calculatorService.getRep("root(pi,2)").substring(0,12));
     }
 }

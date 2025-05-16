@@ -113,8 +113,7 @@ public class CLI {
                 +CYAN +" ".repeat(5)+" power"+WHITE+"(X,Y) ≡ X^Y ,"+CYAN+" root"+WHITE+"(X,Y) ≡ Y^(1/X)\n"
                 +CYAN +" ".repeat(5)+" log"+WHITE+"(X,Y) ≡ logX(Y), "+CYAN+" sqrt"+WHITE+"(x)," +CYAN +" inv"+WHITE+"(x)\n"
                 + CYAN + " ".repeat(5) + " asin" + WHITE + "(x), "+CYAN+"acos" + WHITE + "(x), "+CYAN+"atan" + WHITE + "(x)\n"
-                + CYAN + " ".repeat(5) +" sinh" + WHITE + "(x),  "+CYAN+"acosh" + WHITE + "(x),  "+CYAN+"atanh" + WHITE + "(x)\n"
-                + CYAN + " ".repeat(5) +" asec" + WHITE + "(x), "+CYAN+"acsc" + WHITE + "(x), "+CYAN+"csc" + WHITE + "(x), "+CYAN+"sec" + WHITE + "(x)\n"
+                + CYAN + " ".repeat(5) + " asin" + WHITE + "(x), "+CYAN+"acos" + WHITE + "(x), "+CYAN+"atan" + WHITE + "(x), "+CYAN+"exp" + WHITE +"(x)≡ e^(x) \n"                + CYAN + " ".repeat(5) +" asec" + WHITE + "(x), "+CYAN+"acsc" + WHITE + "(x), "+CYAN+"csc" + WHITE + "(x), "+CYAN+"sec" + WHITE + "(x)\n"
                 + CYAN + " ".repeat(5) +" acosh" + WHITE + "(x), "+CYAN+"asinh" + WHITE + "(x), "+CYAN+"atanh" + WHITE + "(x), "+CYAN+"acot" + WHITE + "(x)\n"
                 + CYAN + " ".repeat(5) + " npr" + WHITE + "(X,Y), "+CYAN+"ncr" + WHITE + "(X,Y)"
         );
