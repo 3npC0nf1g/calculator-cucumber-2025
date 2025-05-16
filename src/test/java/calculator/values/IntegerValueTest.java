@@ -36,8 +36,8 @@ class IntegerValueTest {
       void testNotEqualsDifferentValueOrType() {
          IntegerValue a = new IntegerValue(5);
          assertNotEquals(a, new IntegerValue(6));
-         assertNotEquals(a, null);
-         assertNotEquals(a, "5");
+         assertNotEquals(null, a );
+         assertNotEquals("5", a);
       }
    }
 
