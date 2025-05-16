@@ -101,10 +101,10 @@ public class RationalValue implements NumericValue {
         } else if (other instanceof IntegerValue integerValue) {
             // Convert IntegerValue to RationalValue (denom = 1)
             return this.add(new RationalValue(integerValue.getValue(), 1));
-        }  else if (other instanceof RealValue) {
+        }  else if (other instanceof RealValue realValue) {
         // Promote this RationalValue to a RealValue and delegate the addition.
         BigDecimal thisReal = new BigDecimal(numerator).divide(new BigDecimal(denominator), MathContext.DECIMAL128);
-        int scale = Math.max(thisReal.scale(), ((RealValue) other).getPrecision()); // combine précision des deux
+        int scale = Math.max(thisReal.scale(), realValue.getPrecision()); // combine précision des deux
         RealValue thisAsReal = new RealValue(thisReal.doubleValue(), scale);
         return thisAsReal.add(other);
     }
