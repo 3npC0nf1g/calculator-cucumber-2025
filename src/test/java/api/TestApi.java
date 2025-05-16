@@ -1,3 +1,4 @@
+
 package api;
 
 import calculator.service.CalculatorService;
@@ -9,11 +10,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestApi {
 
+    private ExpressionParser parser;
     private CalculatorService calculatorService;
 
     @BeforeEach
-    public void setUp() {
-        calculatorService = new CalculatorService();
+    void setUp() {
+        // Reset global parser state
+        calculatorService= new CalculatorService();
+
+        ExpressionParser.setMode(ExpressionParser.Mode.DEGREES);
+        ExpressionParser.setNotation(ExpressionParser.Notation.INFIX);
+        ExpressionParser.setDisplay(ExpressionParser.Display.DECIMAL);
+        parser = new ExpressionParser();
+        // Reset last_result
+        ExpressionParser.last_result = null;
     }
 
     // Basic arithmetic operations
@@ -80,5 +90,37 @@ public class TestApi {
 
         calculatorService.toggleDisplayMode();
         assertEquals(ExpressionParser.Display.DECIMAL, ExpressionParser.getDisplay());
+    }
+
+    @Test public void testLnFunction() throws Exception {
+        assertEquals("1", calculatorService.getRep("ln(e)"));
+    }
+
+    @Test public void testRootFunction() throws Exception {
+        assertEquals("3", calculatorService.getRep("root(27,3)"));
+    }
+
+    @Test public void testPiUsage() throws Exception {
+        assertEquals("3.141592653589793", calculatorService.getRep("pi"));
+    }
+
+    @Test public void testEUsage() throws Exception {
+        assertEquals("2.718281828459045", calculatorService.getRep("e"));
+    }
+
+    @Test public void testLnOfEToPower3() throws Exception {
+        assertEquals("3", calculatorService.getRep("ln(power(e,3))"));
+    }
+
+    @Test public void testSqrtOfPi() throws Exception {
+        assertEquals("1.77245385091", calculatorService.getRep("sqrt(pi)").substring(0,12));
+    }
+
+    @Test public void testLogBase2Of8() throws Exception {
+        assertEquals("3", calculatorService.getRep("log(2,8)"));
+    }
+
+    @Test public void testRootOfPi() throws Exception {
+        assertEquals("1.77245385091", calculatorService.getRep("root(pi,2)").substring(0,12));
     }
 }

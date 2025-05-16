@@ -14,6 +14,7 @@ import java.util.ArrayList;
 @Service
 public class CalculatorService {
     private static final Logger logger = LoggerFactory.getLogger(CalculatorService.class);
+    ExpressionParser parser = new ExpressionParser();
 
     /**
      * Processes a simple binary arithmetic operation using integers.
@@ -23,10 +24,11 @@ public class CalculatorService {
      * @return the result of the operation as a string or an error message in case of failure.
      */
     public String getRep(String expression) throws Exception {
-        ExpressionParser e = new ExpressionParser();
+
         logger.info(expression.trim());
-        NumericValue expr = e.parse(expression.trim());
-        return expr.toString();
+        NumericValue result = parser.parse(expression.trim());
+        return result.toString();
+
     }
 
 
