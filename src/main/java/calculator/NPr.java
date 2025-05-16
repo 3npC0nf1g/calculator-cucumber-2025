@@ -58,7 +58,7 @@ public final class NPr extends Operation {
         int k = r.getValueInt();
 
         if (n < 0 || k < 0 || k > n) {
-            throw new ArithmeticException("Invalid input for nPr: n=" + n + ", r=" + k);
+            throw new ArithmeticException("Invalid input for nPr: n=" + n + ", r=" + k+" because n must be >= k and >= 0");
         }
 
         return new IntegerValue(permutation(n, k));
