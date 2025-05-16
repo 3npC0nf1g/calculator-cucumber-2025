@@ -4,6 +4,14 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
+/**
+ * Represents a complex number with a real and an imaginary part.
+ * Implements the {@link NumericValue} interface to support arithmetic and
+ * transcendental operations.
+ *
+ * This class uses {@link BigDecimal} for precision in both parts.
+ * A special constant {@code NaN} is provided to represent undefined results.
+ */
 public class ComplexValue implements NumericValue {
     private final BigDecimal realPart;
     private final BigDecimal imaginaryPart;
@@ -11,17 +19,34 @@ public class ComplexValue implements NumericValue {
 
     public static final ComplexValue NaN = new ComplexValue();
 
+    /**
+     * Constructs a ComplexValue with the specified real and imaginary parts as doubles.
+     *
+     * @param realPart the real part of the complex number
+     * @param imaginaryPart the imaginary part of the complex number
+     */
     public ComplexValue(double realPart, double imaginaryPart) {
         this.realPart = BigDecimal.valueOf(realPart);
         this.imaginaryPart = BigDecimal.valueOf(imaginaryPart);
     }
 
+    /**
+     * Constructs a ComplexValue representing a "Not-a-Number" (NaN) complex value.
+     * Both real and imaginary parts are initialized to zero, and a flag is set to indicate NaN.
+     */
     private ComplexValue() {
         this.realPart = BigDecimal.ZERO;
         this.imaginaryPart = BigDecimal.ZERO;
         this.isNaN = true;
     }
 
+
+    /**
+     * Constructs a ComplexValue with the specified real and imaginary parts as BigDecimal values.
+     *
+     * @param realPart the real part of the complex number
+     * @param imaginaryPart the imaginary part of the complex number
+     */
     public ComplexValue(BigDecimal realPart, BigDecimal imaginaryPart) {
         this.realPart = realPart;
         this.imaginaryPart = imaginaryPart;
@@ -43,6 +68,14 @@ public class ComplexValue implements NumericValue {
         return imaginaryPart;
     }
 
+
+    /**
+     * Adds the current complex value to another numeric value.
+     *
+     * @param other the numeric value to add (can be ComplexValue, RealValue, or IntegerValue)
+     * @return the result of the addition as a new ComplexValue
+     * @throws UnsupportedOperationException if the type of the other value is not supported
+     */
     @Override
     public NumericValue add(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -62,6 +95,13 @@ public class ComplexValue implements NumericValue {
 
 
 
+    /**
+     * Subtracts another numeric value from the current complex value.
+     *
+     * @param other the numeric value to subtract (can be ComplexValue, RealValue, or IntegerValue)
+     * @return the result of the subtraction as a new ComplexValue, with components rounded as needed
+     * @throws UnsupportedOperationException if the type of the other value is not supported
+     */
     @Override
     public NumericValue subtract(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -83,10 +123,13 @@ public class ComplexValue implements NumericValue {
         throw new UnsupportedOperationException("Unsupported subtraction between ComplexValue and " + other.getClass());
     }
 
-
-
-
-
+    /**
+     * Multiplies the current complex value by another numeric value.
+     *
+     * @param other the numeric value to multiply by (can be ComplexValue, RealValue, or IntegerValue)
+     * @return the result of the multiplication as a new ComplexValue
+     * @throws UnsupportedOperationException if the type of the other value is not supported
+     */
     @Override
     public NumericValue multiply(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -104,6 +147,13 @@ public class ComplexValue implements NumericValue {
         throw new UnsupportedOperationException("Unsupported multiplication between ComplexValue and " + other.getClass());
     }
 
+    /**
+     * Divides the current complex value by another numeric value.
+     *
+     * @param other the numeric value to divide by (can be ComplexValue, RealValue, or IntegerValue)
+     * @return the result of the division as a new ComplexValue, with components rounded to 2 decimal places
+     * @throws UnsupportedOperationException if the type of the other value is not supported
+     */
     @Override
     public NumericValue divide(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -143,18 +193,35 @@ public class ComplexValue implements NumericValue {
         throw new UnsupportedOperationException("Unsupported division between ComplexValue and " + other.getClass());
     }
 
-
+    /**
+     * Returns the string representation of the complex number.
+     *
+     * @return a string in the form "a + bi", or "NaN" if the value is not a number
+     */
     @Override
     public String toString() {
         if (isNaN) return "NaN";
         return realPart + " + " + imaginaryPart + "i";
     }
 
+    /**
+     * Returns an integer value representation.
+     * For complex numbers, this returns 0 by default.
+     *
+     * @return 0 always (as complex numbers cannot be converted to a single integer)
+     */
     @Override
     public int getValueInt() {
         return 0;
     }
 
+
+    /**
+     * Checks equality with another object.
+     *
+     * @param o the object to compare to
+     * @return true if both are ComplexValue instances and either both are NaN or both have equal real and imaginary parts
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ComplexValue other)) return false;
@@ -164,6 +231,11 @@ public class ComplexValue implements NumericValue {
                 imaginaryPart.equals(other.imaginaryPart);
     }
 
+    /**
+     * Returns the hash code for the complex value.
+     *
+     * @return a hash code based on real and imaginary parts, or 0 if the value is NaN
+     */
     @Override
     public int hashCode() {
         return isNaN ? 0 : realPart.hashCode() ^ imaginaryPart.hashCode();

@@ -322,6 +322,84 @@ public class Main {
 			c.print(expComplex);
 			c.eval(expComplex);
 
+
+
+
+
+
+
+
+
+
+
+
+			// … dans le bloc try { … } de main(), après les autres tests :
+
+// ============ Tests pour les fonctions combinatoires ============
+
+// Test de nCr (combinaison) : 5 choose 3 = 10
+			List<Expression> combParams = new ArrayList<>();
+			combParams.add(new MyNumber(new IntegerValue(5)));  // n = 5
+			combParams.add(new MyNumber(new IntegerValue(3)));  // r = 3
+			Expression nCrTest = new NCr(combParams, Notation.INFIX);
+			log("Test nCr (5 choose 3): expected 10");
+			c.print(nCrTest);
+			c.eval(nCrTest);
+
+// Test de nCr avec r = 0 : 7 choose 0 = 1
+			combParams = new ArrayList<>();
+			combParams.add(new MyNumber(new IntegerValue(7)));
+			combParams.add(new MyNumber(new IntegerValue(0)));
+			nCrTest = new NCr(combParams, Notation.INFIX);
+			log("Test nCr (7 choose 0): expected 1");
+			c.print(nCrTest);
+			c.eval(nCrTest);
+
+// Test d’erreur nCr avec r > n
+			combParams = new ArrayList<>();
+			combParams.add(new MyNumber(new IntegerValue(4)));
+			combParams.add(new MyNumber(new IntegerValue(5)));
+			nCrTest = new NCr(combParams, Notation.INFIX);
+			log("Test nCr invalide (4 choose 5) => ArithmeticException attendue");
+			try {
+				c.eval(nCrTest);
+			} catch (ArithmeticException ex) {
+				logError("Erreur attendue : " + ex.getMessage());
+			}
+
+// -------------------------------------------------------------
+
+// Test de nPr (permutation) : 5P3 = 5 × 4 × 3 = 60
+			List<Expression> permParams = new ArrayList<>();
+			permParams.add(new MyNumber(new IntegerValue(5)));  // n = 5
+			permParams.add(new MyNumber(new IntegerValue(3)));  // r = 3
+			Expression nPrTest = new NPr(permParams, Notation.INFIX);
+			log("Test nPr (5 P 3): expected 60");
+			c.print(nPrTest);
+			c.eval(nPrTest);
+
+// Test de nPr avec r = 0 : 7P0 = 1
+			permParams = new ArrayList<>();
+			permParams.add(new MyNumber(new IntegerValue(7)));
+			permParams.add(new MyNumber(new IntegerValue(0)));
+			nPrTest = new NPr(permParams, Notation.INFIX);
+			log("Test nPr (7 P 0): expected 1");
+			c.print(nPrTest);
+			c.eval(nPrTest);
+
+// Test d’erreur nPr avec r > n
+			permParams = new ArrayList<>();
+			permParams.add(new MyNumber(new IntegerValue(3)));
+			permParams.add(new MyNumber(new IntegerValue(5)));
+			nPrTest = new NPr(permParams, Notation.INFIX);
+			log("Test nPr invalide (3 P 5) => ArithmeticException attendue");
+			try {
+				c.eval(nPrTest);
+			} catch (ArithmeticException ex) {
+				logError("Erreur attendue : " + ex.getMessage());
+			}
+
+
 		} catch (IllegalConstruction exception) {
 			logError("Impossible de créer des opérations sans paramètres");
 		}
