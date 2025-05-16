@@ -6,7 +6,7 @@ import java.util.*;
 
 public class BooleanExpressionEvaluator {
 
-    private static final Map<String, Integer> PRECEDENCE = Map.of(
+    public static final Map<String, Integer> PRECEDENCE = Map.of(
             "!", 3,
             "&&", 2,
             "||", 1
@@ -18,7 +18,7 @@ public class BooleanExpressionEvaluator {
         return new BooleanValue(evaluatePostfix(postfix));
     }
 
-    private static List<String> tokenize(String expr) {
+    public static List<String> tokenize(String expr) {
         expr = expr.replaceAll("(?i)\\bAND\\b", "&&")
                 .replaceAll("(?i)\\bOR\\b", "||")
                 .replaceAll("(?i)\\bNOT\\b", "!")
@@ -29,7 +29,7 @@ public class BooleanExpressionEvaluator {
         return Arrays.asList(parts);
     }
 
-    private static List<String> toPostfix(List<String> tokens) throws Exception {
+    public static List<String> toPostfix(List<String> tokens) throws Exception {
         List<String> output = new ArrayList<>();
         Deque<String> operators = new ArrayDeque<>();
 
@@ -69,7 +69,7 @@ public class BooleanExpressionEvaluator {
         return output;
     }
 
-    private static boolean evaluatePostfix(List<String> postfix) throws Exception {
+    public static boolean evaluatePostfix(List<String> postfix) throws Exception {
         Deque<Object> stack = new ArrayDeque<>();
 
         for (String token : postfix) {
@@ -111,16 +111,15 @@ public class BooleanExpressionEvaluator {
         return toBoolean(result);
     }
 
-    private static boolean toBoolean(Object val) throws Exception {
+    public static boolean toBoolean(Object val) throws Exception {
         if (val instanceof Boolean) return (Boolean) val;
         if (val instanceof Double) return ((Double) val) != 0.0;
         throw new Exception("Cannot convert to boolean: " + val);
     }
 
 
-    // --- Helper methods ---
 
-    private static boolean parseBooleanToken(String token) throws Exception {
+    public static boolean parseBooleanToken(String token) throws Exception {
         token = token.toLowerCase();
         return switch (token) {
             case "true", "1" -> true;
@@ -129,15 +128,15 @@ public class BooleanExpressionEvaluator {
         };
     }
 
-    private static double parseDouble(boolean b) {
+    public static double parseDouble(boolean b) {
         return b ? 1.0 : 0.0;
     }
 
-    private static boolean isBoolean(String token) {
+    public static boolean isBoolean(String token) {
         return token.equalsIgnoreCase("true") || token.equalsIgnoreCase("false");
     }
 
-    private static boolean isNumeric(String token) {
+    public static boolean isNumeric(String token) {
         try {
             Double.parseDouble(token);
             return true;
@@ -146,15 +145,15 @@ public class BooleanExpressionEvaluator {
         }
     }
 
-    private static boolean isLogicalOperator(String token) {
+    public static boolean isLogicalOperator(String token) {
         return PRECEDENCE.containsKey(token);
     }
 
-    private static boolean isComparisonOperator(String token) {
+    public static boolean isComparisonOperator(String token) {
         return token.matches("==|!=|<=|>=|<|>");
     }
 
-    private static boolean evaluateComparison(double a, double b, String op) {
+    public static boolean evaluateComparison(double a, double b, String op) {
         return switch (op) {
             case "==" -> a == b;
             case "!=" -> a != b;

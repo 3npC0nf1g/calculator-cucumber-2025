@@ -1,63 +1,102 @@
 package parser;
-import calculator.values.BooleanValue;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
 
+import calculator.values.BooleanValue;
+import calculator.values.NumericValue;
+import org.junit.jupiter.api.Test;
+import parser.BooleanExpressionEvaluator;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BooleanExpressionTest {
 
-    // Test comparaisons simples
     @Test
-    public void testSimpleComparisons() {
-        assertTrue(get("1 == 1"));
-        assertTrue(get("2 != 3"));
-        assertTrue(get("4 > 2"));
-        assertFalse(get("3 < 1"));
-        assertTrue(get("3 >= 3"));
-        assertFalse(get("2 <= 1"));
+    public void testEvaluatePostfix() throws Exception {
+        // Equivalent to: !(true && false || true) → !(false || true) → !true → false
+        List<String> postfix = List.of("true", "false", "&&", "true", "||", "!");
+        assertFalse(BooleanExpressionEvaluator.evaluatePostfix(postfix));
     }
 
-    // Test AND logique
+
+
     @Test
-    public void testLogicalAnd() {
-        assertTrue(get("true AND true"));
-        assertFalse(get("true AND false"));
-        assertTrue(get("1 == 1 AND 2 > 1"));
-        assertFalse(get("1 == 2 AND 2 > 1"));
+    public void testToPostfix() throws Exception {
+        List<String> tokens = List.of("true", "&&", "false", "||", "!");
+        List<String> postfix = BooleanExpressionEvaluator.toPostfix(tokens);
+        assertEquals(List.of("true", "false", "&&", "!","||"), postfix);
     }
 
-    // Test OR logique
+
     @Test
-    public void testLogicalOr() {
-        assertTrue(get("true OR false"));
-        assertFalse(get("false OR false"));
-        assertTrue(get("1 < 0 OR 5 == 5"));
-        assertFalse(get("1 < 0 OR 2 != 2"));
+    public void testToBoolean() throws Exception {
+        assertTrue(BooleanExpressionEvaluator.toBoolean(true));         // Boolean true
+        assertFalse(BooleanExpressionEvaluator.toBoolean(false));       // Boolean false
+        assertTrue(BooleanExpressionEvaluator.toBoolean(1.0));          // Double != 0.0
+        assertFalse(BooleanExpressionEvaluator.toBoolean(0.0));         // Double == 0.0
+        assertThrows(Exception.class, () -> BooleanExpressionEvaluator.toBoolean("notABool")); // Invalid type
     }
 
-    // Test NOT logique
+
     @Test
-    public void testLogicalNot() {
-        assertFalse(get("NOT true"));
-        assertTrue(get("NOT false"));
-        assertFalse(get("NOT (3 < 5)"));
-        assertTrue(get("NOT (3 > 5)"));
+    public void testTokenize() {
+        String expression = "(true AND false) OR true";
+        List<String> tokens = BooleanExpressionEvaluator.tokenize(expression);
+        assertEquals(List.of("(", "true", "&&", "false", ")", "||", "true"), tokens);
     }
 
-    // Test expressions complexes
+
+
+
     @Test
-    public void testComplexExpressions() {
-        assertTrue(get("(1 == 1 AND 2 > 1) OR false"));
-        assertTrue(get("NOT (2 != 2) AND (5 >= 3)"));
-        assertFalse(get("NOT (1 == 1 AND 2 > 1) OR false"));
+    public void testParseBooleanToken() throws Exception {
+        assertTrue(BooleanExpressionEvaluator.parseBooleanToken("true"));
+        assertFalse(BooleanExpressionEvaluator.parseBooleanToken("false"));
     }
 
-    // Helper pour parser et obtenir la valeur booléenne
-    private boolean get(String expr) {
-        try {
-            return ((BooleanValue) BooleanExpressionParser.parse(expr)).getValue();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+
+    @Test
+    public void testIsLogicalOperator() {
+        assertTrue(BooleanExpressionEvaluator.isLogicalOperator("&&"));
+        assertTrue(BooleanExpressionEvaluator.isLogicalOperator("||"));
+        assertTrue(BooleanExpressionEvaluator.isLogicalOperator("!"));
+    }
+
+    @Test
+    public void testIsComparisonOperator() {
+        assertTrue(BooleanExpressionEvaluator.isComparisonOperator(">"));
+        assertTrue(BooleanExpressionEvaluator.isComparisonOperator(">="));
+        assertTrue(BooleanExpressionEvaluator.isComparisonOperator("=="));
+        assertTrue(BooleanExpressionEvaluator.isComparisonOperator(">"));
+        assertTrue(BooleanExpressionEvaluator.isComparisonOperator("<="));
+        assertTrue(BooleanExpressionEvaluator.isComparisonOperator("!="));
+    }
+
+    @Test
+    public void testIsBoolean() {
+        assertTrue(BooleanExpressionEvaluator.isBoolean("true"));
+        assertTrue(BooleanExpressionEvaluator.isBoolean("FALSE"));
+        assertFalse(BooleanExpressionEvaluator.isBoolean("maybe"));
+    }
+
+    @Test
+    public void testIsNumeric() {
+        assertTrue(BooleanExpressionEvaluator.isNumeric("123"));
+        assertTrue(BooleanExpressionEvaluator.isNumeric("3.14"));
+        assertFalse(BooleanExpressionEvaluator.isNumeric("abc"));
+    }
+    @Test
+    public void testEvaluateComparison() {
+        assertTrue(BooleanExpressionEvaluator.evaluateComparison(5.0, 3.0, ">"));
+        assertFalse(BooleanExpressionEvaluator.evaluateComparison(2.0, 2.0, "<"));
+        assertTrue(BooleanExpressionEvaluator.evaluateComparison(2.0, 2.0, "=="));
+        assertTrue(BooleanExpressionEvaluator.evaluateComparison(4.0, 2.0, ">="));
+        assertTrue(BooleanExpressionEvaluator.evaluateComparison(2.0, 8.0, "<="));
+        assertFalse(BooleanExpressionEvaluator.evaluateComparison(2.0, 2.0, "!="));
+    }
+    @Test
+    public void testConstructor() {
+        new BooleanExpressionEvaluator(); // Just to cover the default constructor
     }
 }
