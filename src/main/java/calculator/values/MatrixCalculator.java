@@ -13,7 +13,6 @@ public class MatrixCalculator {
 
     /**
      * Launches the interactive matrix calculator in the console.
-     * <p>
      * Supported operations:
      * <ul>
      *     <li><b>add</b> - Adds two matrices</li>
@@ -23,9 +22,9 @@ public class MatrixCalculator {
      *     <li><b>inverse</b> - Computes the inverse of a square matrix</li>
      *     <li><b>exit</b> - Exits the program</li>
      * </ul>
-     * </p>
      *
-     * <p>The user inputs matrices and operation commands directly via the console.</p>
+     *
+     * The user inputs matrices and operation commands directly via the console.
      */
     public void launchMatrixCalculator() {
         Matrix A, B = null;
