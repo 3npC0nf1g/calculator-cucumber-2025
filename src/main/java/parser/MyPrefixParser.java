@@ -101,6 +101,7 @@ public class MyPrefixParser {
 
             token = tokenizerPrefix.peek();
             if (isOperator(token)) {
+                //System.out.println("init operator "+operators);
                 lastOperator = token;
                 token = tokenizerPrefix.next(); // consume operator
                 //System.out.println("[DEBUG] operator in group = " + token);
@@ -121,12 +122,13 @@ public class MyPrefixParser {
                 else {
                     product = applyOperator(token, args);
                     operators.remove(token);
+                    //System.out.println("end operator "+operators);
                 }
 
                 //System.out.println("[DEBUG] result of operator " + token + " on " + args + " = " + product);
                 return product;
             } else if (isFunction(token)) {
-                throw new RuntimeException("non fonction in this notation: " + token);
+                throw new RuntimeException("no fonction in this notation: " + token);
             } else {
                 // Multiplication implicite
                 List<NumericValue> values = new ArrayList<>();
@@ -144,7 +146,7 @@ public class MyPrefixParser {
                 }
                 if (values.isEmpty()) return new RealValue(0, 10);
                 NumericValue product =new RealValue(0, 10);
-                if(lastOperator.isBlank()) {
+                if(operators.size()==0 || lastOperator.isBlank()) {
                     product = values.get(0);
                     for (int i = 1; i < values.size(); i++) {
                         product = product.multiply(values.get(i));
