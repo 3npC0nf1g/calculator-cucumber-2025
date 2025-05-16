@@ -39,7 +39,7 @@ public class MyInfixParser {
         public boolean isFunction = false;
         public boolean isComplex = false;
         public static final Set<String> TWO_ARG_FUNCS = Set.of(
-                "root", "power", "log"
+                "root", "power", "log","ncr","npr"
         );
 
 
@@ -78,20 +78,16 @@ public class MyInfixParser {
 
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
-
-            // 1) Reconnaître '-' unaire devant un nombre
             boolean canBeUnaryMinus =
-                    !inBracket
-                            && c == '-'
-                            && (i == 0 || "+-*/(".indexOf(expression.charAt(i - 1)) >= 0)
-                            && (i + 1 < expression.length())
-                            && (Character.isDigit(expression.charAt(i + 1)) || expression.charAt(i + 1) == '.');
+                           !inBracket
+                                && c == '-'
+                                && (i == 0 || "+-*/(,".indexOf(expression.charAt(i - 1)) >= 0)
+                                && (i + 1 < expression.length())
+                                && (Character.isDigit(expression.charAt(i + 1)) || expression.charAt(i + 1) == '.');
             if (canBeUnaryMinus) {
                 token.append(c);
                 continue;
             }
-
-            // 2) Complexes [...]
             if (c == '[') {
                 inBracket = true;
                 token.append(c);
@@ -100,35 +96,26 @@ public class MyInfixParser {
                 inBracket = false;
             } else if (inBracket) {
                 token.append(c);
-
-                // 3) Chiffres, points, lettres (variables ou fonctions)
             } else if (Character.isDigit(c) || c == '.' || Character.isLetter(c)) {
                 token.append(c);
 
-                // 4) Fin de token, on le pousse
             }
-            // 4.bis) Séparateur d'arguments de fonction
             else if (c == ',') {
-                // flush du token courant
                 if (token.length() > 0) {
                     String tok = token.toString();
                     if (isFunctionName(tok)) ops.push(tok);
                     else nodes.push(createNodeFromToken(tok));
                     token.setLength(0);
                 }
-                // on dépile tout jusqu'à la parenthèse ouvrante
                 while (!ops.isEmpty() && !ops.peek().equals("(")) {
                     buildSubTree(nodes, ops.pop());
                 }
 
-// 4.ter) Pourcentage postfixe
             } else if (c == '%') {
-                // flush du token courant (le nombre)
                 if (token.length() > 0) {
                     nodes.push(createNodeFromToken(token.toString()));
                     token.setLength(0);
                 }
-                // on construit directement le nœud % comme une fonction unaire
                 buildSubTree(nodes, "%");
             }
             else {
@@ -138,8 +125,6 @@ public class MyInfixParser {
                     else nodes.push(createNodeFromToken(tok));
                     token.setLength(0);
                 }
-
-                // 5) Parenthèses et opérateurs comme avant
                 if (c == '(') {
                     ops.push("(");
                     parenthesesBalance++;
@@ -168,8 +153,6 @@ public class MyInfixParser {
                 }
             }
         }
-
-        // Reste du flush et construction finale…
         if (token.length() > 0) {
             String tok = token.toString();
             if (isFunctionName(tok)) ops.push(tok);
@@ -203,22 +186,20 @@ public class MyInfixParser {
             if (TWO_ARG_FUNCS.contains(op)) {
                 // fonctions à 2 arguments
                 if (nodes.size() < 2)
-                    throw new IllegalStateException("Pas assez d'arguments pour " + op);
+                    throw new IllegalStateException("Not enough argument for" + op);
                 Node right = nodes.pop();
                 Node left  = nodes.pop();
                 parent.setLeft(left);
                 parent.setRight(right);
 
             } else {
-                // fonctions unaires
                 if (nodes.isEmpty())
-                    throw new IllegalStateException("Pas d'argument pour la fonction " + op);
+                    throw new IllegalStateException("Pas d'argument pour la fonction 2" + op);
                 Node child = nodes.pop();
                 parent.setLeft(child);
             }
 
         } else {
-            // opérateur binaire standard
             if (nodes.size() < 2)
                 throw new IllegalStateException("Pas assez d'opérandes pour '" + op + "'");
             Node right = nodes.pop();
@@ -259,7 +240,12 @@ public class MyInfixParser {
     private static boolean isFunctionName(String token) {
         return token.equals("sin") || token.equals("cos") || token.equals("tan") || token.equals("E")
                 || token.equals("exp")|| token.equals("ln") || token.equals("log") || token.equals("sqrt")
-                || token.equals("root") || token.equals("power") || token.equals("inv") || token.equals("%");
+                || token.equals("root") || token.equals("power") || token.equals("inv") || token.equals("%")
+                || token.equals("asin") || token.equals("acos") || token.equals("atan")
+                || token.equals("sinh") || token.equals("cosh") || token.equals("tanh") || token.equals("cot")
+                || token.equals("asec") || token.equals("acsc") || token.equals("csc") || token.equals("sec")
+                || token.equals("acosh") || token.equals("asinh") || token.equals("atanh") || token.equals("acot")
+                || token.equals("npr") || token.equals("ncr");
     }
 
     /**
@@ -290,84 +276,139 @@ public class MyInfixParser {
         //System.out.println("Évaluation du nœud : " + root.value);
 
         if (root.isFunction) {
-            Calculator c = ExpressionParser.mycalculator;
-            // si c’est une fonction binaire
-            if (TWO_ARG_FUNCS.contains(root.value)) {
-                NumericValue a = evaluate(root.left);
-                NumericValue b = evaluate(root.right);
-                switch (root.value) {
-                    case "root":
-                        Root r=new Root(List.of(new MyNumber(evaluate(root.left)),new MyNumber(evaluate(root.right))), Notation.INFIX);
-                        return new RealValue(Double.parseDouble(c.eval(r).toString()),10);
+                Calculator c = ExpressionParser.mycalculator;
+                // binary
+                if (TWO_ARG_FUNCS.contains(root.value)) {
+                    NumericValue left = evaluate(root.left);
+                    NumericValue right = evaluate(root.right);
+                    switch (root.value) {
+                        case "root":
+                            Root r = new Root(List.of(new MyNumber(evaluate(root.left)), new MyNumber(evaluate(root.right))), Notation.INFIX);
+                            return new RealValue(Double.parseDouble(c.eval(r).toString()), 10);
 
-                    case "power":
-                        Power p=new Power(List.of(new MyNumber(evaluate(root.left)),new MyNumber(evaluate(root.right))), Notation.INFIX);
-                        return new RealValue(Double.parseDouble(c.eval(p).toString()),10);
+                        case "power":
+                            Power p = new Power(List.of(new MyNumber(evaluate(root.left)), new MyNumber(evaluate(root.right))), Notation.INFIX);
+                            return new RealValue(Double.parseDouble(c.eval(p).toString()), 10);
 
-                    case "log":
-                        Log log = new Log(List.of(new MyNumber(evaluate(root.left)),new MyNumber(evaluate(root.right))), Notation.INFIX);
-                        return new RealValue(Double.parseDouble(c.eval(log).toString()),10);
+                        case "log":
+                            Log log = new Log(List.of(new MyNumber(evaluate(root.left)), new MyNumber(evaluate(root.right))), Notation.INFIX);
+                            return new RealValue(Double.parseDouble(c.eval(log).toString()), 10);
+                        case "ncr":
+                            List<Expression> combParams = new ArrayList<>();
+                            combParams.add(new MyNumber(left));  // n = 5
+                            combParams.add(new MyNumber(right));  // r = 3
+                            Expression nCr = new NCr(combParams, Notation.INFIX);
+                            return c.eval(nCr);
+                        case "npr":
+                            List<Expression> permParams = new ArrayList<>();
+                            permParams.add(new MyNumber(left));  // n = 5
+                            permParams.add(new MyNumber(right));  // r = 3
+                            Expression nPr = new NPr(permParams, Notation.INFIX);
+                            return c.eval(nPr);
+                    }
                 }
+                // unary
+                switch (root.value) {
+                    // Fonctions trigonométriques & E déjà en place...
+                    case "sin":
+                        return new RealValue(c.sin(toDouble(evaluate(root.left).toString())), 10);
+                    case "cos":
+                        return new RealValue(c.cos(toDouble(evaluate(root.left).toString())), 10);
+                    case "tan":
+                        return new RealValue(c.tan(toDouble(evaluate(root.left).toString())), 10);
+                    case "E":
+                        return new RealValue(Math.pow(10, toDouble(evaluate(root.left).toString())), 10);
+
+                    case "exp":
+                        Exp exp = new Exp(List.of(new MyNumber(evaluate(root.left))), Notation.PREFIX);
+                        NumericValue expResult = exp.op(new RealValue(Double.parseDouble(evaluate(root.left).toString()), 10));
+                        return new RealValue(Double.parseDouble(expResult.toString()), 10);
+
+                    // Fonctions unaires MyNumber
+                    case "ln":
+                        Ln ln = new Ln(List.of(new MyNumber(evaluate(root.left))), Notation.INFIX);
+                        return new RealValue(Double.parseDouble(c.eval(ln).toString()), 10);
+
+                    case "sqrt":
+                        return new RealValue(Math.sqrt(Double.parseDouble(evaluate(root.left).toString())), 10);
+                    case "inv":
+                        Inverse inv = new Inverse(List.of(new MyNumber(evaluate(root.left))), Notation.INFIX);
+                        return new RealValue(Double.parseDouble(c.eval(inv).toString()), 10);
+                    // Pourcentage
+                    case "%":
+                        NumericValue pct = evaluate(root.left);
+                        // diviser par 100 : équivalent à MyNumber.divide(100)
+                        return pct.divide(new RealValue(BigDecimal.valueOf(100), 10));
+                    case "asin":
+                        return new RealValue(c.asin(toDouble(evaluate(root.left).toString())), 10);
+                    case "acos":
+                        return new RealValue(c.acos(toDouble(evaluate(root.left).toString())), 10);
+                    case "atan":
+                        return new RealValue(c.atan(toDouble(evaluate(root.left).toString())), 10);
+                    case "sinh":
+                        return new RealValue(c.sinh(toDouble(evaluate(root.left).toString())), 10);
+                    case "cosh":
+                        return new RealValue(c.cosh(toDouble(evaluate(root.left).toString())), 10);
+                    case "tanh":
+                        return new RealValue(c.tanh(toDouble(evaluate(root.left).toString())), 10);
+                    case "cot":
+                        return new RealValue(c.cot(toDouble(evaluate(root.left).toString())), 10);
+                    case "asec":
+                        return new RealValue(c.asec(toDouble(evaluate(root.left).toString())), 10);
+                    case "acsc":
+                        return new RealValue(c.acsc(toDouble(evaluate(root.left).toString())), 10);
+                    case "csc":
+                        return new RealValue(c.csc(toDouble(evaluate(root.left).toString())), 10);
+                    case "sec":
+                        return new RealValue(c.sec(toDouble(evaluate(root.left).toString())), 10);
+                    case "acosh":
+                        return new RealValue(c.acosh(toDouble(evaluate(root.left).toString())), 10);
+                    case "asinh":
+                        return new RealValue(c.asinh(toDouble(evaluate(root.left).toString())), 10);
+                    case "atanh":
+                        return new RealValue(c.atanh(toDouble(evaluate(root.left).toString())), 10);
+                    case "acot":
+                        return new RealValue(c.acot(toDouble(evaluate(root.left).toString())), 10);
+                    default:
+                        throw new IllegalArgumentException("Fonction inconnue: " + root.value);
+                }
+
             }
-            // sinon fonctions unaires restantes
+
+            if (root.isComplex) {
+                return parseComplex(root.value);
+            }
+
+            if (root.left == null && root.right == null) {
+
+                return new RealValue(new BigDecimal(root.value), 10);
+            }
+
+            NumericValue leftVal = evaluate(root.left);
+            NumericValue rightVal = evaluate(root.right);
+
             switch (root.value) {
-                // Fonctions trigonométriques & E déjà en place...
-                case "sin":   return new RealValue(c.sin  (toDouble(evaluate(root.left).toString())), 10);
-                case "cos":   return new RealValue(c.cos  (toDouble(evaluate(root.left).toString())), 10);
-                case "tan":   return new RealValue(c.tan  (toDouble(evaluate(root.left).toString())), 10);
-                case "E":     return new RealValue(Math.pow(10, toDouble(evaluate(root.left).toString())), 10);
+                case "+":
+                    return leftVal.add(rightVal);
+                case "-":
+                    return leftVal.subtract(rightVal);
+                case "*":
+                    return leftVal.multiply(rightVal);
+                case "/": {
+                    if (ExpressionParser.getDisplay() == ExpressionParser.Display.FRACTION)
+                        return new RationalValue(new BigInteger(leftVal.toString()), new BigInteger(rightVal.toString()));
+                    else
+                        return leftVal.divide(rightVal);
 
-                case "exp":
-                    Exp exp = new Exp(List.of(new MyNumber(evaluate(root.left))), Notation.PREFIX);
-                    NumericValue expResult = exp.op(new RealValue(Double.parseDouble(evaluate(root.left).toString()),10));
-                    return new RealValue(Double.parseDouble(expResult.toString()),10);
-
-                // Fonctions unaires MyNumber
-                case "ln":
-                    Ln ln = new Ln(List.of(new MyNumber(evaluate(root.left))), Notation.INFIX);
-                    return new RealValue(Double.parseDouble(c.eval(ln).toString()),10);
-
-                case "sqrt":  return new RealValue(Math.sqrt(Double.parseDouble(evaluate(root.left).toString())),10);
-                case "inv":
-                    Inverse inv = new Inverse(List.of(new MyNumber(evaluate(root.left))), Notation.INFIX);
-                    return new RealValue(Double.parseDouble(c.eval(inv).toString()),10);
-                // Pourcentage
-                case "%":
-                    NumericValue pct = evaluate(root.left);
-                    // diviser par 100 : équivalent à MyNumber.divide(100)
-                    return pct.divide(new RealValue(BigDecimal.valueOf(100), 10));
+                }
                 default:
-                    throw new IllegalArgumentException("Fonction inconnue: " + root.value);
+                    throw new IllegalArgumentException("Invalid operator: " + root.value);
             }
+
         }
 
-        if (root.isComplex) {
-            return parseComplex(root.value);
-        }
 
-        if (root.left == null && root.right == null) {
 
-            return new RealValue(new BigDecimal(root.value), 10);
-        }
-
-        NumericValue leftVal = evaluate(root.left);
-        NumericValue rightVal = evaluate(root.right);
-
-        switch (root.value) {
-            case "+": return leftVal.add(rightVal);
-            case "-": return leftVal.subtract(rightVal);
-            case "*": return leftVal.multiply(rightVal);
-            case "/":
-            {
-                if(ExpressionParser.getDisplay()== ExpressionParser.Display.FRACTION)
-                    return new RationalValue(new BigInteger(leftVal.toString()),new BigInteger(rightVal.toString()));
-                else
-                    return leftVal.divide(rightVal);
-
-            }
-            default: throw new IllegalArgumentException("Invalid operator: " + root.value);
-        }
-    }
 
     /** Parses a complex number literal of the form [a+bi] */
     private static NumericValue parseComplex(String value) {
@@ -414,18 +455,4 @@ public class MyInfixParser {
         return new ComplexValue(r, i);
     }
 
-    /**
-     * Entry point to test infix expressions.
-     */
-    public static void main(String[] args) {
-        ExpressionParser.mycalculator.setUseRadians(false);
-        String expr = "1.8 * E(2)";
-        try {
-            Node root = buildTree(expr);
-            NumericValue result = evaluate(root);
-            System.out.println("Résultat: " + result);
-        } catch (Exception e) {
-            System.err.println("Erreur: " + e.getMessage());
-        }
-    }
 }

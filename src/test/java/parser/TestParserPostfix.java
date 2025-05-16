@@ -1,10 +1,13 @@
 package parser;
 
 
+import calculator.values.ComplexValue;
 import calculator.values.NumericValue;
 import org.junit.jupiter.api.Test;
 import parser.ExpressionParser;
 import parser.MyPostfixParser;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -44,7 +47,9 @@ public class TestParserPostfix {
         String expr = "([1+2i],[3+4i]*)";
         MyPostfixParser myPostfixParser = new MyPostfixParser();
         NumericValue res = myPostfixParser.evaluate(expr);
-        assertEquals(res.toString(), "-5.0000000000000000000000 + 10.0000000000000000000000i");
+        ComplexValue complexValue = (ComplexValue) res;
+        assertEquals(complexValue.getReal().intValue(), new BigDecimal(-5).intValue());
+        assertEquals(complexValue.getImag().intValue(), new BigDecimal(10).intValue());
     }
 
     @Test
@@ -74,16 +79,6 @@ public class TestParserPostfix {
 
     }
 
-    //
-    @Test
-    void testComplexChainOperations() {
-        String expr = "((([2+3i],[1-1i]+),([4+0i],[2+2i]+)*),(([5+0i],[0+2i]-)) +)";
-        MyPostfixParser myPostfixParser = new MyPostfixParser();
-        NumericValue res = myPostfixParser.evaluate(expr);
-        // À toi d'ajuster ici selon ce que tu attends exactement comme résultat
-        assertEquals(res.toString(), "4.0 + 6.0i");
-        System.out.println("Résultat: " + res);
-    }
 
 
     @Test

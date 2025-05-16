@@ -72,3 +72,151 @@ We use [SemVer](http://semver.org/) for semantic versioning. For the versions av
 ## Acknowledgments
 
 * Software Engineering Lab, Faculty of Sciences, University of Mons, Belgium.
+
+# 🧮 Cucumber Calculator
+
+This is a full-stack calculator application consisting of:
+
+- A **Java Spring Boot backend API** for evaluating mathematical expressions
+- A **React Native GUI** (with web support) for user interaction, built using **Expo**
+
+---
+
+## 📂 Project Structure
+
+```
+calculator-cucumber-2025/
+├── src/
+│   └── main/java/calculator/
+│       ├── api/
+│       ├── config/
+│       ├── service/
+│       ├── util/
+│       ├── values/
+│       └── Application.java
+└── GUI/
+    └── Calculator/
+        ├── app/
+        ├── components/
+        ├── constants/
+        ├── context/
+        ├── hooks/
+        └── ...
+```
+
+---
+
+## 🚀 How to Launch the Application
+
+### 1️⃣ Backend API (Java)
+
+#### 📍 Location
+`src/main/java/calculator/Application.java`
+
+#### ▶️ Launch Instructions
+
+##### ✅ Using Maven:
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+##### ✅ Using IntelliJ / Eclipse:
+Open the project, then run `Application.java` directly.
+
+#### 📡 API Endpoint
+
+The API will start on:  
+```
+http://localhost:8080
+```
+
+Example request:
+```
+GET /api/evaluate?expression=2+*+(3+4)
+```
+
+Example curl:
+```bash
+curl "http://localhost:8080/api/evaluate?expression=2%20*%20(3%20+%204)"
+```
+
+Expected response:
+```
+14
+```
+
+---
+
+### 2️⃣ Frontend GUI (React Native via Expo)
+
+#### 📍 Location
+`GUI/Calculator/`
+
+#### ▶️ Launch Instructions
+
+Navigate to the frontend folder:
+
+```bash
+cd GUI/Calculator
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the Expo server in **web mode**:
+
+```bash
+npx expo start -w
+```
+
+Once running, open your browser and go to:
+
+```
+http://localhost:19006
+```
+
+You can interact with the calculator via the web interface.
+
+---
+
+## 🧪 Running Backend Tests
+
+To execute unit and integration tests for the Java backend:
+
+```bash
+mvn clean test
+```
+
+Test coverage is managed via **JaCoCo**, and results can be found in:
+
+```
+target/site/jacoco/
+```
+
+---
+
+## ⚙️ Requirements
+
+### Backend:
+- Java 21 or 23
+- Maven 3.6+
+
+### Frontend:
+- Node.js ≥ 18
+- Expo CLI *(optional for global install)*:
+  ```bash
+  npm install -g expo-cli
+  ```
+
+
+## 👥 Contributors
+
+- [Hugugus](https://github.com/Hugugus)
+- [Le-Mael](https://github.com/Le-Mael)
+- [3npC0nf1g](https://github.com/3npC0nf1g)
+- [T-ramissU](https://github.com/T-ramissU)
+
