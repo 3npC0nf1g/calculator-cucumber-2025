@@ -36,6 +36,8 @@ public class MatrixCalculatorTest {
         assertArrayEquals(new double[][]{{1,4},{2,5},{3,6}}, result.getData());
     }
 
+
+
     @Test
     public void testInverse() throws Exception {
         Matrix A = Matrix.parse("[[4,7],[2,6]]");
