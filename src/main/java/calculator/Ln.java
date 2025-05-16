@@ -7,14 +7,48 @@ import java.util.List;
 import java.math.MathContext;
 import java.math.BigDecimal;
 
+
+/**
+ * The {@code Ln} class represents the natural logarithm (ln) operation,
+ * which is a unary operation that computes the logarithm base e of a given value.
+ *
+ * <p>This class supports complex numbers, rational and real values, with specific
+ * handling for edge cases and improved precision for certain known values.</p>
+ *
+ * @see UnaryOperation
+ * @see NumericValue#ln()
+ */
 public final class Ln extends UnaryOperation {
 
+    /**
+     * Constructs an {@code Ln} operation with the given list of sub-expressions
+     * and the specified notation.
+     *
+     * @param elist the list of expressions (should contain exactly one operand)
+     * @param n the notation to represent the expression (e.g., INFIX, PREFIX)
+     * @throws IllegalConstruction if the expression list is null or invalid
+     */
     public Ln(List<Expression> elist, Notation n) throws IllegalConstruction {
         super(elist, n);
 
         symbol = "ln";
     }
 
+
+    /**
+     * Applies the natural logarithm (ln) operation to the given {@link NumericValue}.
+     *
+     * <ul>
+     *   <li>If the value is a {@link ComplexValue}, delegates to {@code ln()}.</li>
+     *   <li>If the value is a {@link RealValue}, ensures it is strictly positive and applies
+     *       the {@code Math.log} function, with special-case handling for ln(e²) and ln(ln(e²)).</li>
+     *   <li>For all other numeric types, the method delegates to the value's {@code ln()} implementation.</li>
+     * </ul>
+     *
+     * @param val the value for which to compute the natural logarithm
+     * @return the result of applying ln(val)
+     * @throws ArithmeticException if the input is not strictly positive (for real values)
+     */
     @Override
     public NumericValue op(NumericValue val) {
         // Si c'est un nombre complexe, on peut calculer son logarithme naturel
