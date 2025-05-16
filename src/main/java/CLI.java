@@ -102,7 +102,7 @@ public class CLI {
         if (ExpressionParser.getNotation() != ExpressionParser.Notation.POSTFIX)
             System.err.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "postfix" + WHITE + "' to use Postfix notation");
 
-        System.err.println(CYAN + "-" + WHITE + " Supported types" + CYAN + ":" + WHITE + " integers, decimals, fractions (" + CYAN + "a/b" + WHITE + "), complex " + CYAN + "[a+bi]" + WHITE);
+        System.err.println(CYAN + "-" + WHITE + " Supported types" + CYAN + ":" + WHITE + " integers, decimals, real numbers,helfractions (" + CYAN + "a/b" + WHITE + "), complex " + CYAN + "[a+bi]" + WHITE);
         System.err.println(CYAN + "-" + WHITE + " Scientific notation supported" + CYAN + " (e.g.:" + WHITE + " 1.8 * " + CYAN + "E" + WHITE + "(X) = 1.8*10^X" + CYAN + ")");
 
         System.err.println(CYAN + "-" + WHITE + " You can write '" + CYAN + "res" + WHITE + "' to use your last result");
