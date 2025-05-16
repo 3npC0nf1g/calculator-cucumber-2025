@@ -60,6 +60,7 @@ public class CLI {
         runCLI();
     }
 
+
     /**
      * Prints the welcome message and current settings.
      */
