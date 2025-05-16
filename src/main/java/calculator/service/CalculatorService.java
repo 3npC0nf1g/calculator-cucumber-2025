@@ -18,7 +18,7 @@ public class CalculatorService {
     /**
      * Processes a simple binary arithmetic operation using integers.
      *
-     * @param expression    the arithmetic expression as string (e.g., "+", "-", "*", "/")
+     * @expression The arithmatic operation to evaluate
 
      * @return the result of the operation as a string or an error message in case of failure.
      */
@@ -30,6 +30,9 @@ public class CalculatorService {
     }
 
 
+    /**
+     * Toggles between Radiants and angles
+     */
     public void toggleAngleMode() {
         ExpressionParser.Mode current = ExpressionParser.getMode();
         ExpressionParser.Mode newMode = (current == ExpressionParser.Mode.RADIANS)
@@ -40,6 +43,9 @@ public class CalculatorService {
         logger.info("Angle mode toggled to: {}", newMode);
     }
 
+     /**
+     * Toggles between displaying fractions or decimals
+     */
     public void toggleDisplayMode() {
         ExpressionParser.Display current = ExpressionParser.getDisplay();
         ExpressionParser.Display newMode = (current == ExpressionParser.Display.FRACTION)
