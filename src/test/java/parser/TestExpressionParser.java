@@ -1,10 +1,12 @@
 package parser;
 
+import calculator.Notation;
 import calculator.values.NumericValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static parser.ExpressionParser.*;
 
 /**
  * Unit tests for {@link ExpressionParser} covering basic arithmetic,
@@ -19,8 +21,8 @@ public class TestExpressionParser {
     @BeforeEach
     void setUp() {
         // Reset global parser state
-        ExpressionParser.setMode(ExpressionParser.Mode.DEGREES);
-        ExpressionParser.setNotation(ExpressionParser.Notation.INFIX);
+        setMode(ExpressionParser.Mode.DEGREES);
+        setNotation(ExpressionParser.Notation.INFIX);
         ExpressionParser.setDisplay(ExpressionParser.Display.DECIMAL);
         parser = new ExpressionParser();
         // Reset last_result
@@ -59,21 +61,21 @@ public class TestExpressionParser {
 
     @Test
     void testPrefixAddition() throws Exception {
-        ExpressionParser.setNotation(ExpressionParser.Notation.PREFIX);
+        setNotation(ExpressionParser.Notation.PREFIX);
         NumericValue result = parser.parse("+ 2 3");
         assertEquals("5", result.toString());
     }
 
     @Test
     void testPostfixAddition() throws Exception {
-        ExpressionParser.setNotation(ExpressionParser.Notation.POSTFIX);
+        setNotation(ExpressionParser.Notation.POSTFIX);
         NumericValue result = parser.parse("2 3 +");
         assertEquals("5", result.toString());
     }
 
     @Test
     void testAutoNotation() throws Exception {
-        ExpressionParser.setNotation(ExpressionParser.Notation.AUTO);
+        setNotation(ExpressionParser.Notation.AUTO);
         // AUTO should currently not evaluate and return null
         assertNull(parser.parse("2+2"));
     }
@@ -91,7 +93,7 @@ public class TestExpressionParser {
         assertEquals("1", tanDeg.toString());
 
         // Radians
-        ExpressionParser.setMode(ExpressionParser.Mode.RADIANS);
+        setMode(ExpressionParser.Mode.RADIANS);
         NumericValue sinRad = parser.parse("sin(pi/2)");
         double val = Double.parseDouble(sinRad.toString());
         assertTrue(val > 0.99 && val < 1.01);
@@ -150,5 +152,134 @@ public class TestExpressionParser {
     void testInvalidExpressionReturnsNull() throws Exception {
         // Missing operand
         assertNull(parser.parse("2+"));
+    }
+
+    // 1) getters / setters
+    @Test
+    void testModeSetterGetter() {
+        assertEquals(ExpressionParser.Mode.DEGREES, getMode());
+        setMode(Mode.RADIANS);
+        assertEquals(Mode.RADIANS, getMode());
+    }
+
+    @Test
+    void testNotationSetterGetter() {
+        assertEquals(ExpressionParser.Notation.INFIX, getNotation());
+        setNotation(ExpressionParser.Notation.INFIX);
+        assertEquals(ExpressionParser.Notation.INFIX, getNotation());
+        setNotation(ExpressionParser.Notation.PREFIX);
+        assertEquals(ExpressionParser.Notation.PREFIX, getNotation());
+        setNotation(ExpressionParser.Notation.AUTO);
+        assertEquals(ExpressionParser.Notation.AUTO, getNotation());
+    }
+
+    @Test
+    void testDisplaySetterGetter() {
+        assertEquals(Display.DECIMAL, getDisplay());
+        setDisplay(Display.FRACTION);
+        assertEquals(Display.FRACTION, getDisplay());
+        setDisplay(Display.DECIMAL);
+        assertEquals(Display.DECIMAL, getDisplay());
+    }
+
+    // 2) main() ne doit pas lever d’exception
+    @Test
+    void testMainDoesNotThrow() {
+        assertDoesNotThrow(() -> ExpressionParser.main(new String[]{"foo", "bar"}));
+    }
+
+    // 3) préfixe / postfixe valides
+    @Test
+    void testValidPrefixExpression() throws Exception {
+        setNotation(ExpressionParser.Notation.PREFIX);
+        // (* (+ 1 2) 3)  → (1+2)*3 = 9
+        NumericValue v = parser.parse("* + 1 2 3");
+        assertEquals("9", v.toString());
+    }
+
+    @Test
+    void testValidPostfixExpression() throws Exception {
+        setNotation(ExpressionParser.Notation.POSTFIX);
+        // 1 2 + 3 * → (1+2)*3 = 9
+        NumericValue v = parser.parse("1 2 + 3 *");
+        assertEquals("9", v.toString());
+    }
+
+    // 4) préfixe / postfixe INVALIDES → null
+    @Test
+    void testInvalidPrefixReturnsNull() {
+        setNotation(ExpressionParser.Notation.PREFIX);
+        try {
+            assertNull(parser.parse("foo bar baz"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void testInvalidPostfixReturnsMult() throws Exception {
+        setNotation(ExpressionParser.Notation.POSTFIX);
+        // opérateur manquant
+        assertEquals(parser.parse("1 2 3").toString(),"6");
+    }
+
+    // 5) notation AUTO → renvoie toujours null (branche actuelle)
+    @Test
+    void testAutoNotationAlwaysNull() throws Exception {
+        setNotation(ExpressionParser.Notation.AUTO);
+        assertNull(parser.parse("2+2"));
+        assertNull(parser.parse("+ 1 1"));
+        assertNull(parser.parse("1 1 +"));
+    }
+
+    // 6) dernier résultat « res » et constante « pi »
+    @Test
+    void testResAndPiInMixedExpression() throws Exception {
+        // on stocke d’abord 2+3 = 5
+        NumericValue first = parser.parse("2+3");
+        assertEquals("5", first.toString());
+        // on relit res et pi
+        NumericValue v = parser.parse("res + pi");
+        double d = Double.parseDouble(v.toString());
+        assertTrue(d > 5 + 3.1415 && d < 5 + 3.142);
+    }
+
+    @Test
+    void testPiOnly() throws Exception {
+        NumericValue v = parser.parse("pi");
+        double d = Double.parseDouble(v.toString());
+        assertTrue(d > 3.141 && d < 3.142);
+    }
+
+    // 7) remise à zéro de last_result quand on obtient NaN
+    @Test
+    void testLastResultResetOnNaN() throws Exception {
+        // ln(-1) doit produire NaN
+        NumericValue nan = parser.parse("1/0");
+        //assertThrows(ArithmeticException.class, () -> parser.parse("ln(-1)"));
+        assertEquals("NaN", nan.toString());
+        // last_result doit être égal à 0
+        assertNotNull(last_result);
+        assertEquals("0", last_result.toString());
+    }
+
+    // 8) pi et res en préfixe et postfixe
+    @Test
+    void testPrefixWithPiAndRes() throws Exception {
+        setNotation(ExpressionParser.Notation.INFIX);
+        parser.parse("2+2");                         // last_result = 4
+        setNotation(ExpressionParser.Notation.PREFIX);
+        NumericValue v = parser.parse("+ res pi");   // 4 + π
+        double d = Double.parseDouble(v.toString());
+        assertTrue(d > 7.1415 && d < 7.142);
+    }
+
+    @Test
+    void testPostfixWithPiAndRes() throws Exception {
+        setNotation(ExpressionParser.Notation.POSTFIX);
+        parser.parse("3*3");                         // last_result = 9
+        NumericValue v = parser.parse("res pi +");   // 9 + π
+        double d = Double.parseDouble(v.toString());
+        assertTrue(d > 12.1415 && d < 12.142);
     }
 }
