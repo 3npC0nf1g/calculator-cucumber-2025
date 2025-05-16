@@ -6,6 +6,12 @@ import java.math.RoundingMode;
 
 /**
  * Represents a real number value with fixed decimal precision (scale).
+ * <p>
+ * This class encapsulates a {@link BigDecimal} and ensures that the value
+ * is rounded to a fixed number of decimal places.
+ * It supports basic arithmetic operations, NaN handling,
+ * and promotion to complex types when necessary.
+ * </p>
  */
 public class RealValue implements NumericValue {
     private final BigDecimal value;
@@ -61,10 +67,30 @@ public class RealValue implements NumericValue {
         return scale;
     }
 
+    /**
+     * Returns whether this value represents a NaN (Not a Number).
+     *
+     * @return true if the value is NaN, false otherwise
+     */
     public boolean isNaN() {
         return isNaN;
     }
 
+    /**
+     * Adds another numeric value to this RealValue.
+     * <p>
+     * The behavior depends on the type of {@code other}:
+     * <ul>
+     *   <li>If {@code other} is a {@link RealValue}, their BigDecimal values are added.</li>
+     *   <li>If {@code other} is a {@link RationalValue} or {@link IntegerValue}, it is converted to {@link BigDecimal} before addition.</li>
+     *   <li>If {@code other} is a {@link ComplexValue}, this value is promoted to a {@link ComplexValue} with zero imaginary part.</li>
+     *   <li>Otherwise, an {@link UnsupportedOperationException} is thrown.</li>
+     * </ul>
+     *
+     * @param other the numeric value to add
+     * @return the result of the addition as a {@link NumericValue}
+     * @throws UnsupportedOperationException if {@code other} type is not supported
+     */
     @Override
     public NumericValue add(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -85,6 +111,16 @@ public class RealValue implements NumericValue {
         throw new UnsupportedOperationException("Cannot add different numeric types: " + other.getClass());
     }
 
+
+    /**
+     * Subtracts another numeric value from this RealValue.
+     * <p>
+     * The behavior is similar to {@link #add(NumericValue)} but performs subtraction.
+     *
+     * @param other the numeric value to subtract
+     * @return the result of the subtraction as a {@link NumericValue}
+     * @throws UnsupportedOperationException if {@code other} type is not supported
+     */
     @Override
     public NumericValue subtract(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -105,6 +141,16 @@ public class RealValue implements NumericValue {
         throw new UnsupportedOperationException("Cannot subtract different numeric types: " + other.getClass());
     }
 
+
+    /**
+     * Multiplies this RealValue by another numeric value.
+     * <p>
+     * The behavior is similar to {@link #add(NumericValue)} but performs multiplication.
+     *
+     * @param other the numeric value to multiply by
+     * @return the result of the multiplication as a {@link NumericValue}
+     * @throws UnsupportedOperationException if {@code other} type is not supported
+     */
     @Override
     public NumericValue multiply(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -125,6 +171,23 @@ public class RealValue implements NumericValue {
         throw new UnsupportedOperationException("Cannot multiply different numeric types: " + other.getClass());
     }
 
+    /**
+     * Divides this RealValue by another numeric value.
+     * <p>
+     * Behavior depends on the type of {@code other}:
+     * <ul>
+     *   <li>If {@code other} is a {@link RealValue}, division is performed on BigDecimal values,
+     *       returning NaN if {@code other} is NaN or zero.</li>
+     *   <li>If {@code other} is a {@link RationalValue} or {@link IntegerValue}, it is converted
+     *       to BigDecimal first; division by zero returns NaN.</li>
+     *   <li>If {@code other} is a {@link ComplexValue}, this value is promoted to {@link ComplexValue} and delegated.</li>
+     *   <li>Throws {@link UnsupportedOperationException} for unsupported types.</li>
+     * </ul>
+     *
+     * @param other the divisor value
+     * @return the result of division as a {@link NumericValue}
+     * @throws UnsupportedOperationException if the divisor type is not supported
+     */
     @Override
     public NumericValue divide(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -170,6 +233,15 @@ public class RealValue implements NumericValue {
         return isNaN ? 0 : value.intValue();
     }
 
+
+    /**
+     * Checks equality between this RealValue and another object.
+     * <p>
+     * Two RealValues are equal if they are both NaN or their {@link BigDecimal} values are equal.
+     *
+     * @param o the object to compare with
+     * @return true if equal, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof RealValue other)) return false;
@@ -177,17 +249,34 @@ public class RealValue implements NumericValue {
         return !this.isNaN && !other.isNaN && this.value.compareTo(other.value) == 0;
     }
 
+    /**
+     * Computes the hash code for this RealValue.
+     * <p>
+     * NaN always returns 0; otherwise, the hash code of the BigDecimal value is returned.
+     *
+     * @return the hash code of this RealValue
+     */
     @Override
     public int hashCode() {
         return isNaN ? 0 : value.hashCode();
     }
 
 
-
-
-
-    // In RealValue.java
-
+    /**
+     * Raises this RealValue to the power of the given exponent.
+     * <p>
+     * If the exponent is:
+     * <ul>
+     *   <li>A {@link ComplexValue}, delegates to complex power method.</li>
+     *   <li>An {@link IntegerValue}, uses BigDecimal.pow with specified precision.</li>
+     *   <li>A {@link RealValue}, uses {@link Math#pow(double, double)}.</li>
+     *   <li>Otherwise, throws {@link UnsupportedOperationException}.</li>
+     * </ul>
+     *
+     * @param exponent the exponent to raise to
+     * @return the result of exponentiation as a {@link NumericValue}
+     * @throws UnsupportedOperationException if the exponent type is unsupported
+     */
     @Override
     public NumericValue pow(NumericValue exponent) {
         // Delegate to ComplexValue if exponent is complex
@@ -211,7 +300,16 @@ public class RealValue implements NumericValue {
                 "Unsupported exponent type: " + exponent.getClass());
     }
 
-
+    /**
+     * Computes the nth root of this RealValue.
+     * <p>
+     * Supports integer and real degrees. Throws {@link UnsupportedOperationException}
+     * for unsupported degree types.
+     *
+     * @param degree the degree of the root
+     * @return the nth root as a {@link NumericValue}
+     * @throws UnsupportedOperationException if degree type is unsupported
+     */
     @Override
     public NumericValue root(NumericValue degree) {
         // nth root: x^(1/n)
@@ -227,6 +325,12 @@ public class RealValue implements NumericValue {
                 "Unsupported root degree type: " + degree.getClass());
     }
 
+    /**
+     * Computes the logarithm of this RealValue with the given base.
+     *
+     * @param base the logarithm base
+     * @return the logarithm value as a {@link NumericValue}
+     */
     @Override
     public NumericValue log(NumericValue base) {
         // log_base(x) = ln(x) / ln(base)
@@ -238,6 +342,13 @@ public class RealValue implements NumericValue {
         return new RealValue(res, scale);
     }
 
+    /**
+     * Computes the multiplicative inverse (reciprocal) of this RealValue.
+     * <p>
+     * Returns NaN if the value is zero.
+     *
+     * @return the inverse as a {@link NumericValue}
+     */
     @Override
     public NumericValue inverse() {
         // 1 / x
@@ -249,6 +360,13 @@ public class RealValue implements NumericValue {
         return new RealValue(inv, scale);
     }
 
+    /**
+     * Computes the natural logarithm (ln) of this RealValue.
+     * <p>
+     * Returns NaN if the value is less than or equal to zero.
+     *
+     * @return the natural logarithm as a {@link NumericValue}
+     */
     @Override
     public NumericValue ln() {
         // natural logarithm
@@ -260,6 +378,12 @@ public class RealValue implements NumericValue {
         return new RealValue(res, scale);
     }
 
+
+    /**
+     * Computes the exponential (e^x) of this RealValue.
+     *
+     * @return the exponential as a {@link NumericValue}
+     */
     @Override
     public NumericValue exp() {
         // exponential e^x

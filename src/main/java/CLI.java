@@ -116,9 +116,14 @@ public class CLI {
         System.err.println(CYAN + "-" + WHITE + " You can write '" + CYAN + "pi" + WHITE + "' to use π");
         System.err.println(CYAN + "-" + WHITE + " You can write '" + CYAN + "last" + WHITE + "' to run again the last operation");
         System.err.println(CYAN + "-" + WHITE + " Supported functions in "+ CYAN + capitalize("infix") + WHITE + CYAN + ":\n"
-                +CYAN +" ".repeat(5)+" sin"+WHITE+"(x),"+CYAN+" cos"+WHITE+"(x), "+CYAN+"tan"+WHITE+"(x)"+CYAN +", ln"+WHITE+"(x)\n"
+                +CYAN +" ".repeat(5)+" sin"+WHITE+"(x),"+CYAN+" cos"+WHITE+"(x), "+CYAN+"tan"+WHITE+"(x)"+CYAN +", ln"+WHITE+"(x), "+CYAN+"cot" + WHITE +"(x)\n"
                 +CYAN +" ".repeat(5)+" power"+WHITE+"(X,Y) ≡ X^Y ,"+CYAN+" root"+WHITE+"(X,Y) ≡ Y^(1/X)\n"
-                +CYAN +" ".repeat(5)+" log"+WHITE+"(X,Y) ≡ logX(Y), "+CYAN+" sqrt"+WHITE+"(x)," +CYAN +" inv"+WHITE+"(x)"
+                +CYAN +" ".repeat(5)+" log"+WHITE+"(X,Y) ≡ logX(Y), "+CYAN+" sqrt"+WHITE+"(x)," +CYAN +" inv"+WHITE+"(x)\n"
+                + CYAN + " ".repeat(5) + " asin" + WHITE + "(x), "+CYAN+"acos" + WHITE + "(x), "+CYAN+"atan" + WHITE + "(x)\n"
+                + CYAN + " ".repeat(5) +" sinh" + WHITE + "(x),  "+CYAN+"acosh" + WHITE + "(x),  "+CYAN+"atanh" + WHITE + "(x)\n"
+                + CYAN + " ".repeat(5) +" asec" + WHITE + "(x), "+CYAN+"acsc" + WHITE + "(x), "+CYAN+"csc" + WHITE + "(x), "+CYAN+"sec" + WHITE + "(x)\n"
+                + CYAN + " ".repeat(5) +" acosh" + WHITE + "(x), "+CYAN+"asinh" + WHITE + "(x), "+CYAN+"atanh" + WHITE + "(x), "+CYAN+"acot" + WHITE + "(x)\n"
+                + CYAN + " ".repeat(5) + " npr" + WHITE + "(X,Y), "+CYAN+"ncr" + WHITE + "(X,Y)"
         );
 
         System.err.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize(ExpressionParser.getDisplay().toString()) + WHITE + " mode" + CYAN + " :" + WHITE);
@@ -276,7 +281,7 @@ public class CLI {
                     //System.err.println("= "+expr);
                 }
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                System.out.println("Error i: " + e.getMessage());
             }
 
         }
