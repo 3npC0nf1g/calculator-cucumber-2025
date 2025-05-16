@@ -22,15 +22,13 @@
  */
 
 import calculator.*;
-import calculator.conversion.UnitConverter;
-import calculator.conversion.Units;
-import calculator.values.BooleanValue;
-import calculator.values.MatrixCalculator;
 import calculator.values.NumericValue;
-import parser.BooleanExpressionParser;
 import parser.ExpressionParser;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
 
 public class CLI {
 
@@ -77,10 +75,6 @@ public class CLI {
         System.out.println(CYAN + "-" + WHITE + " It's currently using " + CYAN + capitalize("Decimal") + WHITE + " mode" + CYAN + " :" + WHITE);
         System.out.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "display" + WHITE + "' to toggle between Fraction and Decimal mode");
 
-        System.out.println(CYAN + "-" + WHITE + "Tap '" + CYAN + "units" + WHITE + "' to see all types of units category supported and its units");
-        System.out.println( CYAN + "-" + WHITE + "Tap '" + CYAN + "convert <value> <fromUnit> <toUnit> <category>" + WHITE + "' to convert unit value." +CYAN+ "e.g: convert 20 km cm length" + WHITE + "'");
-        System.out.println(CYAN + "-" + WHITE + "Tap '" + CYAN + "Matrix" + WHITE + "' to start using matrix computation");
-        System.out.println(CYAN + "-" + WHITE + "Tap '" + CYAN + "testbool" + WHITE + " to compute boolean expressions. e.g: " +CYAN+"testbool true and false or not true and 1 >5" + WHITE + "'");
         System.out.println(CYAN + "-" + WHITE + " Tap '" + CYAN + "help" + WHITE + "' for instructions");
         System.out.println(CYAN + "-" + WHITE + " Tap '" + CYAN + "quit" + WHITE + "' to close the program" + RESET);
     }
@@ -121,9 +115,8 @@ public class CLI {
                 +CYAN +" ".repeat(5)+" sin"+WHITE+"(x),"+CYAN+" cos"+WHITE+"(x), "+CYAN+"tan"+WHITE+"(x)"+CYAN +", ln"+WHITE+"(x), "+CYAN+"cot" + WHITE +"(x)\n"
                 +CYAN +" ".repeat(5)+" power"+WHITE+"(X,Y) ≡ X^Y ,"+CYAN+" root"+WHITE+"(X,Y) ≡ Y^(1/X)\n"
                 +CYAN +" ".repeat(5)+" log"+WHITE+"(X,Y) ≡ logX(Y), "+CYAN+" sqrt"+WHITE+"(x)," +CYAN +" inv"+WHITE+"(x)\n"
-                + CYAN + " ".repeat(5) + " asin" + WHITE + "(x), "+CYAN+"acos" + WHITE + "(x), "+CYAN+"atan" + WHITE + "(x), "+CYAN+"exp" + WHITE +"(x)≡ e^(x) \n"
-                + CYAN + " ".repeat(5) +" sinh" + WHITE + "(x),  "+CYAN+"acosh" + WHITE + "(x),  "+CYAN+"atanh" + WHITE + "(x)\n"
-                + CYAN + " ".repeat(5) +" asec" + WHITE + "(x), "+CYAN+"acsc" + WHITE + "(x), "+CYAN+"csc" + WHITE + "(x), "+CYAN+"sec" + WHITE + "(x)\n"
+                + CYAN + " ".repeat(5) + " asin" + WHITE + "(x), "+CYAN+"acos" + WHITE + "(x), "+CYAN+"atan" + WHITE + "(x)\n"
+                + CYAN + " ".repeat(5) + " asin" + WHITE + "(x), "+CYAN+"acos" + WHITE + "(x), "+CYAN+"atan" + WHITE + "(x), "+CYAN+"exp" + WHITE +"(x)≡ e^(x) \n"                + CYAN + " ".repeat(5) +" asec" + WHITE + "(x), "+CYAN+"acsc" + WHITE + "(x), "+CYAN+"csc" + WHITE + "(x), "+CYAN+"sec" + WHITE + "(x)\n"
                 + CYAN + " ".repeat(5) +" acosh" + WHITE + "(x), "+CYAN+"asinh" + WHITE + "(x), "+CYAN+"atanh" + WHITE + "(x), "+CYAN+"acot" + WHITE + "(x)\n"
                 + CYAN + " ".repeat(5) + " npr" + WHITE + "(X,Y), "+CYAN+"ncr" + WHITE + "(X,Y)"
         );
@@ -237,43 +230,6 @@ public class CLI {
             if (commands.contains(input.toLowerCase())) {
                 continue;
             }
-            if (input.toLowerCase().startsWith("units")) {
-                UnitConverter.printAllUnitsByCategory();
-                continue;
-            }
-            if (input.toLowerCase().startsWith("convert ")) {
-                try {
-                    String[] parts = input.split("\\s+");
-                    if (parts.length != 5) {
-                        System.out.println("Usage: convert <value> <fromUnit> <toUnit> <category>");
-                        continue;
-                    }
-                    double value = Double.parseDouble(parts[1]);
-                    String from = parts[2];
-                    String to = parts[3];
-                    String category = parts[4];
-
-                    double result = UnitConverter.convert(value, from, to, category);
-                    System.out.println("Result: " + result + " " + to);
-                } catch (Exception e) {
-                    System.out.println("Conversion error: " + e.getMessage());
-                }
-                continue;
-            }
-            else if (input.toLowerCase().startsWith("testbool ")) {
-                String boolExpr = input.substring(9); // skip "testbool "
-                try {
-                    BooleanValue result = BooleanExpressionParser.parse(boolExpr);
-                    System.out.println("= " + result);
-                } catch (Exception e) {
-                    System.out.println("Error: " + e.getMessage());
-                }
-                continue;
-            }
-            else if (input.equalsIgnoreCase("matrix")) {
-                new MatrixCalculator().launchMatrixCalculator();
-                continue;
-            }
             try {
                 expr = exp.parse(input);
                 lastInput = input;
@@ -285,7 +241,6 @@ public class CLI {
             } catch (Exception e) {
                 System.out.println("Error i: " + e.getMessage());
             }
-
         }
 
         scanner.close();

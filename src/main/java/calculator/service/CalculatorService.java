@@ -19,7 +19,7 @@ public class CalculatorService {
     /**
      * Processes a simple binary arithmetic operation using integers.
      *
-     * @expression The arithmatic operation to evaluate
+     * @param expression The arithmatic operation to evaluate
 
      * @return the result of the operation as a string or an error message in case of failure.
      */
