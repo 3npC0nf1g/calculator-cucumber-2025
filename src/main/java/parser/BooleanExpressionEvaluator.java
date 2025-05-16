@@ -6,13 +6,12 @@ import java.util.*;
 
 /**
  * Evaluates boolean expressions with support for logical operators (AND, OR, NOT),
- * comparison operators (==, !=, <, <=, >, >=), and boolean/numeric literals.
- * <p>
+ * comparison operators (`==`, `!=`, `&gt;`, `&gt;=`, `&lt;`, `&lt;=`), and boolean/numeric literals.
  * Example usage:
  * <pre>
  *     NumericValue result = BooleanExpressionEvaluator.parseBooleanExpression("3 > 2 AND true");
  * </pre>
- * </p>
+ *
  */
 public class BooleanExpressionEvaluator {
     /**
@@ -27,7 +26,7 @@ public class BooleanExpressionEvaluator {
     /**
      * Parses and evaluates a boolean expression string.
      *
-     * @param expr the expression string to evaluate (e.g., "true && false" or "3 > 2 || false")
+     * @param expr the expression string to evaluate (e.g., "true &amp;&amp; false" or "3 &gt; 2 || false")
      * @return a BooleanValue representing the evaluated result
      * @throws Exception if the expression is malformed or contains unsupported tokens
      */
@@ -218,7 +217,7 @@ public class BooleanExpressionEvaluator {
     }
 
     /**
-     * Checks if a token is a logical operator (!, &&, ||).
+     * Checks if a token is a logical operator (!, &amp;&amp;, ||).
      *
      * @param token the input token
      * @return true if the token is a recognized logical operator
@@ -231,7 +230,7 @@ public class BooleanExpressionEvaluator {
      * Checks if a token is a comparison operator.
      *
      * @param token the input token
-     * @return true if the token is one of ==, !=, <, <=, >, >=
+     * @return true if the token is one of ==, !=, &lt;, &lt;=, &gt;, &gt;=
      */
     public static boolean isComparisonOperator(String token) {
         return token.matches("==|!=|<=|>=|<|>");

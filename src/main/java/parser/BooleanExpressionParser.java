@@ -4,17 +4,16 @@ import calculator.values.BooleanValue;
 
 /**
  * A parser and evaluator for boolean expressions that supports logical operators (AND, OR, NOT),
- * numeric comparisons (==, !=, >, >=, <, <=), and constants (true, false, 1, 0).
- * <p>
+ * Numeric comparisons (`==`, `!=`, `&gt;`, `&gt;=`, `&lt;`, `&lt;=`), and constants (`true`, `false`, `1`, `0`).
  * This class uses a recursive descent parsing approach with minimal tokenization.
- * </p>
+ *
  */
 public class BooleanExpressionParser {
 
     /**
      * Parses a boolean expression string and evaluates it.
      *
-     * @param expr the boolean expression to parse (e.g., "3 >= 2 AND NOT false")
+     * @param expr the boolean expression to parse (e.g., "3 &gt;= 2 AND NOT false")
      * @return a BooleanValue representing the result of the expression
      * @throws Exception if the expression is invalid or cannot be evaluated
      */

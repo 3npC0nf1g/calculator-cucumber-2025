@@ -58,7 +58,7 @@ public class BooleanValue implements NumericValue {
     }
 
     /**
-     * Logical AND (&&) as a "multiply" operation.
+     * Logical AND (&amp;&amp;) as a "multiply" operation.
      */
     @Override
     public NumericValue multiply(NumericValue other) {
