@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Utility class for converting values between different units across various categories
+ * such as length, weight, time, data, and more.
+ */
 public class UnitConverter {
 
     private static final List<Units> lengthUnits = new ArrayList<>();
@@ -85,6 +89,16 @@ public class UnitConverter {
         pressureUnits.add(new Units("mmHg", "pressure", 0.00750062));
     }
 
+    /**
+     * Converts a value from one unit to another within the same category.
+     *
+     * @param value    the numerical value to convert
+     * @param from     the source unit name (e.g., "m", "kg", "s")
+     * @param to       the target unit name (e.g., "cm", "g", "min")
+     * @param category the category of units (e.g., "length", "weight", "time")
+     * @return the converted value
+     * @throws IllegalArgumentException if either unit is not found in the category
+     */
     public static double convert(double value, String from, String to, String category) {
         List<Units> units = getUnitsByCategory(category);
 
@@ -101,6 +115,13 @@ public class UnitConverter {
         return (value / fromUnit.getFactorToBase()) * toUnit.getFactorToBase();
     }
 
+    /**
+     * Retrieves the list of units for a given category.
+     *
+     * @param category the name of the category (e.g., "length", "data")
+     * @return the list of {@link Units} in the specified category
+     * @throws IllegalArgumentException if the category is unknown
+     */
     public static List<Units> getUnitsByCategory(String category) {
         return switch (category.toLowerCase()) {
             case "length" -> lengthUnits;
@@ -116,6 +137,12 @@ public class UnitConverter {
             default -> throw new IllegalArgumentException("Unknown category: " + category);
         };
     }
+
+    /**
+     * Returns a map containing all units grouped by their categories.
+     *
+     * @return a map where each key is a category name and the value is a list of unit names
+     */
     public static Map<String, List<String>> getAllUnitsByCategory() {
         Map<String, List<String>> categoryUnits = new HashMap<>();
 
@@ -132,9 +159,14 @@ public class UnitConverter {
 
         return categoryUnits;
     }
+
+    /**
+     * Prints all available units grouped by their categories to the standard output.
+     * This method is intended for debugging or exploration purposes.
+     */
     public static void printAllUnitsByCategory() {
         Map<String, List<String>> allUnits = getAllUnitsByCategory();
-        System.out.println("Liste des unités par catégorie :");
+        System.out.println("List of units by category: :");
         System.out.println("--------------------------------");
 
         for (Map.Entry<String, List<String>> entry : allUnits.entrySet()) {
@@ -146,7 +178,12 @@ public class UnitConverter {
         }
     }
 
-
+    /**
+     * Extracts the names of units from a list of {@link Units}.
+     *
+     * @param unitsList the list of unit objects
+     * @return a list of unit names as strings
+     */
     private static List<String> getUnitNames(List<Units> unitsList) {
         List<String> names = new ArrayList<>();
         for (Units unit : unitsList) {
