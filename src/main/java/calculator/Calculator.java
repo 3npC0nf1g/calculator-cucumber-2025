@@ -7,7 +7,6 @@ import calculator.values.NumericValue;
 /**
  * This class represents the core logic of a Calculator.
  * It can be used to print and evaluate arithmetic expressions.
- *
  * (University of Mons - UMONS, Software Engineering Lab, Faculty of Sciences)
  *
  * @author tommens
@@ -277,7 +276,7 @@ public class Calculator {
      *
      * @param angle the input angle in degrees or radians depending on the useRadians flag
      * @return the sec or asec of the input angle
-     * @throws IllegalArgumentException if |value| < 1 (undefined for asec)
+     * @throws IllegalArgumentException if the absolute value of value is less than 1 (undefined for asec)
      */
     public double sec(double angle) {
 
@@ -297,7 +296,7 @@ public class Calculator {
      *
      * @param angle the input angle in degrees or radians depending on the useRadians flag
      * @return the csc or acsc of the input angle
-     * @throws IllegalArgumentException if |value| < 1 (undefined for acsc)
+     * @throws IllegalArgumentException if  the absolute value of value is less than  1 (undefined for acsc)
      */
     public double csc(double angle) {
 
@@ -346,12 +345,12 @@ public class Calculator {
      *
      * @param value the input value; must be between -1 and 1 (exclusive)
      * @return the atanh of the value, in degrees if useRadians is false
-     * @throws IllegalArgumentException if |value| ≥ 1
+     * @throws IllegalArgumentException if the absolute value of value is  ≥ 1
      */
     public double atanh(double value) {
         // atanh est défini pour -1 < value < 1
         if (value <= -1 || value >= 1) {
-            throw new IllegalArgumentException("atanh is undefined for |value| >= 1");
+            throw new IllegalArgumentException("atanh is undefined for the absolute value of value is >= 1");
         }
         double result = 0.5 * Math.log((1 + value) / (1 - value));
         return useRadians ? result : AngleConverter.radiansToDegrees(result);
@@ -376,14 +375,14 @@ public class Calculator {
     /**
      * Calculates the inverse secant (asec) of the given value.
      *
-     * @param value the input value; must satisfy |value| ≥ 1
+     * @param value the input value; must satisfy the absolute value of value is superior or equal of 1
      * @return the asec of the value, in degrees if useRadians is false
-     * @throws IllegalArgumentException if |value| < 1
+     * @throws IllegalArgumentException if the absolute value of value is less than 1
      */
     public double asec(double value) {
         // asec(x) = arccos(1/x) pour |x| >= 1
         if (Math.abs(value) < 1) {
-            throw new IllegalArgumentException("asec is undefined for |value| < 1");
+            throw new IllegalArgumentException("asec is undefined for the absolute value of value is less than 1");
         }
         double result = Math.acos(1.0 / value);
         return useRadians ? result : AngleConverter.radiansToDegrees(result);
@@ -392,14 +391,14 @@ public class Calculator {
     /**
      * Calculates the inverse cosecant (acsc) of the given value.
      *
-     * @param value the input value; must satisfy |value| ≥ 1
+     * @param value the input value; must satisfy the absolute value of value is less than ≥ 1
      * @return the acsc of the value, in degrees if useRadians is false
-     * @throws IllegalArgumentException if |value| < 1
+     * @throws IllegalArgumentException if the absolute value of value is less than1
      */
     public double acsc(double value) {
         // acsc(x) = arcsin(1/x) pour |x| >= 1
         if (Math.abs(value) < 1) {
-            throw new IllegalArgumentException("acsc is undefined for |value| < 1");
+            throw new IllegalArgumentException("acsc is undefined for the absolute value of value is less than 1");
         }
         double result = Math.asin(1.0 / value);
         return useRadians ? result : AngleConverter.radiansToDegrees(result);
