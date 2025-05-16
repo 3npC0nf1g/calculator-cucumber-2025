@@ -4,6 +4,11 @@ import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+/**
+ * Represents a rational number as a numerator and denominator using {@link BigInteger}.
+ * Implements the {@link NumericValue} interface and supports arithmetic, exponentiation,
+ * logarithmic, and conversion operations with other numeric types.
+ */
 public class RationalValue implements NumericValue {
     private final BigInteger numerator;
     private final BigInteger denominator;
@@ -11,6 +16,13 @@ public class RationalValue implements NumericValue {
 
     public static final RationalValue NaN = new RationalValue();
 
+    /**
+     * Constructs a new {@code RationalValue} with a specified numerator and denominator.
+     * Automatically simplifies the fraction and normalizes the sign.
+     *
+     * @param numerator the numerator as a {@code BigInteger}
+     * @param denominator the denominator as a {@code BigInteger}
+     */
     public RationalValue(BigInteger numerator, BigInteger denominator) {
         if (denominator.equals(BigInteger.ZERO)) {
             isNaN = true;
@@ -26,6 +38,13 @@ public class RationalValue implements NumericValue {
         this.denominator = denominator.divide(gcd);
     }
 
+
+    /**
+     * Constructs a new {@code RationalValue} from two integers.
+     *
+     * @param num the integer numerator
+     * @param den the integer denominator
+     */
     public RationalValue(int num, int den) {
         this(BigInteger.valueOf(num), BigInteger.valueOf(den));
     }
@@ -36,13 +55,40 @@ public class RationalValue implements NumericValue {
         this.isNaN = true;
     }
 
+    /**
+     * Checks whether this rational value is NaN.
+     *
+     * @return {@code true} if the value is NaN, otherwise {@code false}
+     */
     public boolean isNaN() {
         return isNaN;
     }
 
+    /**
+     * Returns the numerator of the rational value.
+     *
+     * @return the numerator
+     */
     public BigInteger getNumerator() { return numerator; }
+
+    /**
+     * Returns the denominator of the rational value.
+     *
+     * @return the denominator
+     */
     public BigInteger getDenominator() { return denominator; }
 
+
+    /**
+     * Adds this rational value to another numeric value.
+     * Supports addition with {@link RationalValue}, {@link IntegerValue}, {@link RealValue}, and {@link ComplexValue}.
+     * If types differ, promotes this rational to the appropriate type before adding.
+     * Returns {@link #NaN} if either operand is NaN.
+     *
+     * @param other the numeric value to add
+     * @return the sum as a {@link NumericValue}
+     * @throws UnsupportedOperationException if the other type is not supported
+     */
     @Override
     public NumericValue add(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -71,6 +117,17 @@ public class RationalValue implements NumericValue {
         throw new UnsupportedOperationException("Cannot add different numeric types.");
     }
 
+
+    /**
+     * Subtracts another numeric value from this rational value.
+     * Supports subtraction with {@link RationalValue} directly.
+     * For other types, converts subtraction into addition of the negation.
+     * Returns {@link #NaN} if this value is NaN.
+     *
+     * @param other the numeric value to subtract
+     * @return the difference as a {@link NumericValue}
+     * @throws UnsupportedOperationException if the other type is not supported
+     */
     @Override
     public NumericValue subtract(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -85,6 +142,16 @@ public class RationalValue implements NumericValue {
         }
     }
 
+
+    /**
+     * Multiplies this rational value by another numeric value.
+     * Supports multiplication with {@link RationalValue}, {@link IntegerValue}, {@link RealValue}, and {@link ComplexValue}.
+     * Returns {@link #NaN} if either operand is NaN.
+     *
+     * @param other the numeric value to multiply
+     * @return the product as a {@link NumericValue}
+     * @throws UnsupportedOperationException if the other type is not supported
+     */
     @Override
     public NumericValue multiply(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -106,6 +173,15 @@ public class RationalValue implements NumericValue {
         throw new UnsupportedOperationException("Cannot multiply different numeric types.");
     }
 
+    /**
+     * Divides this rational value by another numeric value.
+     * Supports division with {@link RationalValue}, {@link IntegerValue}, {@link RealValue}, and {@link ComplexValue}.
+     * Returns {@link #NaN} if division by zero or NaN occurs.
+     *
+     * @param other the numeric value divisor
+     * @return the quotient as a {@link NumericValue}
+     * @throws UnsupportedOperationException if the other type is not supported
+     */
     @Override
     public NumericValue divide(NumericValue other) {
         if (this.isNaN) return NaN;
@@ -142,6 +218,15 @@ public class RationalValue implements NumericValue {
         throw new UnsupportedOperationException("Cannot divide different numeric types.");
     }
 
+    /**
+     * Returns a string representation of this rational value.
+     * If the value is NaN, returns "NaN".
+     * If the value is very large or very small, uses scientific notation.
+     * If denominator is 1, returns the numerator as integer string.
+     * Otherwise returns the fraction in canonical form "numerator/denominator".
+     *
+     * @return string representation of this rational value
+     */
     @Override
     public String toString() {
         if (isNaN) return "NaN";
@@ -165,14 +250,26 @@ public class RationalValue implements NumericValue {
         return numerator + "/" + denominator;
     }
 
-
-
+    /**
+     * Returns the integer value of this rational number.
+     * Currently returns 0 as a placeholder (should be implemented properly).
+     *
+     * @return int value representation of this rational (currently always 0)
+     */
     @Override
     public int getValueInt() {
         return 0;
     }
 
 
+    /**
+     * Checks equality between this {@link RationalValue} and another object.
+     * Two rational values are equal if both are NaN or if their numerators and denominators
+     * are equal after normalization.
+     *
+     * @param o the object to compare to
+     * @return true if equal, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof RationalValue other)) return false;
@@ -182,6 +279,14 @@ public class RationalValue implements NumericValue {
                 denominator.equals(other.denominator);
     }
 
+
+
+    /**
+     * Returns a hash code consistent with {@link #equals(Object)}.
+     * If NaN, returns 0; otherwise XORs the hash codes of numerator and denominator.
+     *
+     * @return hash code for this rational value
+     */
     @Override
     public int hashCode() {
         return isNaN ? 0 : numerator.hashCode() ^ denominator.hashCode();
@@ -191,7 +296,14 @@ public class RationalValue implements NumericValue {
 
 
 
-
+    /**
+     * Raises this rational value to the power of the given exponent.
+     * If exponent is an integer, computes (a/b)^n = a^n / b^n exactly.
+     * Otherwise promotes this value and the exponent to {@link RealValue} and computes power.
+     *
+     * @param exponent the exponent value
+     * @return the result of raising this value to the given power
+     */
     @Override
     public NumericValue pow(NumericValue exponent) {
         // (a/b)^n = a^n / b^n for integer n, else promote to real
@@ -211,6 +323,15 @@ public class RationalValue implements NumericValue {
         }
     }
 
+
+    /**
+     * Computes the nth root of this rational value.
+     * If degree is an integer, computes a^(1/n) / b^(1/n) and returns a {@link RealValue}.
+     * Otherwise promotes to real and computes root using floating point.
+     *
+     * @param degree the root degree
+     * @return the nth root of this value
+     */
     @Override
     public NumericValue root(NumericValue degree) {
         // nth root: (a/b)^(1/n) = a^(1/n) / b^(1/n) for integer n, else promote to real
@@ -229,6 +350,13 @@ public class RationalValue implements NumericValue {
         return new RealValue(result, ((RealValue) degree).getPrecision());
     }
 
+    /**
+     * Computes the logarithm of this rational value with respect to the given base.
+     * Uses natural logarithms: log_base(x) = ln(x) / ln(base).
+     *
+     * @param base the logarithm base
+     * @return the logarithm of this value in the given base
+     */
     @Override
     public NumericValue log(NumericValue base) {
         // log_base(a/b) = ln(a/b) / ln(base)
@@ -242,6 +370,15 @@ public class RationalValue implements NumericValue {
         return new RealValue(result, ((RealValue) base).getPrecision());
     }
 
+
+
+    /**
+     * Returns the multiplicative inverse of this rational value.
+     * That is, 1/(a/b) = b/a.
+     * Returns {@link #NaN} if numerator is zero (division by zero).
+     *
+     * @return the inverse of this rational value
+     */
     @Override
     public NumericValue inverse() {
         // 1/(a/b) = b/a
@@ -251,6 +388,12 @@ public class RationalValue implements NumericValue {
         return new RationalValue(denominator, numerator);
     }
 
+    /**
+     * Computes the natural logarithm of this rational value.
+     * Returns {@link RealValue#NaN} if the value is NaN or non-positive.
+     *
+     * @return the natural logarithm as a {@link RealValue}
+     */
     @Override
     public NumericValue ln() {
         // ln(a/b) = ln(a) - ln(b)
@@ -263,6 +406,12 @@ public class RationalValue implements NumericValue {
         return new RealValue(result, 10);
     }
 
+    /**
+     * Computes the exponential of this rational value.
+     * That is, exp(a/b) = e^(a/b).
+     *
+     * @return the exponential of this value as a {@link RealValue}
+     */
     @Override
     public NumericValue exp() {
         // exp(a/b) = exp(a/b) as real
