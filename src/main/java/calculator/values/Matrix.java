@@ -54,19 +54,39 @@ public class Matrix {
      * @throws NumberFormatException if the string contains invalid numbers
      */
     public static Matrix parse(String input) {
-        input = input.replaceAll("\\[\\[", "").replaceAll("]]", "");
-        String[] rows = input.split("],\\[");
-        int rowCount = rows.length;
-        int colCount = rows[0].split(",").length;
-        double[][] matrix = new double[rowCount][colCount];
-        for (int i = 0; i < rowCount; i++) {
-            String[] cols = rows[i].split(",");
-            for (int j = 0; j < colCount; j++) {
-                matrix[i][j] = Double.parseDouble(cols[j]);
+        try {
+            input = input.trim();
+            input = input.replaceAll("\\[\\[", "");
+            input = input.replaceAll("]]", "");
+            String[] rowStrings = input.split("],\\s*\\[");
+
+            int rows = rowStrings.length;
+            int cols = -1;
+            double[][] data = null;
+
+            for (int i = 0; i < rows; i++) {
+                // Supprimer les crochets restants si présents
+                rowStrings[i] = rowStrings[i].replaceAll("[\\[\\]]", "").trim();
+                String[] values = rowStrings[i].split("\\s*,\\s*");
+
+                if (cols == -1) {
+                    cols = values.length;
+                    data = new double[rows][cols];
+                } else if (values.length != cols) {
+                    throw new IllegalArgumentException("All rows must have the same number of columns.");
+                }
+
+                for (int j = 0; j < cols; j++) {
+                    data[i][j] = Double.parseDouble(values[j]);
+                }
             }
+
+            return new Matrix(data);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid matrix format: " + input, e);
         }
-        return new Matrix(matrix);
     }
+
 
     /**
      * Compares this matrix with another matrix, allowing a margin of error (epsilon)

@@ -33,7 +33,7 @@ public class MatrixCalculator {
         System.out.println("Expected format : [[1,2],[3,4]]");
 
         while (true) {
-            System.out.print("\nOpération (add, subtract, multiply, transpose, inverse, exit): ");
+            System.out.print("\nOperation (add, subtract, multiply, transpose, inverse, exit): ");
             String operation = scanner.nextLine().trim();
 
             if (operation.equalsIgnoreCase("exit")) break;

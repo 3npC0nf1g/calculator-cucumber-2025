@@ -77,9 +77,9 @@ public class CLI {
         System.out.println(" ".repeat(5) + WHITE + "Tap '" + CYAN + "display" + WHITE + "' to toggle between Fraction and Decimal mode");
 
         System.out.println(CYAN + "-" + WHITE + "Tap '" + CYAN + "units" + WHITE + "' to see all types of units category supported and its units");
-        System.out.println( CYAN + "-" + WHITE + "Tap '" + CYAN + "convert <value> <fromUnit> <toUnit> <category>" + WHITE + "' to convert unit value. e.g: convert 20 km cm length" + WHITE + "'");
+        System.out.println( CYAN + "-" + WHITE + "Tap '" + CYAN + "convert <value> <fromUnit> <toUnit> <category>" + WHITE + "' to convert unit value." +CYAN+ "e.g: convert 20 km cm length" + WHITE + "'");
         System.out.println(CYAN + "-" + WHITE + "Tap '" + CYAN + "Matrix" + WHITE + "' to start using matrix computation");
-        System.out.println(CYAN + "-" + WHITE + "Tap '" + CYAN + "testbool" + WHITE + " to compute boolean expressions. e.g: testbool true and false or not true and 1 >5" + WHITE + "'");
+        System.out.println(CYAN + "-" + WHITE + "Tap '" + CYAN + "testbool" + WHITE + " to compute boolean expressions. e.g: " +CYAN+"testbool true and false or not true and 1 >5" + WHITE + "'");
 
         System.out.println(CYAN + "-" + WHITE + " Tap '" + CYAN + "help" + WHITE + "' for instructions");
         System.out.println(CYAN + "-" + WHITE + " Tap '" + CYAN + "quit" + WHITE + "' to close the program" + RESET);
