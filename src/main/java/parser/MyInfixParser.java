@@ -14,8 +14,8 @@ import static parser.MyInfixParser.Node.TWO_ARG_FUNCS;
  *
  * Features:
  * - Supports integers, decimals, fractions (a/b), and complex numbers [a+bi]
- * - Recognizes trigonometric functions: sin(x), cos(x), tan(x)
- * - Allows scientific notation via E(x), equivalent to 10^x
+ * - Recognizes trigonometric functions: sin(x), cos(x), tan(x), ...
+ * - Allows scientific notation via E(x), equivalent to 10^x , exp(x)
  * - Supports fraction vs. decimal display modes
  * - Integrates with a shared Calculator instance for evaluation
  *
