@@ -8,6 +8,7 @@ import parser.ExpressionParser;
 import parser.MyPostfixParser;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -133,5 +134,48 @@ public class TestParserPostfix {
         MyPostfixParser myPostfixParser = new MyPostfixParser();
         NumericValue res= myPostfixParser.evaluate(expr);
         assertEquals(res.toString(),"993.2142857085");
+    }
+
+    @Test
+    void testMainRunsWithoutException() {
+        assertThrows(RuntimeException.class, () ->  MyPostfixParser.main(new String[]{}));
+    }
+
+    @Test
+    void testSimplePostfixWithoutParensIsWrappedAndEvaluated() {
+        MyPostfixParser p = new MyPostfixParser();
+        // "1 2 +" → automatiquement "(1 2 +)" → prefix "+ 1 2"
+        NumericValue v = p.evaluate("1 2 +");
+        assertEquals("3", v.toString());
+    }
+
+    @Test
+    void testAlreadyParenthesizedPostfix() {
+        MyPostfixParser p = new MyPostfixParser();
+        // "(3 4 *)" → prefix "* 3 4"
+        NumericValue v = p.evaluate("(3 4 *)");
+        assertEquals("12", v.toString());
+    }
+
+    @Test
+    void testNestedPostfixExpression() {
+        MyPostfixParser p = new MyPostfixParser();
+        // "((1 2 +) 3 *)" → (1+2)*3 = 9
+        NumericValue v = p.evaluate("((1 2 +) 3 *)");
+        assertEquals("9", v.toString());
+    }
+
+    @Test
+    void testPercentOperatorInPostfix() {
+        MyPostfixParser p = new MyPostfixParser();
+        // "200 %" → 200% = 2
+        assertThrows(RuntimeException.class, () -> p.evaluate("200 %"));
+
+    }
+
+    @Test
+    void testInvalidTokensThrows() {
+        MyPostfixParser p = new MyPostfixParser();
+        assertThrows(RuntimeException.class, () -> p.evaluate("foo bar"));
     }
 }

@@ -2,11 +2,16 @@ package parser;
 
 import calculator.IllegalConstruction;
 import calculator.values.NumericValue;
+import calculator.values.RationalValue;
+import calculator.values.RealValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static parser.ExpressionParser.setDisplay;
 
 /**
  * Extended unit tests for {@link MyPrefixParser}, covering:
@@ -119,5 +124,98 @@ public class TestParserPrefix {
         String expr = "(* (sin (+ 30 60)) (cos (+ 45 45)) (/ 10 2) (+ 1 2 3))";
         assertThrows(RuntimeException.class, () ->  parser.evaluate(expr) );
 
+    }
+
+    @BeforeEach
+    void resetDisplayMode() {
+        setDisplay(ExpressionParser.Display.DECIMAL);
+    }
+
+    @Test
+    void testTokenizeMixedBracketsAndFuncs() {
+        String input = "(-3.5 [2+3i] sin(30))";
+        TokenizerPrefix tz = new TokenizerPrefix(input);
+        List<String> tokens = tz.getTokens();
+        assertArrayEquals(
+                new String[]{"(", "-3.5", "[2+3i]", "sin", "(", "30", ")", ")"},
+                tokens.toArray()
+        );
+    }
+
+    @Test
+    void testHasNextPeekNextSequence() {
+        TokenizerPrefix tz = new TokenizerPrefix("1 2 +");
+        assertTrue(tz.hasNext());
+        assertEquals("1", tz.peek());
+        assertEquals("1", tz.next());
+        assertTrue(tz.hasNext());
+        assertEquals("2", tz.next());
+        assertTrue(tz.hasNext());
+        assertEquals("+", tz.next());
+        assertFalse(tz.hasNext());
+    }
+
+    @Test
+    void testApplyOperatorSum() {
+        List<NumericValue> args = List.of(
+                new RealValue(1, 10),
+                new RealValue(2, 10),
+                new RealValue(3, 10)
+        );
+        NumericValue sum = TokenizerPrefix.applyOperator("+", args);
+        assertEquals("6", sum.toString());
+    }
+
+    @Test
+    void testApplyOperatorSubtract() {
+        List<NumericValue> args = List.of(
+                new RealValue(10, 10),
+                new RealValue(3, 10),
+                new RealValue(2, 10)
+        );
+        NumericValue diff = TokenizerPrefix.applyOperator("-", args);
+        assertEquals("5", diff.toString());
+    }
+
+    @Test
+    void testApplyOperatorMultiply() {
+        List<NumericValue> args = List.of(
+                new RealValue(2, 10),
+                new RealValue(3, 10),
+                new RealValue(4, 10)
+        );
+        NumericValue prod = TokenizerPrefix.applyOperator("*", args);
+        assertEquals("24", prod.toString());
+    }
+
+    @Test
+    void testApplyOperatorDivideDecimalAndFraction() {
+        List<NumericValue> args = List.of(
+                new RealValue(12, 10),
+                new RealValue(3, 10),
+                new RealValue(2, 10)
+        );
+        // DECIMAL mode
+        setDisplay(ExpressionParser.Display.DECIMAL);
+        NumericValue dec = TokenizerPrefix.applyOperator("/", args);
+        assertEquals("2", dec.toString());
+
+        // FRACTION mode
+        setDisplay(ExpressionParser.Display.FRACTION);
+        NumericValue frac = TokenizerPrefix.applyOperator("/", args);
+        assertTrue(frac instanceof RationalValue);
+        // on a (12 ÷ 3 ÷ 2) en fraction → (12/3)=4 puis 4/2=2
+        assertEquals("2", frac.toString());
+    }
+
+    @Test
+    void testApplyOperatorErrorCases() {
+        assertThrows(RuntimeException.class, () -> TokenizerPrefix.applyOperator("-", List.of()));
+        assertThrows(RuntimeException.class, () -> TokenizerPrefix.applyOperator("/", List.of()));
+        RuntimeException ex = assertThrows(
+                RuntimeException.class,
+                () -> TokenizerPrefix.applyOperator("?", List.of(new RealValue(1, 10)))
+        );
+        assertTrue(ex.getMessage().contains("Unknown operator"));
     }
 }
